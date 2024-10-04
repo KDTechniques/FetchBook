@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0B53DB992CB0A92F0034B436 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0B53DB982CB0A92F0034B436 /* SDWebImageSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		0B53DB772CB0A3360034B436 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B53DB992CB0A92F0034B436 /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = FetchBook;
 			packageProductDependencies = (
+				0B53DB982CB0A92F0034B436 /* SDWebImageSwiftUI */,
 			);
 			productName = FetchBook;
 			productReference = 0B53DB662CB0A3330034B436 /* FetchBook.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 0B53DB5D2CB0A3330034B436;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0B53DB972CB0A92F0034B436 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0B53DB672CB0A3330034B436 /* Products */;
 			projectDirPath = "";
@@ -572,6 +581,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0B53DB972CB0A92F0034B436 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0B53DB982CB0A92F0034B436 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0B53DB972CB0A92F0034B436 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0B53DB5E2CB0A3330034B436 /* Project object */;
 }
