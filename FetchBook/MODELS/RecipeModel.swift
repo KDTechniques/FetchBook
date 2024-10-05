@@ -7,24 +7,28 @@
 
 import Foundation
 
-struct RecipeModel {
+struct RecipesModel: Codable {
+    let recipes: [RecipeModel]
+}
+
+struct RecipeModel: Identifiable, Codable {
     // MARK: - PROPERTIES
-    let uuid: String
+    let id: String
     let name: String
     let cuisine: String
     let photoURLLarge: String
     let thumbnail: String
-    let blogPostURL: String
-    let youtubeURL: String
+    let blogPostURL: String?
+    let youtubeURL: String?
     
-    // MARK: - INITIALIZER
-    init(uuid: String, name: String, cuisine: String, photoURLLarge: String, thumbnail: String, blogPostURL: String, youtubeURL: String) {
-        self.uuid = uuid
-        self.name = name
-        self.cuisine = cuisine
-        self.photoURLLarge = photoURLLarge
-        self.thumbnail = thumbnail
-        self.blogPostURL = blogPostURL
-        self.youtubeURL = youtubeURL
+    // MARK: - CODING KEYS
+    enum CodingKeys: String, CodingKey {
+        case id = "uuid"
+        case name
+        case cuisine
+        case photoURLLarge = "photo_url_large"
+        case thumbnail = "photo_url_small"
+        case blogPostURL = "source_url"
+        case youtubeURL = "youtube_url"
     }
 }
