@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0B53DB992CB0A92F0034B436 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0B53DB982CB0A92F0034B436 /* SDWebImageSwiftUI */; };
+		0B5E77AA2CB1959F00048277 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 0B5E77A92CB1959F00048277 /* YouTubeiOSPlayerHelper */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B53DB992CB0A92F0034B436 /* SDWebImageSwiftUI in Frameworks */,
+				0B5E77AA2CB1959F00048277 /* YouTubeiOSPlayerHelper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +120,7 @@
 			name = FetchBook;
 			packageProductDependencies = (
 				0B53DB982CB0A92F0034B436 /* SDWebImageSwiftUI */,
+				0B5E77A92CB1959F00048277 /* YouTubeiOSPlayerHelper */,
 			);
 			productName = FetchBook;
 			productReference = 0B53DB662CB0A3330034B436 /* FetchBook.app */;
@@ -203,6 +206,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				0B53DB972CB0A92F0034B436 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				0B5E77A82CB1959F00048277 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0B53DB672CB0A3330034B436 /* Products */;
@@ -591,6 +595,14 @@
 				minimumVersion = 2.2.7;
 			};
 		};
+		0B5E77A82CB1959F00048277 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/youtube/youtube-ios-player-helper.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -598,6 +610,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0B53DB972CB0A92F0034B436 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		0B5E77A92CB1959F00048277 /* YouTubeiOSPlayerHelper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0B5E77A82CB1959F00048277 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
+			productName = YouTubeiOSPlayerHelper;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
