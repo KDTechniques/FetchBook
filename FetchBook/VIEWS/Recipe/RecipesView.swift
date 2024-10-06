@@ -10,7 +10,7 @@ import SDWebImageSwiftUI
 
 struct RecipesView: View {
     // MARK: - PROPERTIES
-    @StateObject private var recipeVM: RecipeViewModel = .init()
+    @StateObject private var recipeVM: RecipeViewModel
     
     @State private var progress: Double = .zero
     @State private var showVideoPlayer: Bool = false
@@ -20,10 +20,17 @@ struct RecipesView: View {
         case refresh
     }
     
+    // MARK: - INITIALIZER
+    init(recipeService: RecipeDataFetching) {
+        _recipeVM = StateObject(wrappedValue: RecipeViewModel(recipeService: recipeService))
+    }
+    
     // MARK: - BODY
     var body: some View {
         NavigationStack {
-            List(recipeVM.recipesArray) { recipe in
+            List(recipeVM.sortedRecipesArray) { recipe in
+                let videoID: String? = Helpers.extractYouTubeVideoID(from: recipe.youtubeURL ?? "")
+                
                 HStack {
                     Group {
                         if let url: URL = .init(string: recipe.photoURLLarge) {
@@ -60,10 +67,11 @@ struct RecipesView: View {
                                 WebViewWithProgress(url: url, progress: $progress)
                             }
                             .overlay {
-                                if showVideoPlayer {
-                                    DraggableYouTubePlayerView(videoID: "6R8ffRRJcrg") {
+                                if let videoID: String = videoID, showVideoPlayer {
+                                    DraggableYouTubePlayerView(videoID: videoID) {
                                         showVideoPlayer = false
                                     }
+                                    .onDisappear { showVideoPlayer = false }
                                 }
                             }
                             .ignoresSafeArea(edges: .bottom)
@@ -78,6 +86,8 @@ struct RecipesView: View {
                             }
                             .navigationTitle("Blog Post")
                             .navigationBarTitleDisplayMode(.inline)
+                        } else  {
+                            CustomContentNotAvailableView(.init(systemImageName: "xmark", title: "title", description: "description"))
                         }
                     } label: {
                         VStack(alignment: .leading) {
@@ -90,16 +100,34 @@ struct RecipesView: View {
                     }
                 }
             }
-            .task(priority: .high) { loadData(.initial, endpoint: .all) }
-            .refreshable { loadData(.refresh, endpoint: .all) }
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Menu {
+                        Picker(selection: $recipeVM.selectedSortOption, label: Text("Sorting options")) {
+                            ForEach(RecipeViewModel.SortOptions.allCases) { option in
+                                Text(option.rawValue.capitalized)
+                                    .tag(option)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                    }
+                }
+            }
+            .task(priority: .high) { loadData(.initial) }
+            .refreshable { loadData(.refresh) }
             .navigationTitle("Recipes")
         }
     }
 }
 
 // MARK: - PREVIEWS
+#Preview("RecipesView - Mock Data") {
+    RecipesView(recipeService: MockRecipeAPIService())
+}
+
 #Preview("RecipesView") {
-    RecipesView()
+    RecipesView(recipeService: RecipeAPIService())
 }
 
 extension RecipesView {
@@ -115,13 +143,13 @@ extension RecipesView {
         }
     }
     
-    private func loadData(_ condition: FetchConditions, endpoint: RecipeViewModel.Endpoints) {
+    private func loadData(_ condition: FetchConditions) {
         switch condition {
         case .initial:
-            recipeVM.recipesArray.isEmpty ? fetchData(endpoint: endpoint) : ()
+            recipeVM.sortedRecipesArray.isEmpty ? fetchData(endpoint: .all) : ()
             
         case .refresh:
-            fetchData(endpoint: endpoint)
+            fetchData(endpoint: .all)
         }
     }
 }
