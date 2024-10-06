@@ -11,7 +11,7 @@ import SwiftUI
 struct FetchBookApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RecipesView(recipeService: RecipeAPIService())
         }
     }
 }
