@@ -9,5 +9,5 @@ import Foundation
 
 protocol RecipeDataFetching {
     // MARK: - FUNCTIONS
-    func fetchRecipeData(from endpoint: RecipeViewModel.Endpoints) async throws -> RecipesModel
+    func fetchRecipeData(from endpoint: RecipeEndpointModel) async throws -> RecipesModel
 }
