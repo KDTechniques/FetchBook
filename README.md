@@ -4,7 +4,7 @@
 > This project was created as a take-home project for **'Fetch'** company in the US to evaluate my skills in the interview process. It also covers unit tests, best coding practices, performance enhancements, and provides a better UI/UX experience.
 
 ## 👨🏻‍🏫 Introduction
-**FetchBook** is a simple recipe browsing app that fetches and displays recipes using a provided API. Built using Swift and SwiftUI, this app showcases clean architecture, efficient networking, and image caching to enhance user experience. Users can view recipes with details like name, photo, and cuisine type. The app also supports manual refresh functionality and handles various edge cases, such as empty or malformed data. 
+**FetchBook** is a simple recipe browsing app that fetches and displays recipes using a provided API. Built using Swift and SwiftUI, this app showcases MVVM architecture, efficient networking, and image caching to enhance user experience. Users can view recipes with details like name, photo, and cuisine type. The app also supports manual refresh functionality and handles various edge cases, such as empty or malformed data. 
 
 Additionally, the app features:
 
@@ -81,10 +81,10 @@ I decided to invest more than 4-5 hours into this project because there was no s
 
 This habit was cultivated during my bachelor’s degree during lab sessions conducted by the university. I find joy in crafting well-structured code and ensuring my projects are well-documented, as it enhances both maintainability and user experience.
 
-I spent approximately 17.5 hours on this project. My time was allocated as follows:
+I spent approximately 12 hours on this project. My time was allocated as follows:
 - Requiremnents Planning: 1 hour
 - Design & Prototyping: 30min
-- Implementation: 12 hours
+- Implementation: 8 hours
 - Testing & Debugging: 3 hours
 - Documentation: 1 hour
 
