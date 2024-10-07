@@ -48,7 +48,7 @@ extension DebugView {
         } header: {
             Text("Endpoint")
         } footer: {
-            Text("Note: Refresh the list after selecting an endpoint to see the outcome.")
+            Text("Note: Refresh the list after selecting an endpoint to see the results.")
                 .font(.footnote)
         }
     }
@@ -60,7 +60,7 @@ extension DebugView {
                 Helpers.clearImageCache()
             }
         }  footer: {
-            Text("All the cashed images will be deleted from both memory and disk.")
+            Text("Note: Refresh the list after clearing cache from both memory and disk to see the results.")
                 .font(.footnote)
         }
     }
