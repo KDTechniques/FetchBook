@@ -20,10 +20,10 @@ class MockRecipeAPIService: RecipeDataFetching {
     /// - For the `.malformed` endpoint, it throws a `URLError` to simulate a malformed response.
     /// - For the `.empty` endpoint, it returns an empty `RecipesModel`.
     ///
-    /// - Parameter endpoint: The specific endpoint to fetch data from, defined by the `RecipeViewModel.Endpoints` enum.
+    /// - Parameter endpoint: The specific endpoint to fetch data from, defined by the `RecipeEndpointModel`.
     /// - Throws: `URLError` if the JSON string cannot be parsed or if the endpoint is malformed.
     /// - Returns: A `RecipesModel` containing the recipes fetched from the mock data.
-    func fetchRecipeData(from endpoint: RecipeViewModel.Endpoints) async throws -> RecipesModel {
+    func fetchRecipeData(from endpoint: RecipeEndpointModel) async throws -> RecipesModel {
         var mockJSONString: String { """
         {
             "recipes": [
@@ -43,14 +43,14 @@ class MockRecipeAPIService: RecipeDataFetching {
                     "photo_url_small": "https://d3jbb8n5wk0qxi.cloudfront.net/photos/4aecd46e-e419-49ec-8888-246b3cc0cc94/small.jpg",
                     "source_url": "https://www.bbc.co.uk/food/recipes/chelsea_buns_95015",
                     "uuid": "7fc217a9-5566-4bf1-b1ce-13bc9e3f2b1a",
-                    "youtube_url": "https://www.youtube.com/watch?v=i_zemP3yBKw"
+                    "youtube_url": ""
                 },
                 {
                     "cuisine": "Malaysian",
                     "name": "Apam Balik",
                     "photo_url_large": "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/large.jpg",
                     "photo_url_small": "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/small.jpg",
-                    "source_url": "https://www.nyonyacooking.com/recipes/apam-balik~SJ5WuvsDf9WQ",
+                    "source_url": "",
                     "uuid": "0c6ca6e7-e32a-4053-b824-1dbf749910d8",
                     "youtube_url": "https://www.youtube.com/watch?v=6R8ffRRJcrg"
                 },
@@ -76,8 +76,8 @@ class MockRecipeAPIService: RecipeDataFetching {
         // Decode the JSON string into your RecipesModel
         let recipesResponse = try JSONDecoder().decode(RecipesModel.self, from: data)
         
-        // Depending on the endpoint, return the mock data or simulate errors
-        switch endpoint {
+        // Depending on the endpoint type, return the mock data or simulate errors
+        switch endpoint.type {
         case .all:
             return recipesResponse
         case .malformed:
