@@ -40,7 +40,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				VIEWS/Recipe/DraggableYouTubePlayerView.swift,
-				VIEWS/Recipe/WebView.swift,
+				VIEWS/Recipe/WebViewWithProgress.swift,
 				VIEWS/Reusable/CustomContentNotAvailableView.swift,
 			);
 			target = 0B53DB652CB0A3330034B436 /* FetchBook */;
