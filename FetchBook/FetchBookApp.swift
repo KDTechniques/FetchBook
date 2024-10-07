@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct FetchBookApp: App {
+    // MARK: - INITIALIZER
+    init() {
+        Helpers.preloadWebView()
+    }
+    
+    // MARK: - BODY
     var body: some Scene {
         WindowGroup {
-            RecipesView(recipeService: RecipeAPIService())
+            ContentView(recipeService: RecipeAPIService())
         }
     }
 }
