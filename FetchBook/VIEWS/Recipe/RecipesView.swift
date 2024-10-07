@@ -57,7 +57,7 @@ struct RecipesView: View {
 extension RecipesView {
     // MARK: - successRecipeList
     private var successRecipeList: some View {
-        List(recipeVM.sortedRecipesArray) { ListRowContentView(recipe: $0) }
+        List(recipeVM.mutableRecipesArray) { ListRowContentView(recipe: $0) }
     }
     
     // MARK: - shimmeringListEffect
