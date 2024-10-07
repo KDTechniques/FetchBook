@@ -16,7 +16,7 @@ final class RecipeViewModel: ObservableObject {
     @Published private(set) var recipesArray: [RecipeModel] = []
     
     /// A published array that holds the sorted list of recipes, which updates the UI automatically.
-    @Published var sortedRecipesArray: [RecipeModel] = []
+    @Published var mutableRecipesArray: [RecipeModel] = []
     
     /// Enumeration representing sorting options available for the recipes.
     enum SortOptions: String, CaseIterable, Identifiable {
@@ -38,7 +38,7 @@ final class RecipeViewModel: ObservableObject {
     private var cancelables = Set<AnyCancellable>()
     
     /// A service for fetching recipe data, adhering to the `RecipeDataFetching` protocol.
-    private let recipeService: RecipeDataFetching
+    let recipeService: RecipeDataFetching
     
     /// The currently selected API endpoint for data retrieval.
     /// debug purposes only.
@@ -50,6 +50,9 @@ final class RecipeViewModel: ObservableObject {
     // MARK: - INITIALIZER
     /// Initializes a new instance of `RecipeViewModel` with the provided recipe service.
     ///
+    /// - This initializer sets up the recipe fetching service used for retrieving recipe data.
+    /// - It also subscribes to changes in the sorting option and search text to dynamically update the recipe list based on user input.
+    ///
     /// - Parameter recipeService: A service conforming to `RecipeDataFetching` for fetching recipe data.
     init(recipeService: RecipeDataFetching) {
         self.recipeService = recipeService
@@ -59,10 +62,16 @@ final class RecipeViewModel: ObservableObject {
     
     // MARK: - FUNCTIONS
     
-    /// Fetches recipe data from the specified endpoint and updates the recipes array and sorted recipes array.
+    // MARK: - fetchRecipeData
+    /// Fetches recipe data from the specified endpoint and updates the `recipesArray` and `mutableRecipesArray`.
     ///
-    /// - Parameter endpoint: The endpoint from which to fetch recipe data.
-    /// - Throws: An error if the fetching fails.
+    /// - The function sets the `currentDataStatus` to `.fetching` while waiting for the data.
+    /// - Once the data is fetched, it updates the `recipesArray` and `mutableRecipesArray` with the fetched recipes.
+    /// - If no recipes are returned, the `currentDataStatus` is set to `.emptyData`, otherwise it is set to `.none`.
+    /// - If an error occurs during fetching, the `currentDataStatus` is updated to `.malformed`, and the error is thrown.
+    ///
+    /// - Parameter endpoint: The endpoint from which to fetch the recipe data.
+    /// - Throws: An error if fetching data from the `RecipeService` fails.
     func fetchRecipeData(endpoint: RecipeEndpointModel) async throws {
         do {
             DispatchQueue.main.async { [weak self] in
@@ -78,7 +87,7 @@ final class RecipeViewModel: ObservableObject {
                 
                 currentDataStatus = recipes.isEmpty ? .emptyData : .none
                 recipesArray = recipes // Store fetched recipes in recipesArray.
-                sortedRecipesArray = recipes // Initialize sortedRecipesArray with the fetched recipes.
+                mutableRecipesArray = recipes // Initialize mutableRecipesArray with the fetched recipes.
             }
         } catch {
             DispatchQueue.main.async { [weak self] in
@@ -93,24 +102,31 @@ final class RecipeViewModel: ObservableObject {
     // MARK: - sortRecipes
     /// Sorts the recipes based on the selected sorting option.
     ///
-    /// - Parameter option: The sorting option to apply.
+    /// - Parameter option: The sorting option to apply (`az`, `za`, or `none`).
     /// - Returns: An array of `RecipeModel` sorted according to the specified option.
-    private func sortRecipes(option: SortOptions) -> [RecipeModel] {
+    ///   If the option is `.az`, the array is sorted in ascending order (A-Z),
+    ///   if `.za`, it is sorted in descending order (Z-A), and if `.none`, the original array is returned.
+    func sortRecipes(option: SortOptions) -> [RecipeModel] {
         switch option {
-        case .az: return recipesArray.sorted(by: { $0.name < $1.name }) // Sort A-Z.
-        case .za: return recipesArray.sorted(by: { $0.name > $1.name }) // Sort Z-A.
-        case .none: return recipesArray // Return unsorted array.
+        case .az: recipesArray.sorted(by: { $0.name < $1.name }) // Sort A-Z.
+        case .za: recipesArray.sorted(by: { $0.name > $1.name }) // Sort Z-A.
+        case .none: recipesArray // Return unsorted array.
         }
     }
     
     // MARK: - sortOptionSubscriber
     /// Sets up a subscriber to observe changes in the selected sort option
-    /// and updates the sorted recipes array accordingly.
-    private func sortOptionSubscriber() {
+    /// and updates the `mutableRecipesArray` accordingly.
+    ///
+    /// - This function listens for changes to the `selectedSortOption` property, which determines how the recipes should be sorted.
+    /// - When the sort option is updated (e.g., A-Z, Z-A, or none), the function calls `sortRecipes(option:)` to sort the array based on the selected option.
+    /// - Updates the `mutableRecipesArray` with the sorted results.
+    /// - Stores the subscription in `cancelables` to ensure proper memory management and prevent memory leaks.
+    func sortOptionSubscriber() {
         $selectedSortOption
             .sink { [weak self] option in
                 guard let self else { return }
-                self.sortedRecipesArray = self.sortRecipes(option: option) // Update sortedRecipesArray on option change.
+                mutableRecipesArray = sortRecipes(option: option) // Update mutableRecipesArray on option change.
             }
             .store(in: &cancelables) // Store the subscription in cancelables to manage memory.
     }
@@ -119,29 +135,45 @@ final class RecipeViewModel: ObservableObject {
     /// Subscribes to changes in the `recipeSearchText` property and updates the list of recipes accordingly.
     ///
     /// - This function listens for updates to the search text entered by the user.
-    /// - When the search text is empty, all recipes are displayed.
-    /// - When the search text contains valid input, the recipes are filtered based on the user's search.
-    /// - Uses `debounce` to delay the filtering action until the user has stopped typing for a specified duration.
-    /// - Updates `sortedRecipesArray` with either the full recipe list or filtered results.
-    private func recipeSearchTextSubscriber() {
+    /// - When the search text is empty, all recipes are displayed and the `currentDataStatus` is set to `.none`.
+    /// - When the search text contains valid input, the recipes are filtered based on the user's search using `filterSearchResult(_:)`.
+    /// - Uses `debounce` to delay the filtering action until the user has stopped typing for 0.1 seconds, preventing unnecessary updates.
+    /// - Updates `mutableRecipesArray` with either the full recipe list when no search text is entered or filtered results based on the search text.
+    /// - Stores the subscription in `cancelables` to ensure proper memory management.
+    func recipeSearchTextSubscriber() {
         $recipeSearchText
             .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
             .sink { [weak self] text in
                 guard let self else { return }
-                text.isEmpty ? sortedRecipesArray = recipesArray : filterSearchResult(text: text)
+                
+                if text.isEmpty {
+                    currentDataStatus = .none
+                    mutableRecipesArray = recipesArray
+                } else {
+                    filterSearchResult(text: text)
+                }
             }
             .store(in: &cancelables)
     }
     
     // MARK: - filterSearchResult
-    /// Filters the `sortedRecipesArray` based on the provided search text.
+    /// Filters the `mutableRecipesArray` based on the provided search text.
     ///
     /// - Converts the search text to lowercase to perform case-insensitive matching.
     /// - Filters the recipes by checking if the recipe's name or cuisine contains the search text.
-    /// - Updates the `sortedRecipesArray` with the recipes that match the search criteria.
+    /// - Updates the `mutableRecipesArray` with the recipes that match the search criteria.
+    /// - If the search text is empty, it resets `mutableRecipesArray` to the full `recipesArray`.
+    /// - If no recipes match the search criteria, updates the `mutableRecipesArray` with an empty array.
+    /// - Animates the update to `mutableRecipesArray` if matching recipes are found.
+    /// - Updates the `currentDataStatus` to `.emptyResult` if no matches are found, or to `.none` otherwise.
     ///
     /// - Parameter text: The search text entered by the user to filter the recipe list.
-    private func filterSearchResult(text: String) {
+    func filterSearchResult(text: String) {
+        guard !text.isEmpty else {
+            mutableRecipesArray = recipesArray
+            return
+        }
+        
         let lowercasedText: String = text.lowercased()
         let filteredRecipesArray: [RecipeModel] = recipesArray.filter({
             $0.name.lowercased().contains(lowercasedText) ||
@@ -149,13 +181,13 @@ final class RecipeViewModel: ObservableObject {
         })
         
         if filteredRecipesArray.isEmpty {
-            sortedRecipesArray = filteredRecipesArray
+            mutableRecipesArray = filteredRecipesArray
         } else {
             withAnimation {
-                sortedRecipesArray = filteredRecipesArray
+                mutableRecipesArray = filteredRecipesArray
             }
         }
         
-        currentDataStatus = sortedRecipesArray.isEmpty ? .emptyResult : .none
+        currentDataStatus = mutableRecipesArray.isEmpty ? .emptyResult : .none
     }
 }
