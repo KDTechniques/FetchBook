@@ -10,146 +10,122 @@ import SDWebImageSwiftUI
 
 struct RecipesView: View {
     // MARK: - PROPERTIES
-    @StateObject private var recipeVM: RecipeViewModel
+    @ObservedObject private var recipeVM: RecipeViewModel
     
-    @State private var progress: Double = .zero
-    @State private var showVideoPlayer: Bool = false
+    // MARK: - PRIVATE PROPERTIES
+    @State private var isLoading: Bool = true
     
-    enum FetchConditions {
-        case initial
-        case refresh
-    }
+    enum FetchConditions { case initial, refresh }
     
     // MARK: - INITIALIZER
-    init(recipeService: RecipeDataFetching) {
-        _recipeVM = StateObject(wrappedValue: RecipeViewModel(recipeService: recipeService))
+    init(vm: RecipeViewModel) {
+        _recipeVM = ObservedObject(wrappedValue: vm)
     }
     
     // MARK: - BODY
     var body: some View {
         NavigationStack {
-            List(recipeVM.sortedRecipesArray) { recipe in
-                let videoID: String? = Helpers.extractYouTubeVideoID(from: recipe.youtubeURL ?? "")
-                
-                HStack {
-                    Group {
-                        if let url: URL = .init(string: recipe.photoURLLarge) {
-                            WebImage(url: url, options: [.retryFailed, .progressiveLoad])
-                                .placeholder {
-                                    Rectangle()
-                                        .fill(.secondary)
-                                }
-                                .resizable()
-                                .scaledToFit()
-                            
-                        } else {
-                            Rectangle()
-                                .fill(.secondary)
-                        }
-                    }
-                    .frame(width: 80, height: 80)
-                    .clipShape(.rect(cornerRadius: 10))
+            Group {
+                switch recipeVM.currentDataStatus {
+                case .none: successRecipeList
+                case .fetching: shimmeringListEffect
+                case .malformed: malformedError
+                case .emptyData: emptyDataError
+                case .emptyResult: emptySearchResults
                     
-                    NavigationLink {
-                        if let urlString: String = recipe.blogPostURL,
-                           let url: URL = .init(string: urlString) {
-                            VStack(spacing: 0) {
-                                Rectangle()
-                                    .fill(Color(uiColor: .systemGray6))
-                                    .frame(height: 2)
-                                    .overlay(alignment: .leading) {
-                                        Rectangle()
-                                            .fill(.blue)
-                                            .frame(width: UIScreen.main.bounds.size.width * progress)
-                                    }
-                                    .opacity(progress == 1 ? 0 : 1)
-                                
-                                WebViewWithProgress(url: url, progress: $progress)
-                            }
-                            .overlay {
-                                if let videoID: String = videoID, showVideoPlayer {
-                                    DraggableYouTubePlayerView(videoID: videoID) {
-                                        showVideoPlayer = false
-                                    }
-                                    .onDisappear { showVideoPlayer = false }
-                                }
-                            }
-                            .ignoresSafeArea(edges: .bottom)
-                            .toolbar {
-                                ToolbarItem(placement: .topBarTrailing) {
-                                    Button {
-                                        showVideoPlayer = true
-                                    } label: {
-                                        Image(systemName: "play.circle")
-                                    }
-                                }
-                            }
-                            .navigationTitle("Blog Post")
-                            .navigationBarTitleDisplayMode(.inline)
-                        } else  {
-                            CustomContentNotAvailableView(.init(systemImageName: "xmark", title: "title", description: "description"))
-                        }
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(recipe.name)
-                            
-                            Text(recipe.cuisine)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Menu {
-                        Picker(selection: $recipeVM.selectedSortOption, label: Text("Sorting options")) {
-                            ForEach(RecipeViewModel.SortOptions.allCases) { option in
-                                Text(option.rawValue.capitalized)
-                                    .tag(option)
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                    }
-                }
-            }
+            .toolbar { ToolbarItem(placement: .automatic) { RecipeListSorterButtonView(vm: recipeVM) } }
             .task(priority: .high) { loadData(.initial) }
             .refreshable { loadData(.refresh) }
             .navigationTitle("Recipes")
         }
+        .searchable(text: $recipeVM.recipeSearchText, prompt: "Search")
     }
 }
 
 // MARK: - PREVIEWS
-#Preview("RecipesView - Mock Data") {
-    RecipesView(recipeService: MockRecipeAPIService())
+#Preview("RecipesView - Mock") {
+    RecipesView(vm: .init(recipeService: MockRecipeAPIService()))
 }
 
 #Preview("RecipesView") {
-    RecipesView(recipeService: RecipeAPIService())
+    RecipesView(vm: .init(recipeService: RecipeAPIService()))
 }
 
+// MARK: - EXTENSIONS
 extension RecipesView {
+    // MARK: - successRecipeList
+    private var successRecipeList: some View {
+        List(recipeVM.sortedRecipesArray) { ListRowContentView(recipe: $0) }
+    }
+    
+    // MARK: - shimmeringListEffect
+    private var shimmeringListEffect: some View {
+        RecipeShimmeringListView()
+    }
+    
+    // MARK: - malformedError
+    private var malformedError: some View {
+        List {
+            CustomContentNotAvailableView(.init(
+                systemImageName: "exclamationmark.icloud",
+                title: "No Recipes",
+                description: "We're having trouble loading the recipes right now. Please try again later."
+            ))
+            .listRowSeparator(.hidden)
+        }
+        .listStyle(.plain)
+    }
+    
+    // MARK: - emptyDataError
+    private var emptyDataError: some View {
+        List {
+            CustomContentNotAvailableView(.init(
+                systemImageName: "fork.knife",
+                title: "No Recipes",
+                description: "Recipes are currently unavailable from our end. Please check back later."
+            ))
+            .listRowSeparator(.hidden)
+        }
+        .listStyle(.plain)
+    }
+    
+    // MARK: - emptySearchResults
+    private var emptySearchResults: some View {
+        CustomContentNotAvailableView(.init(title: "No Results"))
+    }
+    
     // MARK: - fetchData
-    private func fetchData(endpoint: RecipeViewModel.Endpoints) {
+    /// Fetches recipe data from the specified endpoint.
+    /// - Parameter endpoint: The endpoint model representing the recipe source.
+    /// This function uses an asynchronous task to fetch the recipe data,
+    /// updating the view model accordingly. If an error occurs during the fetch,
+    /// it sets the current data status to .malformed and prints the error.
+    private func fetchData(endpoint: RecipeEndpointModel) {
         Task {
             do {
                 try await recipeVM.fetchRecipeData(endpoint: endpoint)
             } catch {
                 print("Error fetching recipes: \(error)")
-                // show an alert here...
+                recipeVM.currentDataStatus = .malformed
             }
         }
     }
     
+    // MARK: - loadData
+    /// Loads data based on the specified fetch condition.
+    /// - Parameter condition: The condition that determines how data should be fetched.
+    /// This function checks the condition and either fetches data for the first time
+    /// (if the condition is .initial and the recipes array is empty) or refreshes the
+    /// data (if the condition is .refresh) by calling fetchData with the selected endpoint.
     private func loadData(_ condition: FetchConditions) {
         switch condition {
         case .initial:
-            recipeVM.sortedRecipesArray.isEmpty ? fetchData(endpoint: .all) : ()
+            recipeVM.recipesArray.isEmpty ? fetchData(endpoint: recipeVM.selectedEndpoint) : ()
             
         case .refresh:
-            fetchData(endpoint: .all)
+            fetchData(endpoint: recipeVM.selectedEndpoint)
         }
     }
 }
