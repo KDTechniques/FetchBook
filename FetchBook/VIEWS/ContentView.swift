@@ -17,7 +17,7 @@ struct ContentView: View {
     }
     
     // MARK: - PRIVATE PROPERTIES
-    @State private var selectedTab: TabBarTypes = .debug
+    @State private var selectedTab: TabBarTypes = .recipe
     
     // MARK: - BODY
     var body: some View {

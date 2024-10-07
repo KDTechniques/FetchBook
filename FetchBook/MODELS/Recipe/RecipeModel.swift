@@ -11,7 +11,7 @@ struct RecipesModel: Codable {
     let recipes: [RecipeModel]
 }
 
-struct RecipeModel: Identifiable, Codable {
+struct RecipeModel: Identifiable, Codable, Equatable {
     // MARK: - PROPERTIES
     let id: String
     let name: String
