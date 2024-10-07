@@ -35,9 +35,24 @@
 		0B53DB802CB0A3360034B436 /* FetchBookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetchBookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0B132BAC2CB3885D005C49CD /* Exceptions for "FetchBook" folder in "FetchBook" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				VIEWS/Recipe/DraggableYouTubePlayerView.swift,
+				VIEWS/Recipe/WebView.swift,
+				VIEWS/Reusable/CustomContentNotAvailableView.swift,
+			);
+			target = 0B53DB652CB0A3330034B436 /* FetchBook */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0B53DB682CB0A3330034B436 /* FetchBook */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0B132BAC2CB3885D005C49CD /* Exceptions for "FetchBook" folder in "FetchBook" target */,
+			);
 			path = FetchBook;
 			sourceTree = "<group>";
 		};
