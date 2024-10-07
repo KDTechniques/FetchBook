@@ -6,8 +6,17 @@
 //
 
 import Foundation
+import SDWebImageSwiftUI
+import WebKit
 
 struct Helpers {
+    // MARK: - PROPERTIES
+    static let screenWidth: CGFloat = UIScreen.main.bounds.size.width
+    static let screenHeight: CGFloat = UIScreen.main.bounds.size.height
+    
+    // MARK: - FUNCTIONS
+    
+    // MARK: - extractYouTubeVideoID
     // Extract video ID from a YouTube URL.
     ///
     /// This function takes a YouTube video URL as a string and uses a regular expression
@@ -31,4 +40,31 @@ struct Helpers {
         return nil
     }
     
+    // MARK: - clearImageCache
+    /// Clears the image cache from both memory and disk storage.
+    ///
+    /// This function removes all cached images from the memory and disk. Once the disk cache is cleared,
+    /// a message is printed to indicate that the operation was successful.
+    static func clearImageCache() {
+        let imageCache = SDImageCache.shared
+        
+        imageCache.clearMemory()
+        imageCache.clearDisk { print("Image cache cleared from disk.") }
+        
+        print("Image cache cleared from memory.")
+    }
+    
+    // MARK: - preloadWebView
+    /// Preloads a hidden `WKWebView` to warm up the WebKit process and avoid delays during subsequent WebView usage.
+    ///
+    /// This function preloads a `WKWebView` by loading a lightweight page (`about:blank`) on the main thread.
+    /// This warms up the WebKit process to reduce any potential delay when the user navigates to a webpage for the first time.
+    static func preloadWebView() {
+        DispatchQueue.main.async {
+            let webView = WKWebView(frame: .zero)
+            let dummyURL = URL(string: "about:blank")! // Load a blank page or a simple local page
+            let request = URLRequest(url: dummyURL)
+            webView.load(request)
+        }
+    }
 }
