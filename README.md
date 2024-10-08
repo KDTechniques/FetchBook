@@ -82,8 +82,8 @@ I decided to invest more than 4-5 hours into this project because there was no s
 This habit was cultivated during lab sessions conducted by the university during my bachelor's degree. I find joy in crafting well-structured code and ensuring my projects are well-documented, as it enhances both maintainability and user experience.
 
 I spent approximately 12 hours on this project. My time was allocated as follows:
-- Requirements Planning: 30 min.
-- Design & Prototyping: 15 min.
+- Requirements Planning: 15 min.
+- Design & Prototyping: 5 min.
 - Implementation: 8 hours
 - Testing & Debugging: 3 hours
 - Documentation: 1 hour
