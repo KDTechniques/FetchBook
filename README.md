@@ -1,7 +1,7 @@
 # FetchBook - Recipe Fetching iOS App 🍰 🍜 🥗
 
 > [!Note]
-> This project was created as a take-home project for **'Fetch'** company in the US to evaluate my skills in the interview process. It also covers unit tests, best coding practices, performance enhancements, and provides a better UI/UX experience.
+> This project was created as a take-home project for **'Fetch'** company in the US to evaluate my skills in the interview process. It also covers unit tests, best coding practices, and performance enhancements, and provides a better UI/UX experience.
 
 ## 👨🏻‍🏫 Introduction
 **FetchBook** is a simple recipe browsing app that fetches and displays recipes using a provided API. Built using Swift and SwiftUI, this app showcases MVVM architecture, efficient networking, and image caching to enhance user experience. Users can view recipes with details like name, photo, and cuisine type. The app also supports manual refresh functionality and handles various edge cases, such as empty or malformed data. 
@@ -77,13 +77,13 @@ In this project, I prioritized the following areas:
 |<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/UnitTests.jpg?raw=true'>
 
 ## ⏰ Time Spent
-I decided to invest more than 4-5 hours into this project because there was no strict deadline for the exercise. I wanted to put forth my maximum effort to create something I love. Even though this isn’t a production app, I treated it with the same level of seriousness and dedication as I would for any professional project. This approach reflects both a strength and a weakness of mine—I take projects very seriously and strive to deliver beautiful outcomes, regardless of whether it's a full-fledged app or a simple console application.
+I decided to invest more than 4-5 hours into this project because there was no strict deadline for the exercise. I wanted to put forth my maximum effort to create something I love. Even though this isn’t a production app, I treated it with the same seriousness and dedication as I would for any professional project. This approach reflects my strengths and a weakness of mine—I take projects very seriously and strive to deliver beautiful outcomes, whether it's a full-fledged app or a simple console application.
 
-This habit was cultivated during my bachelor’s degree during lab sessions conducted by the university. I find joy in crafting well-structured code and ensuring my projects are well-documented, as it enhances both maintainability and user experience.
+This habit was cultivated during lab sessions conducted by the university during my bachelor's degree. I find joy in crafting well-structured code and ensuring my projects are well-documented, as it enhances both maintainability and user experience.
 
 I spent approximately 12 hours on this project. My time was allocated as follows:
-- Requiremnents Planning: 1 hour
-- Design & Prototyping: 30min
+- Requirements Planning: 30 min.
+- Design & Prototyping: 15 min.
 - Implementation: 8 hours
 - Testing & Debugging: 3 hours
 - Documentation: 1 hour
@@ -97,7 +97,7 @@ In this project, I made several key decisions that contributed to its overall fu
 - Although pagination for recipe fetching could improve performance, I did not implement this feature since the API endpoint does not support it. Similarly, the lack of access to all available cuisine types from the server-side API prevented me from implementing a sort-by-cuisine feature.
 
 ## 🤒 Weakest Part of the Project
-The weakest part of the project lies in the error handling for network requests. While basic error handling is implemented, there are several areas for improvement:
+The weakest part of the project lies in the error handling of network requests. While basic error handling is implemented, there are several areas for improvement:
 
 - **User Feedback**: Although I could have implemented alerts for error handling, I opted not to do so. Instead, I provided user-friendly feedback directly in the list view using the ContentNotAvailable view. This approach ensures that users receive clear information about any issues without the disruption of alerts.
 
@@ -116,6 +116,6 @@ This project uses the following external libraries and dependencies:
 ## 💁🏻‍♂️ Additional Information
 I've included images to show the behind-the-scenes planning of this exercise as follows:
 
-|Once I understood the requirements and the API endpoints, I created a model, designed the list row view|Then I documented additional features and functional improvements.|Finally, I sketched the main recipe list UI, paying close attention to typography to enhance readability and user experience.|I wrote pseudo code for the image loading and caching mechanism using the third-party library called SDWebImageSwiftUI, but improved and simplified the functionality for better performance.|
+|Once I understood the requirements and the API endpoints, I created a model, and designed the list row view|Then I documented additional features and functional improvements.|Finally, I sketched the main recipe list UI, paying close attention to typography to enhance readability and user experience.|I wrote pseudo-code for the image loading and caching mechanism using the third-party library called SDWebImageSwiftUI, but improved and simplified the functionality for better performance.|
 |-|-|-|-|
 |<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/1.jpeg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/2.jpeg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/3.jpeg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/4.jpeg?raw=true'>|
