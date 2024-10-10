@@ -113,6 +113,8 @@ This project uses the following external libraries and dependencies:
 - **WebKit**: For rendering web content within the app.
 - **SwiftUI-Shimmer**: For adding a shimmering effect to indicate loading content, enhancing the user experience during data fetching.
 
+Additionally, I utilized Copilot and ChatGPT to assist in creating some parts of the documentation and provide code suggestions for enhancing performance and structure.
+
 ## 💁🏻‍♂️ Additional Information
 I've included images to show the behind-the-scenes planning of this exercise as follows:
 
