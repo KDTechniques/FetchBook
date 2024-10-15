@@ -2,6 +2,9 @@
 
 > [!Note]
 > This project was created as a Take-Home Project for **'Fetch'** company in the US to evaluate my skills in the interview process. It also covers unit tests, best coding practices, and performance enhancements, and provides a better UI/UX experience.
+>
+> *[Project Requirements Reference](https://d3jbb8n5wk0qxi.cloudfront.net/take-home-project.html)*
+
 
 ## 👨🏻‍🏫 Introduction
 **FetchBook** is a simple recipe browsing app that fetches and displays recipes using a provided API. Built using Swift and SwiftUI, this app showcases MVVM architecture, efficient networking, and image caching to enhance user experience. Users can view recipes with details like name, photo, and cuisine type. The app also supports manual refresh functionality and handles various edge cases, such as empty or malformed data. 
@@ -17,6 +20,7 @@ Additionally, the app features:
 |Recipe List View (Main-UI)|Blog Post Web View with Youtube Player|
 |-|-|
 |<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Intro_1.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Intro_2.jpg?raw=true' width='300'>|
+
 
 ## 👨🏻‍💻 Steps to Run the App
 
@@ -52,6 +56,7 @@ cd FetchBook
 
 - Additionally, you can clear the image cache from both memory and disk. After changing any debug options, be sure to refresh the recipe list to see the updates. ↺
 
+
 ## 👀 Focus Areas
 In this project, I prioritized the following areas:
 
@@ -76,6 +81,29 @@ In this project, I prioritized the following areas:
 |-|
 |<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/UnitTests.jpg?raw=true'>
 
+
+## 🚀 Performance Optimizations
+- **Lazy Loading and Image Caching**: Used a list for lazy loading of recipe images and `SDWebImageSwiftUI` for caching images. This ensures that images are only loaded when about to appear on the screen and are quickly accessible on subsequent views, reducing memory usage and unnecessary network requests.
+  
+- **Efficient Data Fetching**: Combined data fetching logic with Swift Concurrency to optimize the process and avoid blocking the main thread during API calls.
+
+- **`.task` ViewModifier for Asynchronous Fetching**: Used the task modifier to initiate asynchronous data fetches directly within SwiftUI views. This allows for a seamless integration of async/await, ensuring that data fetching is efficient and happens as soon as the view appears without blocking the main thread.
+
+- **View Extractions**: Extracted views to prevent them from being redrawn when there's a data change. This helps reduce the complexity of the main view body, promotes reusability, and improves performance by avoiding unnecessary recomputations.
+
+- **Efficient View Composition**: Using `@ViewBuilder` makes the code more efficient by directly returning the actual views, preserving their types and avoiding unnecessary overhead caused by type-erasing them with `AnyView`.
+
+- **Eliminate Unnecessary Dependencies**: Minimized the number of dependent views or properties that a single view relies on to prevent unnecessary updates to the entire view hierarchy.
+
+- **Avoid Inline Filtering/Sorting in Lists**: Moved filtering and sorting logic outside of the view body to avoid recalculating it on every render. By performing these operations before passing the data to the list, the app ensures smoother performance, particularly with larger datasets.
+
+- **Utilize `@StateObject` and `@ObservedObject` Appropriately**: Used @StateObject for managing the lifecycle of observable objects in the view and @ObservedObject for subscribing to objects created elsewhere can significantly improve memory management and performance in SwiftUI apps.
+
+- **Stable Identifiers**: Leveraged stable identifiers (e.g., unique IDs) for recipe items in lists. This helps SwiftUI optimize view updates and animations, ensuring that the UI remains responsive when the underlying data changes.
+
+- **Potential for Further Optimization**: I could have improved performance even further by eliminating the `SwiftUI-Shimmer` and `YouTubeiOSPlayerHelper` dependencies, reducing the overall complexity and overhead in the app.
+  
+
 ## ⏰ Time Spent
 I decided to invest more than 4-5 hours into this project because there was no strict deadline for the exercise. I wanted to put forth my maximum effort to create something I love. Even though this isn’t a production app, I treated it with the same seriousness and dedication as I would for any professional project. This approach reflects my strengths and a weakness of mine—I take projects very seriously and strive to deliver beautiful outcomes, whether it's a full-fledged app or a simple console application.
 
@@ -88,6 +116,7 @@ I spent approximately 8.5 hours on this project. My time was allocated as follow
 - Testing & Debugging: 1.5 hours
 - Documentation: 1 hour
 
+
 ## 🧠 Trade-offs and Decisions
 In this project, I made several key decisions that contributed to its overall functionality and user experience:
 
@@ -95,6 +124,7 @@ In this project, I made several key decisions that contributed to its overall fu
 - I matched model property names with the JSON recipe object attributes, adopting a consistent and easily readable naming convention. This not only simplifies the code but also improves maintainability and clarity for future developers.
 - I opted not to implement alerts for error handling; instead, I displayed user-friendly error messages directly in the list view using the ContentNotAvailable view. This approach ensures users are informed without the interruption of alerts.
 - Although pagination for recipe fetching could improve performance, I did not implement this feature since the API endpoint does not support it. Similarly, the lack of access to all available cuisine types from the server-side API prevented me from implementing a sort-by-cuisine feature.
+
 
 ## 🤒 Weakest Part of the Project
 The weakest part of the project lies in the error handling of network requests. While basic error handling is implemented, there are several areas for improvement:
@@ -105,6 +135,7 @@ The weakest part of the project lies in the error handling of network requests. 
 
 - **Cuisine Sorting**: Another potential improvement could have been adding a sorting feature by cuisine type. Unfortunately, I am unable to fetch all available cuisine types from the server side with the given API endpoint, restricting this feature's implementation.
 
+
 ## 🫛 External Code and Dependencies
 This project uses the following external libraries and dependencies:
 - **SwiftUI**: For building the user interface, providing a declarative syntax for UI development.
@@ -114,6 +145,7 @@ This project uses the following external libraries and dependencies:
 - **SwiftUI-Shimmer**: For adding a shimmering effect to indicate loading content, enhancing the user experience during data fetching.
 
 Additionally, I utilized Copilot and ChatGPT to assist in creating some parts of the documentation and provide code suggestions for enhancing performance and structure.
+
 
 ## 💁🏻‍♂️ Additional Information
 I've included images to show the behind-the-scenes planning of this exercise as follows:
