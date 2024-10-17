@@ -8,7 +8,7 @@
 import Foundation
 
 // Mock API service used for unit testing, also conforms to RecipeDataFetching
-class MockRecipeAPIService: RecipeDataFetching {
+actor MockRecipeAPIService: RecipeDataFetching {
     // MARK: - FUNCTIONS
     
     // MARK: - fetchRecipeData
