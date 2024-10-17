@@ -8,14 +8,18 @@
 import Foundation
 
 // Real API service that conforms to RecipeDataFetching protocol
-class RecipeAPIService: RecipeDataFetching {
+actor RecipeAPIService: RecipeDataFetching {
     // MARK: - FUNCTIONS
     
     // MARK: - fetchRecipeData
     /// Fetches recipe data from the specified API endpoint.
     ///
     /// This asynchronous function retrieves recipe data from a given endpoint defined by the `RecipeEndpoints` enum.
-    /// It constructs a URL from the endpoint, performs a network request, and decodes the response into a `RecipesModel` object.
+    /// It constructs a URL from the endpoint, configures a URL request with a cache policy to ignore cached data,
+    /// and performs a network request. The response is then decoded into a `RecipesModel` object.
+    ///
+    /// The cache policy used is `.reloadIgnoringCacheData`, ensuring that the latest data is fetched directly
+    /// from the server, bypassing any locally cached data. The request also has a timeout interval of 10 seconds.
     ///
     /// - Parameter endpoint: The specific endpoint to fetch data from, defined by the `RecipeEndpointModel`.
     /// - Throws: `URLError` if the URL is invalid, or if the network request fails or the response cannot be decoded.
@@ -26,7 +30,8 @@ class RecipeAPIService: RecipeDataFetching {
             throw URLError(.badURL)
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let request: URLRequest = .init(url: url, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 10)
+        let (data, _) = try await URLSession.shared.data(for: request)
         return try JSONDecoder().decode(RecipesModel.self, from: data)
     }
 }

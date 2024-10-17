@@ -25,7 +25,7 @@ struct WebView: UIViewRepresentable {
         // Configure WebView with process pool and other settings.
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WebView.sharedProcessPool // Sharing process pool
-        configuration.websiteDataStore = .default() // Using default data store; change to `.nonPersistent()` for no cache.
+        configuration.websiteDataStore = .nonPersistent() // Using `.nonPersistent()` for no cache; change to `.default` data store
         
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator // Set navigation delegate
