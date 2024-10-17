@@ -87,7 +87,7 @@ final class RecipeViewModel: ObservableObject {
                 
                 currentDataStatus = recipes.isEmpty ? .emptyData : .none
                 recipesArray = recipes // Store fetched recipes in recipesArray.
-                mutableRecipesArray = recipes // Initialize mutableRecipesArray with the fetched recipes.
+                assignSortedRecipesToMutableRecipesArray() // Initialize mutableRecipesArray with the fetched and sorted recipes.
             }
         } catch {
             DispatchQueue.main.async { [weak self] in
@@ -97,6 +97,17 @@ final class RecipeViewModel: ObservableObject {
             
             throw error
         }
+    }
+    
+    // MARK: - assignSortedRecipesToMutableRecipesArray
+    /// Assigns sorted recipes to the `mutableRecipesArray`.
+    ///
+    /// This function sorts the recipes based on the specified sort option and assigns the sorted result to the `mutableRecipesArray`.
+    /// If no sort option is provided, it defaults to the `selectedSortOption`.
+    ///
+    /// - Parameter option: An optional `SortOptions` value that determines the sorting criteria. If `nil`, the currently selected sort option will be used.
+    private func assignSortedRecipesToMutableRecipesArray(_ option: SortOptions? = nil) {
+        mutableRecipesArray = sortRecipes(option: option ?? selectedSortOption)
     }
     
     // MARK: - sortRecipes
@@ -126,7 +137,7 @@ final class RecipeViewModel: ObservableObject {
         $selectedSortOption
             .sink { [weak self] option in
                 guard let self else { return }
-                mutableRecipesArray = sortRecipes(option: option) // Update mutableRecipesArray on option change.
+                assignSortedRecipesToMutableRecipesArray(option) // Update mutableRecipesArray on option change.
             }
             .store(in: &cancelables) // Store the subscription in cancelables to manage memory.
     }
@@ -148,7 +159,7 @@ final class RecipeViewModel: ObservableObject {
                 
                 if text.isEmpty {
                     currentDataStatus = .none
-                    mutableRecipesArray = recipesArray
+                    assignSortedRecipesToMutableRecipesArray() // Update mutableRecipesArray with current sorting option.
                 } else {
                     filterSearchResult(text: text)
                 }
@@ -159,7 +170,7 @@ final class RecipeViewModel: ObservableObject {
     // MARK: - filterSearchResult
     /// Filters the `mutableRecipesArray` based on the provided search text.
     ///
-    /// - Converts the search text to lowercase to perform case-insensitive matching.
+    /// - Converts the search text to lowercase to enable case-insensitive matching.
     /// - Filters the recipes by checking if the recipe's name or cuisine contains the search text.
     /// - Updates the `mutableRecipesArray` with the recipes that match the search criteria.
     /// - If the search text is empty, it resets `mutableRecipesArray` to the full `recipesArray`.
@@ -170,12 +181,13 @@ final class RecipeViewModel: ObservableObject {
     /// - Parameter text: The search text entered by the user to filter the recipe list.
     func filterSearchResult(text: String) {
         guard !text.isEmpty else {
-            mutableRecipesArray = recipesArray
+            assignSortedRecipesToMutableRecipesArray()
             return
         }
         
         let lowercasedText: String = text.lowercased()
-        let filteredRecipesArray: [RecipeModel] = recipesArray.filter({
+        let sortedRecipesArray: [RecipeModel] = sortRecipes(option: selectedSortOption)
+        let filteredRecipesArray: [RecipeModel] = sortedRecipesArray.filter({
             $0.name.lowercased().contains(lowercasedText) ||
             $0.cuisine.lowercased().contains(lowercasedText)
         })
