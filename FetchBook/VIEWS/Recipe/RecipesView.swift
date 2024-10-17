@@ -108,7 +108,6 @@ extension RecipesView {
                 try await recipeVM.fetchRecipeData(endpoint: endpoint)
             } catch {
                 print("Error fetching recipes: \(error)")
-                recipeVM.currentDataStatus = .malformed
             }
         }
     }
