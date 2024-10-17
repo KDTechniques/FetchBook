@@ -72,9 +72,9 @@ In this project, I prioritized the following areas:
 
 - Data Management ⚙:
   - Utilized a ViewModel to manage the application's state and handle data fetching from the API, ensuring efficient and clean data flow.
-  - Employed Swift concurrency to streamline asynchronous data fetching and improve performance.
+  - Employed Swift concurrency to streamline asynchronous data fetching and improve performance with actors.
   - Implemented lazy loading and image caching to enhance performance, ensuring that images load efficiently and reducing memory, and network usage.
-  - Developed protocols, a mock API service class, and employed dependency injection for better code structure.
+  - Developed protocols and a mock API service class, and employed dependency injection for better code structure.
   - Wrote comprehensive unit tests to ensure the reliability and maintainability of the codebase.
  
 |Unit Tests|
@@ -102,7 +102,13 @@ In this project, I prioritized the following areas:
 - **Stable Identifiers**: Leveraged stable identifiers (e.g., unique IDs) for recipe items in lists. This helps SwiftUI optimize view updates and animations, ensuring that the UI remains responsive when the underlying data changes.
 
 - **Potential for Further Optimization**: I could have improved performance even further by eliminating the `SwiftUI-Shimmer` and `YouTubeiOSPlayerHelper` dependencies, reducing the overall complexity and overhead in the app.
-  
+
+- **Actor for API Service**: Converted the `RecipeAPIService` class to an `actor`, ensuring thread-safe operations, efficient concurrency management in asynchronous data fetching within SwiftUI views, and preventing data races and other concurrency-related issues.
+
+- **URL Request with Caching Policies**: Implemented URL request with caching policies in fetchRecipeData. The URLRequest is initialized with a cache policy of `.reloadIgnoringCacheData` and a timeout interval of 10 seconds and got rid of HTTP caching to reduce cache usage, complying with a user requirement. This ensures efficient data fetching while minimizing unnecessary network requests and reducing the risk of stale data.
+
+- **Non-Persistent WebView Data Store**: Configured `WKWebView` to use a `non-persistent` data store, preventing caching and reducing storage usage. This change, along with sharing the process pool, aligns with user requirements for minimized cache usage and improved performance.
+
 
 ## ⏰ Time Spent
 I decided to invest more than 4-5 hours into this project because there was no strict deadline for the exercise. I wanted to put forth my maximum effort to create something I love. Even though this isn’t a production app, I treated it with the same seriousness and dedication as I would for any professional project. This approach reflects my strengths and a weakness of mine—I take projects very seriously and strive to deliver beautiful outcomes, whether it's a full-fledged app or a simple console application.
