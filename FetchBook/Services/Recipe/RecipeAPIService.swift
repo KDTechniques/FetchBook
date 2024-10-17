@@ -8,7 +8,7 @@
 import Foundation
 
 // Real API service that conforms to RecipeDataFetching protocol
-class RecipeAPIService: RecipeDataFetching {
+actor RecipeAPIService: RecipeDataFetching {
     // MARK: - FUNCTIONS
     
     // MARK: - fetchRecipeData
