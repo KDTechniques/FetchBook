@@ -22,43 +22,43 @@ Additionally, the app features:
 ## 🤳🏻 Previews
 |Recipe List View (Main-UI)|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Recipe List View (Main-UI)/Recipe List View (Main-UI).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Recipe List View (Main-UI)/Recipe List View (Main-UI).gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Recipe List View (Main-UI)/Recipe List View (Main-UI).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Recipe List View (Main-UI)/Recipe List View (Main-UI).gif?raw=true' width='300'>|
 
 |Blog Post Web View with Youtube Player|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Blog Post Web View with Youtube Player/Blog Post Web View with Youtube Player.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Blog Post Web View with Youtube Player/Blog Post Web View with Youtube Player.gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Blog Post Web View with Youtube Player/Blog Post Web View with Youtube Player.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Blog Post Web View with Youtube Player/Blog Post Web View with Youtube Player.gif?raw=true' width='300'>|
 
 |Error Handling (No Search Results)|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (No Results).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (No Results).gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Error Types/Error Types (No Results).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Error Types/Error Types (No Results).gif?raw=true' width='300'>|
 
 |Error Handling (No Blog Post)|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (No Blog Post).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (No Blog Post).gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Error Types/Error Types (No Blog Post).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Error Types/Error Types (No Blog Post).gif?raw=true' width='300'>|
 
 |Error Handling (Malformed Data)|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (Malformed).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (Malformed).gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Error Types/Error Types (Malformed).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Error Types/Error Types (Malformed).gif?raw=true' width='300'>|
 
 |Error Handling (Empty Data)|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (Empty).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (Empty).gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Error Types/Error Types (Empty).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Error Types/Error Types (Empty).gif?raw=true' width='300'>|
 
 |Searchable|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Searchable/Searchable.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Searchable/Searchable.gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Searchable/Searchable.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Searchable/Searchable.gif?raw=true' width='300'>|
 
 |Context Menu (Recipe Image Preview)|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Context Menu (Recipe Image Preview)/Context Menu (Recipe Image Preview).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Context Menu (Recipe Image Preview)/Context Menu (Recipe Image Preview).gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Context Menu (Recipe Image Preview)/Context Menu (Recipe Image Preview).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Context Menu (Recipe Image Preview)/Context Menu (Recipe Image Preview).gif?raw=true' width='300'>|
 
 |Sorting Options|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sorting Options/Sorting Options.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sorting Options/Sorting Options.gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Sorting Options/Sorting Options.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Sorting Options/Sorting Options.gif?raw=true' width='300'>|
 
 |Debug View|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Debug View/Debug View.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Debug View/Debug View.gif?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Debug View/Debug View.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Debug View/Debug View.gif?raw=true' width='300'>|
 
 ## 👨🏻‍💻 Steps to Run the App
 
@@ -117,7 +117,7 @@ In this project, I prioritized the following areas:
  
 |Unit Tests|
 |-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/UnitTests.jpg?raw=true'>
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/UnitTests.jpg?raw=true'>
 
 
 ## 🚀 Performance Optimizations
@@ -125,15 +125,15 @@ In this project, I prioritized the following areas:
   
 - **Efficient Data Fetching**: Combined data fetching logic with Swift Concurrency to optimize the process and avoid blocking the main thread during API calls.
 
-- **`.task` ViewModifier for Asynchronous Fetching**: Used the task modifier to initiate asynchronous data fetches directly within SwiftUI views. This allows for a seamless integration of async/await, ensuring that data fetching is efficient and happens as soon as the view appears without blocking the main thread.
+- **`.task` ViewModifier for Asynchronous Fetching**: Used the task modifier to initiate asynchronous data fetches directly within SwiftUI views. This allows for seamless integration of async/await, ensuring that data fetching is efficient and happens as soon as the view appears without blocking the main thread.
 
 - **View Extractions**: Extracted views to prevent them from being redrawn when there's a data change. This helps reduce the complexity of the main view body, promotes reusability, and improves performance by avoiding unnecessary recomputations.
 
-- **Efficient View Composition**: Using `@ViewBuilder` makes the code more efficient by directly returning the actual views, preserving their types and avoiding unnecessary overhead caused by type-erasing them with `AnyView`.
+- **Efficient View Composition**: Using `@ViewBuilder` makes the code more efficient by directly returning the actual views, preserving their types, and avoiding unnecessary overhead caused by type-erasing them with `AnyView`.
 
-- **Eliminate Unnecessary Dependencies**: Minimized the number of dependent views or properties that a single view relies on to prevent unnecessary updates to the entire view hierarchy.
+- **Eliminate Unnecessary Dependencies**: Minimized the number of dependent views or properties on which a single view relies to prevent unnecessary updates to the entire view hierarchy.
 
-- **Avoid Inline Filtering/Sorting in Lists**: Moved filtering and sorting logic outside of the view body to avoid recalculating it on every render. By performing these operations before passing the data to the list, the app ensures smoother performance, particularly with larger datasets.
+- **Avoid Inline Filtering/Sorting in Lists**: Moved filtering and sorting logic outside the view body to avoid recalculating it on every render. The app ensures smoother performance by performing these operations before passing the data to the list, particularly with larger datasets.
 
 - **Utilize `@StateObject` and `@ObservedObject` Appropriately**: Used @StateObject for managing the lifecycle of observable objects in the view and @ObservedObject for subscribing to objects created elsewhere can significantly improve memory management and performance in SwiftUI apps.
 
@@ -196,4 +196,4 @@ I've included images to show the behind-the-scenes planning of this exercise as 
 
 |Once I understood the requirements and the API endpoints, I created a model, and designed the list row view|Then I documented additional features and functional improvements.|Finally, I sketched the main recipe list UI, paying close attention to typography to enhance readability and user experience.|I wrote pseudo-code for the image loading and caching mechanism using the third-party library called SDWebImageSwiftUI, but improved and simplified the functionality for better performance.|
 |-|-|-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sketches/Sketch_1.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sketches/Sketch_2.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sketches/Sketch_3.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sketches/Sketch_4.jpg?raw=true'>|
+|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Sketches/Sketch_1.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Sketches/Sketch_2.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Sketches/Sketch_3.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook_Readme_Media_Files/blob/main/Sketches/Sketch_4.jpg?raw=true'>|
