@@ -52,6 +52,3 @@ fastlane/test_output
 
 # Documentation
 .docc/
-
-# Custom Folders
-behindTheScenesImages/
