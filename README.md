@@ -11,16 +11,52 @@
 
 Additionally, the app features:
 
-- **YouTube Integration**: A floating video player that moves around the screen, providing users with seamless access to related video content.
+- **YouTube Integration**: A floating video player that moves around the screen, providing users seamless access to related video content.
 - **Image Caching**: High priority for thumbnail images and low priority for the larger images of the same recipe, optimizing loading times and user experience.
 - **Search Bar**: Users can easily search for specific recipes.
 - **List Sorting Button**: Allows users to sort recipes based on their preferences.
-- **Web View Navigation**: Users can navigate to the recipe blog post from the recipe list, displayed within a web view.
+- **Web View Navigation**: Users can navigate to the recipe blog post from the recipe list displayed within a web view.
+- **Recipe Image Preview**: Users can long-press on a recipe image in the list to see a magnified version, giving them a quick sneak peek of the recipe without opening the full details.
 
-|Recipe List View (Main-UI)|Blog Post Web View with Youtube Player|
+|Recipe List View (Main-UI)|Simulator Preview|
 |-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Intro_1.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Intro_2.jpg?raw=true' width='300'>|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Recipe List View (Main-UI)/Recipe List View (Main-UI).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Recipe List View (Main-UI)/Recipe List View (Main-UI).gif?raw=true' width='300'>|
 
+|Blog Post Web View with Youtube Player|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Blog Post Web View with Youtube Player/Blog Post Web View with Youtube Player.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Blog Post Web View with Youtube Player/Blog Post Web View with Youtube Player.gif?raw=true' width='300'>|
+
+|Error Handling (No Search Results)|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (No Results).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (No Results).gif?raw=true' width='300'>|
+
+|Error Handling (No Blog Post)|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (No Blog Post).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (No Blog Post).gif?raw=true' width='300'>|
+
+|Error Handling (Malformed Data)|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (Malformed).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (Malformed).gif?raw=true' width='300'>|
+
+|Error Handling (Empty Data)|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (Empty).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Error Types/Error Types (Empty).gif?raw=true' width='300'>|
+
+|Searchable|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Searchable/Searchable.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Searchable/Searchable.gif?raw=true' width='300'>|
+
+|Context Menu (Recipe Image Preview)|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Context Menu (Recipe Image Preview)/Context Menu (Recipe Image Preview).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Context Menu (Recipe Image Preview)/Context Menu (Recipe Image Preview).gif?raw=true' width='300'>|
+
+|Sorting Options|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sorting Options/Sorting Options.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sorting Options/Sorting Options.gif?raw=true' width='300'>|
+
+|Debug View|Simulator Preview|
+|-|-|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Debug View/Debug View.jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Debug View/Debug View.gif?raw=true' width='300'>|
 
 ## 👨🏻‍💻 Steps to Run the App
 
@@ -158,4 +194,4 @@ I've included images to show the behind-the-scenes planning of this exercise as 
 
 |Once I understood the requirements and the API endpoints, I created a model, and designed the list row view|Then I documented additional features and functional improvements.|Finally, I sketched the main recipe list UI, paying close attention to typography to enhance readability and user experience.|I wrote pseudo-code for the image loading and caching mechanism using the third-party library called SDWebImageSwiftUI, but improved and simplified the functionality for better performance.|
 |-|-|-|-|
-|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/1.jpeg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/2.jpeg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/3.jpeg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/4.jpeg?raw=true'>|
+|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sketches/Sketch_1.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sketches/Sketch_2.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sketches/Sketch_3.jpg?raw=true'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Sketches/Sketch_4.jpg?raw=true'>|
