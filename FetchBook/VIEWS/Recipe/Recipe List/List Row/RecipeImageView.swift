@@ -14,9 +14,7 @@ struct RecipeImageView: View {
     let largeImageURLString: String
     
     // MARK: - PRIVATE PROPERTIES
-    let cornerRadius: CGFloat = 10
-    let lineWidth: CGFloat = 2
-    let frameSize: CGFloat = 80
+    let values = RecipeImageValues.self
     
     // MARK: - INITIALIZER
     init(thumbnailImageURLString: String, largeImageURLString: String) {
@@ -52,32 +50,21 @@ extension RecipeImageView {
     // MARK: - thumbnailImage
     private func thumbnailImage(_ url: URL?) -> some View {
         WebImage(url: url, options: [.retryFailed, .highPriority])
-            .placeholder { placeholder }
+            .placeholder { RecipeImagePlaceholderView() }
             .resizable()
             .scaledToFill()
     }
     
     // MARK: - image
     private func imageLoader(thumbnailImageURL: URL?, largeImageURL: URL?) -> some View {
-        WebImage(url: largeImageURL, options: [.retryFailed, .lowPriority])
-            .placeholder { thumbnailImage(thumbnailImageURL) }
-            .resizable()
-            .scaledToFill()
-            .frame(width: frameSize, height: frameSize)
-            .overlay { roundedRectangleStroke }
-            .clipShape(.rect(cornerRadius: cornerRadius))
-    }
-    
-    // MARK: - roundedRectangleStroke
-    private var roundedRectangleStroke: some View {
-        RoundedRectangle(cornerRadius: cornerRadius)
-            .strokeBorder(Color(uiColor: .systemGray5), lineWidth: lineWidth)
-    }
-    
-    // MARK: - placeholder
-    private var placeholder: some View {
-        roundedRectangleStroke
-            .background(RoundedRectangle(cornerRadius: cornerRadius).fill(Color(uiColor: .systemGray6)))
-            .frame(width: frameSize, height: frameSize)
+        RecipeImageBackgroundRoundedRectangleView()
+            .overlay {
+                WebImage(url: largeImageURL, options: [.retryFailed, .lowPriority])
+                    .placeholder { thumbnailImage(thumbnailImageURL) }
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: values.innerFrameSize, height: values.innerFrameSize)
+                    .clipShape(.rect(cornerRadius: values.innerCornerRadius))
+            }
     }
 }
