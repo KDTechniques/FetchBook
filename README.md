@@ -18,6 +18,8 @@ Additionally, the app features:
 - **Web View Navigation**: Users can navigate to the recipe blog post from the recipe list displayed within a web view.
 - **Recipe Image Preview**: Users can long-press on a recipe image in the list to see a magnified version, giving them a quick sneak peek of the recipe without opening the full details.
 
+
+## 🤳🏻 Previews
 |Recipe List View (Main-UI)|Simulator Preview|
 |-|-|
 |<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Recipe List View (Main-UI)/Recipe List View (Main-UI).jpg?raw=true' width='300'>|<img src='https://github.com/KDTechniques/FetchBook/blob/main/behindTheScenesImages/Recipe List View (Main-UI)/Recipe List View (Main-UI).gif?raw=true' width='300'>|
