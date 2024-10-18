@@ -40,6 +40,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				VIEWS/Recipe/DraggableYouTubePlayerView.swift,
+				"VIEWS/Recipe/Recipe List/List Row/RecipeImageBackgroundRoundedRectangleView.swift",
+				"VIEWS/Recipe/Recipe List/List Row/RecipeImagePlaceholderView.swift",
 				VIEWS/Recipe/WebViewWithProgress.swift,
 				VIEWS/Reusable/CustomContentNotAvailableView.swift,
 			);
