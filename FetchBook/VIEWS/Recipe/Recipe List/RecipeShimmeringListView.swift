@@ -9,14 +9,14 @@ import SwiftUI
 import Shimmer
 
 struct RecipeShimmeringListView: View {
+    // MARK: - PROPERTIES
+    let array: [Int] = Array(0...10)
+    
     // MARK: - BODY
     var body: some View {
-        List(0...10, id: \.self) { _ in
+        List(array, id: \.self) {
             HStack(alignment: .top) {
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(Color(uiColor: .systemGray3), lineWidth: 2)
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color(uiColor: .systemGray4)))
-                    .frame(width: 80, height: 80)
+                RecipeImagePlaceholderView()
                 
                 VStack(alignment: .leading) {
                     Text("Recipe name goes here")
@@ -30,10 +30,11 @@ struct RecipeShimmeringListView: View {
                 }
                 .padding(.top, 10)
             }
-            .listRowBackground(Color.clear)
-            .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 0))
+            .listRowSeparator($0 == array.first ? .hidden : .visible, edges: .top)
+            .listRowSeparator($0 == array.last ? .hidden : .visible, edges: .bottom)
             .shimmering(active: true, duration: 1, bounce: false, delay: 0.3)
         }
+        .listStyle(.plain)
     }
 }
 

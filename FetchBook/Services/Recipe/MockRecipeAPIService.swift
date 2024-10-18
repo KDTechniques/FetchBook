@@ -66,7 +66,7 @@ actor MockRecipeAPIService: RecipeDataFetching {
             ]
         }
         """ }
-        // Introduce a delay of 1 second (2_000_000_000 nanoseconds)
+        // Introduce a delay of 2 seconds (2_000_000_000 nanoseconds)
         try await Task.sleep(nanoseconds: 2_000_000_000)
         
         // Simulate a JSON response by converting the string to Data

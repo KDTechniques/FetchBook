@@ -6,42 +6,37 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct ListRowContentView: View {
     // MARK: - PROPERTIES
     let recipe: RecipeModel
-    
-    // MARK: - PRIVATE PROPERTIES
-    @State private var showVideoPlayer: Bool = false
+    let firstItemID: String
+    let lastItemID: String
     
     // MARK: - INITIALIZER
-    init(recipe: RecipeModel) {
+    init(recipe: RecipeModel, firstItemID: String, lastItemID: String) {
         self.recipe = recipe
+        self.firstItemID = firstItemID
+        self.lastItemID = lastItemID
     }
     
     // MARK: - BODY
     var body: some View {
-        let videoID: String? = Helpers.extractYouTubeVideoID(from: recipe.secureYoutubeURLString ?? "")
-        
         NavigationLink {
-            RecipeBlogPostView(secureBlogPostURLString: recipe.secureBlogPostURLString)
-                .overlay { FloatingYTPlayerView(showVideoPlayer: $showVideoPlayer, videoID: videoID) }
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        BlogPostVideoPlayerButtonView(showVideoPlayer: $showVideoPlayer, videoID: videoID)
-                    }
-                }
-                .navigationTitle("Blog Post")
-                .navigationBarTitleDisplayMode(.inline)
+            RecipeBlogPostView(
+                secureBlogPostURLString: recipe.secureBlogPostURLString,
+                secureYoutubeURLString: recipe.secureYoutubeURLString
+            )
         } label: {
             ListRowView(recipe: recipe)
         }
-        .listRowBackground(Color.clear)
-        .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 0))
+        .listRowSeparator(firstItemID == recipe.id ? .hidden : .visible, edges: .top)
+        .listRowSeparator(lastItemID == recipe.id ? .hidden : .visible, edges: .bottom)
     }
 }
 
 // MARK: - PREVIEWS
 #Preview("ListRowContentView") {
-    ListRowContentView(recipe: .mockObject)
+    ListRowContentView(recipe: .mockObject, firstItemID: "", lastItemID: "")
 }

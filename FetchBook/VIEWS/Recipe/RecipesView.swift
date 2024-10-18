@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct RecipesView: View {
     // MARK: - PROPERTIES
     @ObservedObject private var recipeVM: RecipeViewModel
     
     // MARK: - PRIVATE PROPERTIES
-    @State private var isLoading: Bool = true
+    @State private var blogPostItem: [BlogPostItemModel] = []
     
     enum FetchConditions { case initial, refresh }
     
@@ -24,7 +23,7 @@ struct RecipesView: View {
     
     // MARK: - BODY
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $blogPostItem) {
             Group {
                 switch recipeVM.currentDataStatus {
                 case .none: successRecipeList
@@ -32,7 +31,6 @@ struct RecipesView: View {
                 case .malformed: malformedError
                 case .emptyData: emptyDataError
                 case .emptyResult: emptySearchResults
-                    
                 }
             }
             .toolbar { ToolbarItem(placement: .automatic) { RecipeListSorterButtonView(vm: recipeVM) } }
@@ -56,8 +54,31 @@ struct RecipesView: View {
 // MARK: - EXTENSIONS
 extension RecipesView {
     // MARK: - successRecipeList
+    @ViewBuilder
     private var successRecipeList: some View {
-        List(recipeVM.mutableRecipesArray) { ListRowContentView(recipe: $0) }
+        if let firstItem: RecipeModel = recipeVM.mutableRecipesArray.first,
+           let lastItem: RecipeModel = recipeVM.mutableRecipesArray.last {
+            List(recipeVM.mutableRecipesArray) { recipe in
+                ListRowContentView(recipe: recipe, firstItemID: firstItem.id, lastItemID: lastItem.id)
+                    .contextMenu {
+                        RecipeImagePreviewContextMenuItemsView(
+                            blogPostItem: $blogPostItem,
+                            blogPostURLString: recipe.secureBlogPostURLString,
+                            youtubeURLString: recipe.secureYoutubeURLString
+                        )
+                    } preview: {
+                        RecipeImagePreviewView(recipe: recipe)
+                    }
+            }
+            .listStyle(.plain)
+            .navigationDestination(for: BlogPostItemModel.self) {
+                RecipeBlogPostView(
+                    secureBlogPostURLString: $0.secureBlogPostURLString,
+                    secureYoutubeURLString: $0.secureYoutubeURLString,
+                    showVideoPlayer: $0.showVideoPlayer
+                )
+            }
+        }
     }
     
     // MARK: - shimmeringListEffect
