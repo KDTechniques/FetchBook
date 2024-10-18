@@ -1,0 +1,57 @@
+# Xcode
+DerivedData/
+build/
+*.xcworkspace
+!default.xcworkspace
+xcuserdata/
+*.xcuserstate
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Swift Package Manager
+.build/
+
+# CocoaPods
+Pods/
+Podfile.lock
+*.xcscmblueprint
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Code Coverage
+*.xccovreport
+*.xccovarchive
+
+# Archive files
+*.xcarchive
+
+# Temporary Files
+*.tmp
+
+# Xcode Automatically Generated Files
+*.generated.xcconfig
+
+# Personal Settings
+*.env
+
+# SwiftPM
+.swiftpm/xcode/package.pins
+
+# SwiftUI Previews
+*.designer-preview
+
+# Documentation
+.docc/
+
+# Custom Folders
+behindTheScenesImages/
