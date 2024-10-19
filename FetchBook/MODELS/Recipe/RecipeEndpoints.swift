@@ -9,31 +9,30 @@ import Foundation
 
 // DEBUG PURPOSES ONLY
 
-/// Enum representing the types of recipe endpoints, each with a raw string value.
-/// This enum is also `CaseIterable`, allowing iteration over all cases.
-enum RecipeEndpointTypes: String, CaseIterable { case all, malformed, empty }
-
-/// Enumeration representing different API endpoints for fetching recipes.
-/// Each case is a static constant containing a `RecipeEndpointModel`,
-/// which defines the type of endpoint and the corresponding URL.
-enum RecipeEndpoints: CaseIterable, Hashable {
-    // Endpoint for all recipes.
-    static let all: RecipeEndpointModel = .init(type: .all, urlString: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json")
+// Enum representing the types of recipe endpoints, each with a raw string value.
+enum RecipeEndpointTypes: String, CaseIterable {
+    case all = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json"
+    case malformed = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-malformed.json"
+    case empty = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-empty.json"
     
-    // Endpoint for malformed data.
-    static let malformed: RecipeEndpointModel = .init(type: .malformed, urlString: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-malformed.json")
-    
-    // Endpoint for empty data.
-    static let empty: RecipeEndpointModel = .init(type: .empty, urlString: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-empty.json")
-    
-    // An array of all available recipe endpoint models, used for iterating or selection in UI elements.
-    static var allCases: [RecipeEndpointModel] {
-        [all, malformed, empty]
+    // Computed property to return the type as a string.
+    var typeString: String {
+        switch self {
+        case .all: "all"
+        case .malformed: "malformed"
+        case .empty: "empty"
+        }
     }
+    
+    // Computed property to return the corresponding URL string.
+    var urlString: String { self.rawValue }
+    
+    // Computed property to return a RecipeEndpointModel for the type.
+    var endpointModel: RecipeEndpointModel { RecipeEndpointModel(type: self, urlString: self.urlString) }
 }
 
-/// Model representing a recipe API endpoint.
-/// Contains the endpoint type and its corresponding URL.
+// Model representing a recipe API endpoint.
+// Contains the endpoint type and its corresponding URL.
 struct RecipeEndpointModel: Hashable {
     let type: RecipeEndpointTypes
     let urlString: String

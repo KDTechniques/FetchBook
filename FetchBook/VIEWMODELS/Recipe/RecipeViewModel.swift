@@ -42,7 +42,7 @@ final class RecipeViewModel: ObservableObject {
     
     /// The currently selected API endpoint for data retrieval.
     /// debug purposes only.
-    @Published var selectedEndpoint: RecipeEndpointModel = RecipeEndpoints.all
+    @Published var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
     
     /// The current status of the data being processed, and fetched.
     @Published var currentDataStatus: RecipeDataStatusTypes = .fetching
