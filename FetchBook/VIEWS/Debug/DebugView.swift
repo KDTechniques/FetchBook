@@ -39,9 +39,9 @@ extension DebugView {
     private var endpoint: some View {
         Section {
             Picker("Recipe Endpoints Picker", selection: $recipeVM.selectedEndpoint) {
-                ForEach(RecipeEndpoints.allCases, id: \.self) {
-                    Text($0.type.rawValue.capitalized)
-                        .tag($0)
+                ForEach(RecipeEndpointTypes.allCases, id: \.self) {
+                    Text($0.typeString.capitalized)
+                        .tag($0.endpointModel)
                 }
             }
             .pickerStyle(.segmented)
