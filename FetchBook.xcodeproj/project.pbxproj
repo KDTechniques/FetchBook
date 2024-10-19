@@ -42,7 +42,6 @@
 				VIEWS/Recipe/DraggableYouTubePlayerView.swift,
 				"VIEWS/Recipe/Recipe List/List Row/RecipeImageBackgroundRoundedRectangleView.swift",
 				"VIEWS/Recipe/Recipe List/List Row/RecipeImagePlaceholderView.swift",
-				VIEWS/Recipe/WebViewWithProgress.swift,
 				VIEWS/Reusable/CustomContentNotAvailableView.swift,
 			);
 			target = 0B53DB652CB0A3330034B436 /* FetchBook */;

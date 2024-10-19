@@ -34,11 +34,11 @@ struct RecipesView: View {
                 }
             }
             .toolbar { ToolbarItem(placement: .automatic) { RecipeListSorterButtonView(vm: recipeVM) } }
-            .task(priority: .high) { loadData(.initial) }
-            .refreshable { loadData(.refresh) }
             .navigationTitle("Recipes")
         }
         .searchable(text: $recipeVM.recipeSearchText, prompt: "Search")
+        .refreshable { loadData(.refresh) }
+        .task(priority: .high) { loadData(.initial) }
     }
 }
 

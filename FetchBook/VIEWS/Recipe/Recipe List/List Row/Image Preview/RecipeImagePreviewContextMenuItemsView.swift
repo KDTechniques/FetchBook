@@ -46,6 +46,9 @@ extension RecipeImagePreviewContextMenuItemsView {
             showVideoPlayer: showVideoPlayer
         )
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { blogPostItem.append(item) }
+        Task {
+            try? await Task.sleep(nanoseconds: 200_000_000)
+            blogPostItem.append(item)
+        }
     }
 }

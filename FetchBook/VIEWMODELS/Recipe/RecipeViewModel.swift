@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
-import Combine
 
 /// A view model responsible for managing the recipe data, including fetching,
 /// sorting, and publishing the sorted list of recipes to the SwiftUI view.
+@MainActor
 final class RecipeViewModel: ObservableObject {
     
     /// An array holding the original recipe data fetched from the service.
@@ -20,9 +20,9 @@ final class RecipeViewModel: ObservableObject {
     
     /// Enumeration representing sorting options available for the recipes.
     enum SortOptions: String, CaseIterable, Identifiable {
-        case az = "A-Z"       // Sort recipes alphabetically from A to Z.
-        case za = "Z-A"       // Sort recipes alphabetically from Z to A.
-        case none             // No sorting applied.
+        case ascending = "Ascending"// Sort recipes alphabetically from A to Z.
+        case descending = "descending" // Sort recipes alphabetically from Z to A.
+        case none = "default" // No sorting applied.
         
         var id: String { self.rawValue } // Conforms to Identifiable for use in UI components.
     }
@@ -34,9 +34,6 @@ final class RecipeViewModel: ObservableObject {
     /// A string that holds the user's recipe search input.
     @Published var recipeSearchText: String = ""
     
-    /// A set to store cancellable subscriptions for Combine to manage memory and lifecycle of publishers.
-    private var cancelables = Set<AnyCancellable>()
-    
     /// A service for fetching recipe data, adhering to the `RecipeDataFetching` protocol.
     let recipeService: RecipeDataFetching
     
@@ -45,7 +42,7 @@ final class RecipeViewModel: ObservableObject {
     @Published var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
     
     /// The current status of the data being processed, and fetched.
-    @Published var currentDataStatus: RecipeDataStatusTypes = .fetching
+    @Published var currentDataStatus: RecipeDataStatusTypes = .none
     
     // MARK: - INITIALIZER
     /// Initializes a new instance of `RecipeViewModel` with the provided recipe service.
@@ -73,28 +70,19 @@ final class RecipeViewModel: ObservableObject {
     /// - Parameter endpoint: The endpoint from which to fetch the recipe data.
     /// - Throws: An error if fetching data from the `RecipeService` fails.
     func fetchRecipeData(endpoint: RecipeEndpointModel) async throws {
+        await MainActor.run { currentDataStatus = .fetching }
+        
         do {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                currentDataStatus = .fetching
-            }
-            
             let recipesResponse = try await recipeService.fetchRecipeData(from: endpoint)
             let recipes: [RecipeModel] = recipesResponse.recipes
             
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                
+            await MainActor.run {
                 currentDataStatus = recipes.isEmpty ? .emptyData : .none
                 recipesArray = recipes // Store fetched recipes in recipesArray.
                 assignSortedRecipesToMutableRecipesArray() // Initialize mutableRecipesArray with the fetched and sorted recipes.
             }
         } catch {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                currentDataStatus = .malformed
-            }
-            
+            await MainActor.run { currentDataStatus = .malformed }
             throw error
         }
     }
@@ -106,22 +94,26 @@ final class RecipeViewModel: ObservableObject {
     /// If no sort option is provided, it defaults to the `selectedSortOption`.
     ///
     /// - Parameter option: An optional `SortOptions` value that determines the sorting criteria. If `nil`, the currently selected sort option will be used.
+    /// - The function calls `sortRecipes(option:)` to sort the recipes and assigns the result to `mutableRecipesArray`.
     private func assignSortedRecipesToMutableRecipesArray(_ option: SortOptions? = nil) {
+        // Sort recipes using the provided option, or the default selectedSortOption if none is provided.
         mutableRecipesArray = sortRecipes(option: option ?? selectedSortOption)
     }
     
     // MARK: - sortRecipes
-    /// Sorts the recipes based on the selected sorting option.
+    /// Sorts the `recipesArray` based on the specified sorting option.
     ///
-    /// - Parameter option: The sorting option to apply (`az`, `za`, or `none`).
-    /// - Returns: An array of `RecipeModel` sorted according to the specified option.
-    ///   If the option is `.az`, the array is sorted in ascending order (A-Z),
-    ///   if `.za`, it is sorted in descending order (Z-A), and if `.none`, the original array is returned.
+    /// - Parameter option: The sorting option to apply. Can be one of the following:
+    ///   - `.ascending`: Sorts the array in ascending order (A-Z) based on the `name` property of `RecipeModel`.
+    ///   - `.descending`: Sorts the array in descending order (Z-A) based on the `name` property of `RecipeModel`.
+    ///   - `.none`: Returns the array without any sorting (keeps the original order).
+    ///
+    /// - Returns: An array of `RecipeModel` sorted according to the specified option. If `.ascending` or `.descending` is selected, the recipes are sorted by their `name`. If `.none` is selected, the original order of `recipesArray` is retained.
     func sortRecipes(option: SortOptions) -> [RecipeModel] {
         switch option {
-        case .az: recipesArray.sorted(by: { $0.name < $1.name }) // Sort A-Z.
-        case .za: recipesArray.sorted(by: { $0.name > $1.name }) // Sort Z-A.
-        case .none: recipesArray // Return unsorted array.
+        case .ascending: return recipesArray.sorted(by: { $0.name < $1.name }) // Sort A-Z.
+        case .descending: return recipesArray.sorted(by: { $0.name > $1.name }) // Sort Z-A.
+        case .none: return recipesArray // Return unsorted array.
         }
     }
     
@@ -133,38 +125,124 @@ final class RecipeViewModel: ObservableObject {
     /// - When the sort option is updated (e.g., A-Z, Z-A, or none), the function calls `sortRecipes(option:)` to sort the array based on the selected option.
     /// - Updates the `mutableRecipesArray` with the sorted results.
     /// - Stores the subscription in `cancelables` to ensure proper memory management and prevent memory leaks.
-    func sortOptionSubscriber() {
-        $selectedSortOption
-            .sink { [weak self] option in
-                guard let self else { return }
-                assignSortedRecipesToMutableRecipesArray(option) // Update mutableRecipesArray on option change.
+    private func sortOptionSubscriber() {
+        Task {
+            // Convert Combine publisher to async sequence
+            // The for-await loop listens for new values from the publisher and processes them as they arrive.
+            for await option in sortOptionAsyncPublisher(for: $selectedSortOption) {
+                // Ensure the UI updates are done on the main thread
+                // Since `assignSortedRecipesToMutableRecipesArray(option:)` might modify the UI,
+                // we use MainActor.run to guarantee it runs on the main thread.
+                await MainActor.run {
+                    assignSortedRecipesToMutableRecipesArray(option)
+                }
             }
-            .store(in: &cancelables) // Store the subscription in cancelables to manage memory.
+        }
+    }
+    
+    // MARK: - sortOptionAsyncPublisher
+    /// Converts a Combine publisher into an async sequence to be used with async-await syntax.
+    ///
+    /// - Takes a `Published<SortOptions>.Publisher` (i.e., a Combine publisher of `SortOptions`).
+    /// - Yields values from the publisher as they arrive.
+    /// - Properly handles cancellation when the async sequence terminates, ensuring no memory leaks.
+    private func sortOptionAsyncPublisher(for publisher: Published<SortOptions>.Publisher) -> AsyncStream<SortOptions> {
+        AsyncStream { continuation in
+            // Create a cancellable to handle the subscription to the publisher.
+            let cancellable = publisher.sink { option in
+                // When a new value is received, yield it into the async sequence.
+                continuation.yield(option)
+            }
+            
+            // Proper cancellation when the stream terminates
+            // This ensures that when the async sequence is cancelled, the Combine subscription is also cancelled,
+            // preventing memory leaks and unnecessary background work.
+            continuation.onTermination = { _ in
+                cancellable.cancel()
+            }
+        }
+    }
+    
+    // MARK: - createDebouncedTextStream
+    /// Creates a debounced async stream from the `recipeSearchText` publisher.
+    ///
+    /// This function converts the `recipeSearchText` Combine publisher into an `AsyncStream` so that it can be consumed with async/await. It yields new search text whenever it is updated.
+    ///
+    /// - Returns: An `AsyncStream<String>` that emits the latest value of `recipeSearchText` each time it is updated.
+    private func createDebouncedTextStream() -> AsyncStream<String> {
+        return AsyncStream { continuation in
+            // Subscribe to the `recipeSearchText` publisher
+            let subscription = $recipeSearchText
+                .sink { text in
+                    continuation.yield(text) // Yield the new text value to the async stream
+                }
+            
+            // Cancel the subscription when the async stream is terminated
+            continuation.onTermination = { _ in
+                subscription.cancel()
+            }
+        }
+    }
+    
+    // MARK: - handleDebouncedSearchText
+    /// Handles the debounced search text logic, performing a search or resetting recipes depending on the text.
+    ///
+    /// This function checks if the text has changed long enough to trigger a search or reset. If the text is empty, it resets the recipes with the current sorting option. Otherwise, it calls the filtering method.
+    ///
+    /// - Parameters:
+    ///   - text: The latest text from the search field.
+    ///   - lastSearchTime: A reference to the last time the search was triggered. This will be updated based on the debounce logic.
+    ///   - debounceDelay: The time delay (in seconds) between search queries, used to debounce rapid text changes.
+    private func handleDebouncedSearchText(_ text: String, lastSearchTime: inout Date, debounceDelay: TimeInterval) async {
+        let timeElapsed = Date().timeIntervalSince(lastSearchTime)
+        
+        // If enough time has passed since the last search, perform the necessary action
+        if timeElapsed > debounceDelay {
+            lastSearchTime = Date() // Update the last search time
+            
+            // If the search text is empty, reset data and update recipes
+            if text.isEmpty {
+                resetRecipes()
+            } else {
+                // Otherwise, perform the filtering logic asynchronously
+                filterSearchResult(text: text)
+            }
+        } else {
+            // If debounce delay hasn't passed, sleep for the remaining time before checking again
+            let sleepTime = debounceDelay - timeElapsed
+            try? await Task.sleep(nanoseconds: UInt64(sleepTime * 1_000_000_000)) // Sleep for the remaining time in nanoseconds
+        }
+    }
+    
+    // MARK: - resetRecipes
+    /// Resets the recipes and sets the current data status to `.none` when the search text is empty.
+    ///
+    /// This function is called when the search text is cleared, to reset the data state and update the recipe list according to the current sorting option.
+    ///
+    /// This operation runs on the main actor to update the UI-related state.
+    private func resetRecipes() {
+        currentDataStatus = .none
+        assignSortedRecipesToMutableRecipesArray() // Reset recipes with the current sorting
     }
     
     // MARK: - recipeSearchTextSubscriber
-    /// Subscribes to changes in the `recipeSearchText` property and updates the list of recipes accordingly.
+    /// Main function to subscribe to recipe search text updates and handle them asynchronously with debounce.
     ///
-    /// - This function listens for updates to the search text entered by the user.
-    /// - When the search text is empty, all recipes are displayed and the `currentDataStatus` is set to `.none`.
-    /// - When the search text contains valid input, the recipes are filtered based on the user's search using `filterSearchResult(_:)`.
-    /// - Uses `debounce` to delay the filtering action until the user has stopped typing for 0.1 seconds, preventing unnecessary updates.
-    /// - Updates `mutableRecipesArray` with either the full recipe list when no search text is entered or filtered results based on the search text.
-    /// - Stores the subscription in `cancelables` to ensure proper memory management.
-    func recipeSearchTextSubscriber() {
-        $recipeSearchText
-            .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
-            .sink { [weak self] text in
-                guard let self else { return }
-                
-                if text.isEmpty {
-                    currentDataStatus = .none
-                    assignSortedRecipesToMutableRecipesArray() // Update mutableRecipesArray with current sorting option.
-                } else {
-                    filterSearchResult(text: text)
-                }
+    /// This function listens for updates to `recipeSearchText`, applies debouncing logic, and then triggers either a reset of recipes or filtering of search results based on the text. The logic ensures that searches are only triggered after the user has stopped typing for a defined period of time (debounce).
+    private func recipeSearchTextSubscriber() {
+        Task {
+            var lastSearchTime = Date()
+            let debounceDelay: TimeInterval = 0.1 // Define the debounce delay (0.1 seconds)
+            
+            // Create the debounced text stream to consume the latest recipe search text
+            let debouncedTextStream = createDebouncedTextStream()
+            
+            // Iterate over the debounced text stream
+            for await text in debouncedTextStream {
+                // Handle the debounced search text asynchronously
+                await handleDebouncedSearchText(text, lastSearchTime: &lastSearchTime, debounceDelay: debounceDelay)
             }
-            .store(in: &cancelables)
+        }
     }
     
     // MARK: - filterSearchResult
