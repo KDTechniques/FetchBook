@@ -47,7 +47,6 @@ struct WebView: UIViewRepresentable {
     class Coordinator: NSObject, WKNavigationDelegate {
         var parent: WebView
         var webView: WKWebView?
-        private let progressQueue = DispatchQueue(label: "progressQueue", attributes: .concurrent)
         
         init(_ parent: WebView) {
             self.parent = parent
@@ -56,8 +55,9 @@ struct WebView: UIViewRepresentable {
         // Observe progress changes
         override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
             if keyPath == "estimatedProgress", let webView = object as? WKWebView {
-                DispatchQueue.main.async {
-                    self.parent.progress = webView.estimatedProgress
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    parent.progress = webView.estimatedProgress
                 }
             }
         }

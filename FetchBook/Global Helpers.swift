@@ -1,13 +1,13 @@
 //
-//  Helpers.swift
+//  Global Helpers.swift
 //  FetchBook
 //
 //  Created by Mr. Kavinda Dilshan on 2024-10-05.
 //
 
-import Foundation
 import SDWebImageSwiftUI
 import WebKit
+import SwiftUI
 
 struct Helpers {
     // MARK: - PROPERTIES
@@ -59,12 +59,10 @@ struct Helpers {
     ///
     /// This function preloads a `WKWebView` by loading a lightweight page (`about:blank`) on the main thread.
     /// This warms up the WebKit process to reduce any potential delay when the user navigates to a webpage for the first time.
-    static func preloadWebView() {
-        DispatchQueue.main.async {
-            let webView = WKWebView(frame: .zero)
-            let dummyURL = URL(string: "about:blank")! // Load a blank page or a simple local page
-            let request = URLRequest(url: dummyURL)
-            webView.load(request)
-        }
+    static func preloadWebView() async {
+        let webView = await WKWebView(frame: .zero)
+        let dummyURL = URL(string: "about:blank")! // Load a blank page or a simple local page
+        let request = URLRequest(url: dummyURL)
+        await webView.load(request)
     }
 }
