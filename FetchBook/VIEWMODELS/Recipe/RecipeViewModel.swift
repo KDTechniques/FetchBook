@@ -14,8 +14,8 @@ final class RecipeViewModel: ObservableObject {
     
     // MARK: - PROPERTIES
     
-    /// A service for fetching recipe data, adhering to the `RecipeDataFetching` protocol.
-    private let recipeService: RecipeDataFetching
+    /// A service for fetching recipe data, adhering to the `RecipeServiceProtocol` protocol.
+    private let recipeService: RecipeServiceProtocol
     private lazy var sortingManager: RecipeSortingManager = .init(recipeVM: self)
     private lazy var filteringManager: RecipeFilteringManager = .init(recipeVM: self, sortingManager: sortingManager)
     private lazy var dataManager: RecipeDataManager = .init(
@@ -30,8 +30,8 @@ final class RecipeViewModel: ObservableObject {
     /// - This initializer sets up the recipe fetching service used for retrieving recipe data.
     /// - It also subscribes to changes in the sorting option and search text to dynamically update the recipe list based on user input.
     ///
-    /// - Parameter recipeService: A service conforming to `RecipeDataFetching` for fetching recipe data.
-    init(recipeService: RecipeDataFetching) {
+    /// - Parameter recipeService: A service conforming to `RecipeServiceProtocol` for fetching recipe data.
+    init(recipeService: RecipeServiceProtocol) {
         self.recipeService = recipeService
         
         Task {

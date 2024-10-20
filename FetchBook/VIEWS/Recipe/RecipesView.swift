@@ -47,10 +47,6 @@ struct RecipesView: View {
     RecipesView(vm: .init(recipeService: MockRecipeAPIService()))
 }
 
-#Preview("RecipesView") {
-    RecipesView(vm: .init(recipeService: RecipeAPIService()))
-}
-
 // MARK: - EXTENSIONS
 extension RecipesView {
     // MARK: - successRecipeList
@@ -128,7 +124,7 @@ extension RecipesView {
             do {
                 try await recipeVM.fetchRecipeData(endpoint: endpoint)
             } catch {
-                print("Error fetching recipes: \(error)")
+                print("Error: \(error.localizedDescription)")
             }
         }
     }
