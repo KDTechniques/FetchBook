@@ -1,13 +1,13 @@
 //
-//  Helpers.swift
+//  Global Helpers.swift
 //  FetchBook
 //
 //  Created by Mr. Kavinda Dilshan on 2024-10-05.
 //
 
-import Foundation
 import SDWebImageSwiftUI
 import WebKit
+import SwiftUI
 
 struct Helpers {
     // MARK: - PROPERTIES

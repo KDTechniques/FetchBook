@@ -12,37 +12,9 @@ import SwiftUI
 @MainActor
 final class RecipeViewModel: ObservableObject {
     
-    /// An array holding the original recipe data fetched from the service.
-    @Published private(set) var recipesArray: [RecipeModel] = []
-    
-    /// A published array that holds the sorted list of recipes, which updates the UI automatically.
-    @Published var mutableRecipesArray: [RecipeModel] = []
-    
-    /// Enumeration representing sorting options available for the recipes.
-    enum SortOptions: String, CaseIterable, Identifiable {
-        case ascending = "Ascending"// Sort recipes alphabetically from A to Z.
-        case descending = "descending" // Sort recipes alphabetically from Z to A.
-        case none = "default" // No sorting applied.
-        
-        var id: String { self.rawValue } // Conforms to Identifiable for use in UI components.
-    }
-    
-    /// The selected sorting option for the recipes. Changes to this property will trigger
-    /// the sorting of the recipes based on the chosen option.
-    @Published var selectedSortOption: SortOptions = .none
-    
-    /// A string that holds the user's recipe search input.
-    @Published var recipeSearchText: String = ""
-    
+    // MARK: - PROPERTIES
     /// A service for fetching recipe data, adhering to the `RecipeDataFetching` protocol.
     let recipeService: RecipeDataFetching
-    
-    /// The currently selected API endpoint for data retrieval.
-    /// debug purposes only.
-    @Published var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
-    
-    /// The current status of the data being processed, and fetched.
-    @Published var currentDataStatus: RecipeDataStatusTypes = .none
     
     // MARK: - INITIALIZER
     /// Initializes a new instance of `RecipeViewModel` with the provided recipe service.
@@ -56,6 +28,39 @@ final class RecipeViewModel: ObservableObject {
         sortOptionSubscriber() // Subscribe to changes in the selected sorting option.
         recipeSearchTextSubscriber()
     }
+    
+    // MARK: - PRIVATE PROPERTIES
+    
+    /// An array holding the original recipe data fetched from the service.
+    @Published private(set) var recipesArray: [RecipeModel] = []
+    
+    /// A published array that holds the sorted list of recipes, which updates the UI automatically.
+    @Published private(set) var mutableRecipesArray: [RecipeModel] = []
+    
+    /// The current status of the data being processed, and fetched.
+    @Published private(set) var currentDataStatus: RecipeDataStatusTypes = .none
+    
+    /// A string that holds the user's recipe search input.
+    @Published private(set) var recipeSearchText: String = ""
+    
+    /// The selected sorting option for the recipes. Changes to this property will trigger
+    /// the sorting of the recipes based on the chosen option.
+    @Published private(set) var selectedSortOption: RecipeSortOptions = .none
+    
+    /// The currently selected API endpoint for data retrieval.
+    /// debug purposes only.
+    @Published private(set) var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
+    
+    // MARK: - PUBLIC PROPERTIES
+    
+    // Public access to the `recipeSearchText` using a `Binding`
+    var recipeSearchTextBinding: Binding<String> { binding(\.recipeSearchText) }
+    
+    // Public access to the `selectedSortOption` using a `Binding`
+    var selectedSortOptionBinding: Binding<RecipeSortOptions> { binding(\.selectedSortOption) }
+    
+    // Public access to the `selectedEndpoint` using a `Binding`
+    var selectedEndpointBinding: Binding<RecipeEndpointModel> { binding(\.selectedEndpoint) }
     
     // MARK: - FUNCTIONS
     
@@ -93,9 +98,9 @@ final class RecipeViewModel: ObservableObject {
     /// This function sorts the recipes based on the specified sort option and assigns the sorted result to the `mutableRecipesArray`.
     /// If no sort option is provided, it defaults to the `selectedSortOption`.
     ///
-    /// - Parameter option: An optional `SortOptions` value that determines the sorting criteria. If `nil`, the currently selected sort option will be used.
+    /// - Parameter option: An optional `RecipeSortOptions` value that determines the sorting criteria. If `nil`, the currently selected sort option will be used.
     /// - The function calls `sortRecipes(option:)` to sort the recipes and assigns the result to `mutableRecipesArray`.
-    private func assignSortedRecipesToMutableRecipesArray(_ option: SortOptions? = nil) {
+    private func assignSortedRecipesToMutableRecipesArray(_ option: RecipeSortOptions? = nil) {
         // Sort recipes using the provided option, or the default selectedSortOption if none is provided.
         mutableRecipesArray = sortRecipes(option: option ?? selectedSortOption)
     }
@@ -109,7 +114,7 @@ final class RecipeViewModel: ObservableObject {
     ///   - `.none`: Returns the array without any sorting (keeps the original order).
     ///
     /// - Returns: An array of `RecipeModel` sorted according to the specified option. If `.ascending` or `.descending` is selected, the recipes are sorted by their `name`. If `.none` is selected, the original order of `recipesArray` is retained.
-    func sortRecipes(option: SortOptions) -> [RecipeModel] {
+    func sortRecipes(option: RecipeSortOptions) -> [RecipeModel] {
         switch option {
         case .ascending: return recipesArray.sorted(by: { $0.name < $1.name }) // Sort A-Z.
         case .descending: return recipesArray.sorted(by: { $0.name > $1.name }) // Sort Z-A.
@@ -143,10 +148,10 @@ final class RecipeViewModel: ObservableObject {
     // MARK: - sortOptionAsyncPublisher
     /// Converts a Combine publisher into an async sequence to be used with async-await syntax.
     ///
-    /// - Takes a `Published<SortOptions>.Publisher` (i.e., a Combine publisher of `SortOptions`).
+    /// - Takes a `Published<RecipeSortOptions>.Publisher` (i.e., a Combine publisher of `RecipeSortOptions`).
     /// - Yields values from the publisher as they arrive.
     /// - Properly handles cancellation when the async sequence terminates, ensuring no memory leaks.
-    private func sortOptionAsyncPublisher(for publisher: Published<SortOptions>.Publisher) -> AsyncStream<SortOptions> {
+    private func sortOptionAsyncPublisher(for publisher: Published<RecipeSortOptions>.Publisher) -> AsyncStream<RecipeSortOptions> {
         AsyncStream { continuation in
             // Create a cancellable to handle the subscription to the publisher.
             let cancellable = publisher.sink { option in

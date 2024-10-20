@@ -36,7 +36,7 @@ struct RecipesView: View {
             .toolbar { ToolbarItem(placement: .automatic) { RecipeListSorterButtonView(vm: recipeVM) } }
             .navigationTitle("Recipes")
         }
-        .searchable(text: $recipeVM.recipeSearchText, prompt: "Search")
+        .searchable(text: recipeVM.recipeSearchTextBinding, prompt: "Search")
         .refreshable { loadData(.refresh) }
         .task(priority: .high) { loadData(.initial) }
     }

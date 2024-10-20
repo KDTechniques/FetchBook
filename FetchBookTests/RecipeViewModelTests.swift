@@ -134,7 +134,7 @@ final class RecipeViewModelTests: XCTestCase {
         }
     }
     
-    // MARK: - sortRecipes(option: SortOptions) -> [RecipeModel]  Unit Tests
+    // MARK: - sortRecipes(option: RecipeSortOptions) -> [RecipeModel]  Unit Tests
     
     // MARK: - test_RecipeViewModel_sortRecipes_shouldSortAZ
     /// Tests the `sortRecipes` method in `RecipeViewModel` to ensure that recipes are sorted in A-Z order.

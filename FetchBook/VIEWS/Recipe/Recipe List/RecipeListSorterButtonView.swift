@@ -19,8 +19,8 @@ struct RecipeListSorterButtonView: View {
     // MARK: - BODY
     var body: some View {
         Menu {
-            Picker(selection: $vm.selectedSortOption, label: Text("Sorting options")) {
-                ForEach(RecipeViewModel.SortOptions.allCases) { option in
+            Picker(selection: vm.selectedSortOptionBinding, label: Text("Sorting options")) {
+                ForEach(RecipeSortOptions.allCases) { option in
                     Text(option.rawValue.capitalized)
                         .tag(option)
                 }
