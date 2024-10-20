@@ -12,7 +12,7 @@ struct ContentView: View {
     @StateObject private var recipeVM: RecipeViewModel
     
     // MARK: - INITIALIZER
-    init(recipeService: RecipeDataFetching) {
+    init(recipeService: RecipeServiceProtocol) {
         _recipeVM = StateObject(wrappedValue: RecipeViewModel(recipeService: recipeService))
     }
     
@@ -34,6 +34,10 @@ struct ContentView: View {
 }
 
 // MARK: - PREVIEWS
-#Preview("ContentView") {
+#Preview("ContentView - MockRecipeAPIService") {
     ContentView(recipeService: MockRecipeAPIService())
+}
+
+#Preview("ContentView - RecipeAPIService") {
+    ContentView(recipeService: RecipeAPIService())
 }
