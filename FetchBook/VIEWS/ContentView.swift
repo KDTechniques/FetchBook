@@ -12,7 +12,7 @@ struct ContentView: View {
     @StateObject private var recipeVM: RecipeViewModel
     
     // MARK: - INITIALIZER
-    init(recipeService: RecipeDataFetching) {
+    init(recipeService: RecipeServiceProtocol) {
         _recipeVM = StateObject(wrappedValue: RecipeViewModel(recipeService: recipeService))
     }
     

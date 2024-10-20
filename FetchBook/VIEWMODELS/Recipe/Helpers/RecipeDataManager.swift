@@ -11,10 +11,10 @@ actor RecipeDataManager {
     // MARK: - PROPERTIES
     private let recipeVM: RecipeViewModel
     private let sortingManager: RecipeSortingManager
-    private let recipeService: RecipeDataFetching
+    private let recipeService: RecipeServiceProtocol
     
     // MARK: - INITIALIZER
-    init(recipeVM: RecipeViewModel, sortingManager: RecipeSortingManager, recipeService: RecipeDataFetching) {
+    init(recipeVM: RecipeViewModel, sortingManager: RecipeSortingManager, recipeService: RecipeServiceProtocol) {
         self.recipeVM = recipeVM
         self.sortingManager = sortingManager
         self.recipeService = recipeService
