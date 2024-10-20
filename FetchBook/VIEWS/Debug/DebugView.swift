@@ -38,7 +38,7 @@ extension DebugView {
     // MARK: - endpoint
     private var endpoint: some View {
         Section {
-            Picker("Recipe Endpoints Picker", selection: $recipeVM.selectedEndpoint) {
+            Picker("Recipe Endpoints Picker", selection: recipeVM.selectedEndpointBinding) {
                 ForEach(RecipeEndpointTypes.allCases, id: \.self) {
                     Text($0.typeString.capitalized)
                         .tag($0.endpointModel)

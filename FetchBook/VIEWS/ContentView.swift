@@ -23,11 +23,11 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             RecipesView(vm: recipeVM)
-                .tabItem {  Label("Recipes", systemImage: "book") }
+                .tabItem {  Label("Recipes", systemImage: "book.fill") }
                 .tag(TabBarTypes.recipe)
             
             DebugView(vm: recipeVM)
-                .tabItem { Label("Debug", systemImage: "wrench.and.screwdriver") }
+                .tabItem { Label("Debug", systemImage: "wrench.and.screwdriver.fill") }
                 .tag(TabBarTypes.debug)
         }
     }

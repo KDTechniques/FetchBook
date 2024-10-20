@@ -11,7 +11,9 @@ import SwiftUI
 struct FetchBookApp: App {
     // MARK: - INITIALIZER
     init() {
-        Helpers.preloadWebView()
+        Task { @MainActor in
+            await Helpers.preloadWebView() // Preload WebView on the main thread
+        }
     }
     
     // MARK: - BODY

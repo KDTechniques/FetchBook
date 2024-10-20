@@ -9,6 +9,7 @@ import XCTest
 import Combine
 @testable import FetchBook
 
+@MainActor
 final class RecipeViewModelTests: XCTestCase {
     
     /// The instance of `RecipeViewModel` used for testing.
@@ -33,20 +34,6 @@ final class RecipeViewModelTests: XCTestCase {
     
     override func tearDownWithError() throws { }
     
-    /// Executes a given action on the main thread.
-    ///
-    /// - This function ensures that the provided closure is executed on the main thread,
-    ///   which is useful for performing UI updates or actions that must be performed on the main thread.
-    /// - Uses a weak reference to `self` to avoid retain cycles, ensuring that the action is only executed if `self` still exists.
-    ///
-    /// - Parameter action: A closure that takes `self` as a parameter and performs an action.
-    func executeOnMainThread(action: @escaping (_ self: RecipeViewModelTests) -> ()) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            action(self)
-        }
-    }
-    
     // MARK: - Unit Tests
     
     // MARK: - fetchRecipeData(endpoint: RecipeEndpointModel) async throws Unit Tests
@@ -63,16 +50,14 @@ final class RecipeViewModelTests: XCTestCase {
         
         do {
             // When
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             
-            executeOnMainThread {
-                // Then
-                XCTAssertFalse($0.vm.recipesArray.isEmpty)
-                XCTAssertEqual($0.vm.recipesArray.count, expectedRecipeCount)
-                XCTAssertFalse($0.vm.mutableRecipesArray.isEmpty)
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, expectedRecipeCount)
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // Then
+            XCTAssertFalse(vm.recipesArray.isEmpty)
+            XCTAssertEqual(vm.recipesArray.count, expectedRecipeCount)
+            XCTAssertFalse(vm.mutableRecipesArray.isEmpty)
+            XCTAssertEqual(vm.mutableRecipesArray.count, expectedRecipeCount)
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch, but got error: \(error)")
         }
@@ -87,18 +72,16 @@ final class RecipeViewModelTests: XCTestCase {
     ///         and the `currentDataStatus` is updated to reflect the empty data state.
     func test_RecipeViewModel_fetchRecipeData_shouldHandleEmptyResponse() async {
         // Given
-        let endpoint: RecipeEndpointModel = RecipeEndpoints.empty // Simulating empty response
+        let endpoint: RecipeEndpointModel = RecipeEndpointTypes.empty.endpointModel // Simulating empty response
         
         do {
             // When
             try await vm.fetchRecipeData(endpoint: endpoint)
             
-            executeOnMainThread {
-                // Then
-                XCTAssertTrue($0.vm.recipesArray.isEmpty, "Recipe array should be empty for an empty response")
-                XCTAssertTrue($0.vm.mutableRecipesArray.isEmpty, "Sorted recipe array should be empty for an empty response")
-                XCTAssertEqual($0.vm.currentDataStatus, .emptyData)
-            }
+            // Then
+            XCTAssertTrue(vm.recipesArray.isEmpty, "Recipe array should be empty for an empty response")
+            XCTAssertTrue(vm.mutableRecipesArray.isEmpty, "Sorted recipe array should be empty for an empty response")
+            XCTAssertEqual(vm.currentDataStatus, .emptyData)
         } catch {
             XCTFail("Expected successful fetch with empty response, but got error: \(error)")
         }
@@ -113,18 +96,16 @@ final class RecipeViewModelTests: XCTestCase {
     ///         It also checks that the `currentDataStatus` is updated to reflect a malformed data state.
     func test_RecipeViewModel_fetchRecipeData_shouldHandleMalformedResponse() async {
         // Given
-        let endpoint: RecipeEndpointModel = RecipeEndpoints.malformed // Simulating malformed data
+        let endpoint: RecipeEndpointModel = RecipeEndpointTypes.malformed.endpointModel // Simulating malformed data
         
         do {
             // When
             try await vm.fetchRecipeData(endpoint: endpoint)
             XCTFail("Expected error for malformed response, but got success")
         } catch {
-            executeOnMainThread {
-                // Then
-                XCTAssertEqual($0.vm.recipesArray.count, 0, "Recipe array should be empty after a malformed response")
-                XCTAssertEqual($0.vm.currentDataStatus, .malformed)
-            }
+            // Then
+            XCTAssertEqual(vm.recipesArray.count, 0, "Recipe array should be empty after a malformed response")
+            XCTAssertEqual(vm.currentDataStatus, .malformed)
         }
     }
     
@@ -138,23 +119,22 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_fetchRecipeData_recipesArrayShouldReturnCorrectData() async {
         // Given
         let expectedFirstRecipeName: String = "Pear Tarte Tatin" // Based on mock data
-        let endpoint: RecipeEndpointModel = RecipeEndpoints.all
+        let endpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
         
         do {
             // When
             try await vm.fetchRecipeData(endpoint: endpoint)
             
-            executeOnMainThread {
-                // Then
-                XCTAssertEqual($0.vm.recipesArray.first?.name, expectedFirstRecipeName)
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // Then
+            XCTAssertEqual(vm.recipesArray.first?.name, expectedFirstRecipeName)
+            XCTAssertEqual(vm.currentDataStatus, .none)
+            
         } catch {
             XCTFail("Expected successful fetch, but got an error: \(error)")
         }
     }
     
-    // MARK: - sortRecipes(option: SortOptions) -> [RecipeModel]  Unit Tests
+    // MARK: - sortRecipes(option: RecipeSortOptions) -> [RecipeModel]  Unit Tests
     
     // MARK: - test_RecipeViewModel_sortRecipes_shouldSortAZ
     /// Tests the `sortRecipes` method in `RecipeViewModel` to ensure that recipes are sorted in A-Z order.
@@ -167,19 +147,17 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_sortRecipes_shouldSortAZ() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let expectedFirstRecipeName: String = "Apam Balik" // A is the first in A-Z sorting
             let expectedLastRecipeName: String = "Treacle Tart" // T is the last in A-Z sorting
             
-            executeOnMainThread {
-                // When
-                let sortedRecipes: [RecipeModel] = $0.vm.sortRecipes(option: .az)
-                
-                // Then
-                XCTAssertEqual(sortedRecipes.first?.name, expectedFirstRecipeName, "The first recipe in A-Z sort should be \(expectedFirstRecipeName)")
-                XCTAssertEqual(sortedRecipes.last?.name, expectedLastRecipeName, "The last recipe in A-Z sort should be \(expectedLastRecipeName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            let sortedRecipes: [RecipeModel] = vm.sortRecipes(option: .ascending)
+            
+            // Then
+            XCTAssertEqual(sortedRecipes.first?.name, expectedFirstRecipeName, "The first recipe in A-Z sort should be \(expectedFirstRecipeName)")
+            XCTAssertEqual(sortedRecipes.last?.name, expectedLastRecipeName, "The last recipe in A-Z sort should be \(expectedLastRecipeName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & sort, but got an error: \(error)")
         }
@@ -196,19 +174,17 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_sortRecipes_shouldSortZA() async throws {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let expectedFirstRecipeName = "Treacle Tart" // T is the first in Z-A sorting
             let expectedLastRecipeName = "Apam Balik" // A is the last in Z-A sorting
             
-            executeOnMainThread {
-                // When
-                let sortedRecipes: [RecipeModel] = $0.vm.sortRecipes(option: .za)
-                
-                // Then
-                XCTAssertEqual(sortedRecipes.first?.name, expectedFirstRecipeName, "The first recipe in Z-A sort should be \(expectedFirstRecipeName)")
-                XCTAssertEqual(sortedRecipes.last?.name, expectedLastRecipeName, "The last recipe in Z-A sort should be \(expectedLastRecipeName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            let sortedRecipes: [RecipeModel] = vm.sortRecipes(option: .descending)
+            
+            // Then
+            XCTAssertEqual(sortedRecipes.first?.name, expectedFirstRecipeName, "The first recipe in Z-A sort should be \(expectedFirstRecipeName)")
+            XCTAssertEqual(sortedRecipes.last?.name, expectedLastRecipeName, "The last recipe in Z-A sort should be \(expectedLastRecipeName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         }  catch {
             XCTFail("Expected successful fetch & sort, but got an error: \(error)")
         }
@@ -218,28 +194,26 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_sortRecipes_shouldReturnUnsortedArray() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let expectedRecipeCount: Int = 4 // Assuming the mock data has 4 recipes
             let notExpectedRecipeDescription: String = "[]"
             
-            executeOnMainThread {
-                // When
-                let originalRecipesArray = $0.vm.recipesArray // Original unsorted array
-                let unsortedRecipes: [RecipeModel] = $0.vm.sortRecipes(option: .none)
-                
-                // Then
-                XCTAssertEqual(originalRecipesArray.count, expectedRecipeCount, "The original recipes array should return the mock data set count")
-                XCTAssertEqual(unsortedRecipes.count, expectedRecipeCount, "The unsorted option should return the mock data set count")
-                
-                XCTAssertNotEqual(originalRecipesArray.description, notExpectedRecipeDescription, "The original recipes array should not return empty array description")
-                XCTAssertNotEqual(unsortedRecipes.description, notExpectedRecipeDescription, "The unsorted option should not return empty array description")
-                
-                XCTAssertEqual(unsortedRecipes, originalRecipesArray, "The unsorted option should return the original recipes array")
-                XCTAssertEqual(unsortedRecipes.description, originalRecipesArray.description, "The unsorted option should return the original recipes array description")
-                XCTAssertEqual(unsortedRecipes.count, originalRecipesArray.count, "The unsorted option should return the original recipes array count")
-                
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            let originalRecipesArray = vm.recipesArray // Original unsorted array
+            let unsortedRecipes: [RecipeModel] = vm.sortRecipes(option: .none)
+            
+            // Then
+            XCTAssertEqual(originalRecipesArray.count, expectedRecipeCount, "The original recipes array should return the mock data set count")
+            XCTAssertEqual(unsortedRecipes.count, expectedRecipeCount, "The unsorted option should return the mock data set count")
+            
+            XCTAssertNotEqual(originalRecipesArray.description, notExpectedRecipeDescription, "The original recipes array should not return empty array description")
+            XCTAssertNotEqual(unsortedRecipes.description, notExpectedRecipeDescription, "The unsorted option should not return empty array description")
+            
+            XCTAssertEqual(unsortedRecipes, originalRecipesArray, "The unsorted option should return the original recipes array")
+            XCTAssertEqual(unsortedRecipes.description, originalRecipesArray.description, "The unsorted option should return the original recipes array description")
+            XCTAssertEqual(unsortedRecipes.count, originalRecipesArray.count, "The unsorted option should return the original recipes array count")
+            
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & equal arrays, but got an error: \(error)")
         }
@@ -256,27 +230,25 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_sortRecipes_shouldHandleEmptyArray() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.empty) // Simulating empty response
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.empty.endpointModel) // Simulating empty response
             let expectedRecipeCount: Int = 0
             
-            executeOnMainThread {
-                // When
-                let sortedRecipesAZ: [RecipeModel] = $0.vm.sortRecipes(option: .az)
-                let sortedRecipesZA: [RecipeModel] = $0.vm.sortRecipes(option: .za)
-                let unsortedRecipes: [RecipeModel] = $0.vm.sortRecipes(option: .none)
-                
-                // Then
-                XCTAssertTrue(sortedRecipesAZ.isEmpty, "Sorting an empty array A-Z should return an empty array")
-                XCTAssertEqual(sortedRecipesAZ.count, expectedRecipeCount, "Sorting an empty array A-Z should return an empty array")
-                
-                XCTAssertTrue(sortedRecipesZA.isEmpty, "Sorting an empty array Z-A should return an empty array")
-                XCTAssertEqual(sortedRecipesZA.count, expectedRecipeCount, "Sorting an empty array Z-A should return an empty array")
-                
-                XCTAssertTrue(unsortedRecipes.isEmpty, "Returning unsorted array should return an empty array")
-                XCTAssertEqual(sortedRecipesAZ.count, expectedRecipeCount, "Returning unsorted array should return an empty array")
-                
-                XCTAssertEqual($0.vm.currentDataStatus, .emptyData)
-            }
+            // When
+            let sortedRecipesAZ: [RecipeModel] = vm.sortRecipes(option: .ascending)
+            let sortedRecipesZA: [RecipeModel] = vm.sortRecipes(option: .descending)
+            let unsortedRecipes: [RecipeModel] = vm.sortRecipes(option: .none)
+            
+            // Then
+            XCTAssertTrue(sortedRecipesAZ.isEmpty, "Sorting an empty array A-Z should return an empty array")
+            XCTAssertEqual(sortedRecipesAZ.count, expectedRecipeCount, "Sorting an empty array A-Z should return an empty array")
+            
+            XCTAssertTrue(sortedRecipesZA.isEmpty, "Sorting an empty array Z-A should return an empty array")
+            XCTAssertEqual(sortedRecipesZA.count, expectedRecipeCount, "Sorting an empty array Z-A should return an empty array")
+            
+            XCTAssertTrue(unsortedRecipes.isEmpty, "Returning unsorted array should return an empty array")
+            XCTAssertEqual(sortedRecipesAZ.count, expectedRecipeCount, "Returning unsorted array should return an empty array")
+            
+            XCTAssertEqual(vm.currentDataStatus, .emptyData)
         } catch {
             XCTFail("Expected successful fetch & empty arrays, but got an error: \(error)")
         }
@@ -295,19 +267,20 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_sortOptionSubscriber_shouldSortAZ() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let expectedFirstRecipeName: String = "Apam Balik" // A is the first in A-Z sorting
             let expectedLastRecipeName: String = "Treacle Tart" // T is the last in A-Z sorting
             
-            executeOnMainThread {
-                // When
-                $0.vm.selectedSortOption = .az
-                
-                // Then
-                XCTAssertEqual($0.vm.mutableRecipesArray.first?.name, expectedFirstRecipeName, "The first recipe in A-Z sort should be \(expectedFirstRecipeName)")
-                XCTAssertEqual($0.vm.mutableRecipesArray.last?.name, expectedLastRecipeName, "The last recipe in A-Z sort should be \(expectedLastRecipeName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            await MainActor.run { vm.selectedSortOption = .ascending }
+            
+            // Allow some time for the sort to complete, since it's async
+            try await Task.sleep(nanoseconds: 500_000_000) // 0.5 second delay for the sorting to complete
+            
+            // Then
+            XCTAssertEqual(vm.mutableRecipesArray.first?.name, expectedFirstRecipeName, "The first recipe in A-Z sort should be \(expectedFirstRecipeName)")
+            XCTAssertEqual(vm.mutableRecipesArray.last?.name, expectedLastRecipeName, "The last recipe in A-Z sort should be \(expectedLastRecipeName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & sorted array, but got an error: \(error)")
         }
@@ -324,19 +297,20 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_sortOptionSubscriber_shouldSortZA() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let expectedFirstRecipeName: String = "Treacle Tart" // T is the first in A-Z sorting
             let expectedLastRecipeName: String = "Apam Balik" // A is the last in A-Z sorting
             
-            executeOnMainThread {
-                // When
-                $0.vm.selectedSortOption = .za
-                
-                // Then
-                XCTAssertEqual($0.vm.mutableRecipesArray.first?.name, expectedFirstRecipeName, "The first recipe in Z-A sort should be \(expectedFirstRecipeName)")
-                XCTAssertEqual($0.vm.mutableRecipesArray.last?.name, expectedLastRecipeName, "The last recipe in Z-A sort should be \(expectedLastRecipeName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            await MainActor.run { vm.selectedSortOption = .descending }
+            
+            // Allow some time for the sort to complete, since it's async
+            try await Task.sleep(nanoseconds: 500_000_000) // 0.5 second delay for the sorting to complete
+            
+            // Then
+            XCTAssertEqual(vm.mutableRecipesArray.first?.name, expectedFirstRecipeName, "The first recipe in Z-A sort should be \(expectedFirstRecipeName)")
+            XCTAssertEqual(vm.mutableRecipesArray.last?.name, expectedLastRecipeName, "The last recipe in Z-A sort should be \(expectedLastRecipeName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & sorted array, but got an error: \(error)")
         }
@@ -353,21 +327,19 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_recipeSearchTextSubscriber_emptySearchText_shouldReturnAllRecipes() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let expectedRecipeCount: Int = 4 // Assuming the mock data has 4 recipes
-            executeOnMainThread { $0.vm.recipeSearchText = "" /* Set search text to empty */ }
             
             // When
+            await MainActor.run { vm.recipeSearchText = "" /* Set search text to empty */ }
             try await Task.sleep(nanoseconds: 200_000_000) // Wait for debounce to complete
             
-            executeOnMainThread {
-                // Then
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, expectedRecipeCount, "When search text is empty, mutableRecipesArray count should match the expected recipe count")
-                XCTAssertEqual($0.vm.mutableRecipesArray, $0.vm.recipesArray, "When search text is empty, mutableRecipesArray should match the original recipesArray")
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, $0.vm.recipesArray.count, "When search text is empty, mutableRecipesArray count should match the original recipesArray count")
-                XCTAssertEqual($0.vm.mutableRecipesArray.description, $0.vm.recipesArray.description, "When search text is empty, mutableRecipesArray description should match the original recipesArray description")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // Then
+            XCTAssertEqual(vm.mutableRecipesArray.count, expectedRecipeCount, "When search text is empty, mutableRecipesArray count should match the expected recipe count")
+            XCTAssertEqual(vm.mutableRecipesArray, vm.recipesArray, "When search text is empty, mutableRecipesArray should match the original recipesArray")
+            XCTAssertEqual(vm.mutableRecipesArray.count, vm.recipesArray.count, "When search text is empty, mutableRecipesArray count should match the original recipesArray count")
+            XCTAssertEqual(vm.mutableRecipesArray.description, vm.recipesArray.description, "When search text is empty, mutableRecipesArray description should match the original recipesArray description")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & original array results, but got an error: \(error)")
         }
@@ -382,21 +354,19 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_recipeSearchTextSubscriber_nonEmptySearchText_shouldFilterRecipes() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let searchText:String = "Buns"
             let expectedRecipeName: String = "Chelsea Buns"
             let expectedRecipeCount: Int = 1
             
             // When
-            executeOnMainThread { $0.vm.recipeSearchText = searchText /* Set search text to filter results */ }
+            await MainActor.run { vm.recipeSearchText = searchText /* Set search text to filter results */ }
             try await Task.sleep(nanoseconds: 200_000_000) // Wait for debounce to complete
             
-            executeOnMainThread {
-                // Then
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
-                XCTAssertEqual($0.vm.mutableRecipesArray.first?.name, expectedRecipeName, "The filtered recipe should match \(expectedRecipeName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // Then
+            XCTAssertEqual(vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
+            XCTAssertEqual(vm.mutableRecipesArray.first?.name, expectedRecipeName, "The filtered recipe should match \(expectedRecipeName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & filtered array results, but got an error: \(error)")
         }
@@ -411,18 +381,16 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_recipeSearchTextSubscriber_searchText_noMatches_shouldReturnEmptyArray() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let searchText: String = "NonExistentRecipe"
             
             // When
-            executeOnMainThread { $0.vm.recipeSearchText = searchText /* Set a search text that does not match any recipe */ }
+            await MainActor.run { vm.recipeSearchText = searchText /* Set a search text that does not match any recipe */ }
             try await Task.sleep(nanoseconds: 200_000_000) // Wait for debounce to complete
             
-            executeOnMainThread {
-                // Then
-                XCTAssertTrue($0.vm.mutableRecipesArray.isEmpty, "If no recipe matches the search text, mutableRecipesArray should be empty")
-                XCTAssertEqual($0.vm.currentDataStatus, .emptyResult)
-            }
+            // Then
+            XCTAssertTrue(vm.mutableRecipesArray.isEmpty, "If no recipe matches the search text, mutableRecipesArray should be empty")
+            XCTAssertEqual(vm.currentDataStatus, .emptyResult)
         } catch {
             XCTFail("Expected successful fetch & empty array result, but got an error: \(error)")
         }
@@ -437,21 +405,19 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_recipeSearchTextSubscriber_searchTextCaseInsensitiveMatching_shouldFilterCorrectly() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let searchText = "ChELsEa" // mixed case search text for a case-insensitive search
             let expectedRecipeName = "Chelsea Buns"
             let expectedRecipeCount: Int = 1
             
             // When
-            executeOnMainThread { $0.vm.recipeSearchText = searchText /* Set a search text that contains multiple cases */ }
+            await MainActor.run { vm.recipeSearchText = searchText /* Set a search text that contains multiple cases */ }
             try await Task.sleep(nanoseconds: 200_000_000) // Wait for debounce to complete
             
-            executeOnMainThread {
-                // Then
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
-                XCTAssertEqual($0.vm.mutableRecipesArray.first?.name, expectedRecipeName, "Search should be case-insensitive and match \(expectedRecipeName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // Then
+            XCTAssertEqual(vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
+            XCTAssertEqual(vm.mutableRecipesArray.first?.name, expectedRecipeName, "Search should be case-insensitive and match \(expectedRecipeName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & filtered array result, but got an error: \(error)")
         }
@@ -468,21 +434,22 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_filterSearchResult_shouldReturnFilteredRecipes_basedOnName() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let searchText = "Apam" // A recipe name from the mock data
             let expectedRecipeName = "Apam Balik"
             let expectedRecipeCount: Int = 1
             
-            executeOnMainThread {
-                // When
-                $0.vm.filterSearchResult(text: searchText)
-                
-                // Then
-                XCTAssertFalse($0.vm.mutableRecipesArray.isEmpty)
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
-                XCTAssertEqual($0.vm.mutableRecipesArray.first?.name, expectedRecipeName, "The filtered recipe should match \(expectedRecipeName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            await MainActor.run { vm.filterSearchResult(text: searchText) }
+            
+            // Allow some time for the filter to complete
+            try await Task.sleep(nanoseconds: 500_000_000)
+            
+            // Then
+            XCTAssertFalse(vm.mutableRecipesArray.isEmpty)
+            XCTAssertEqual(vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
+            XCTAssertEqual(vm.mutableRecipesArray.first?.name, expectedRecipeName, "The filtered recipe should match \(expectedRecipeName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & filtered array result, but got an error: \(error)")
         }
@@ -498,21 +465,22 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_filterSearchResult_shouldReturnFilteredRecipes_basedOnCuisine() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let searchText = "French" // A cuisine from the mock data
             let expectedCuisineName = "French"
             let expectedRecipeCount: Int = 1
             
-            executeOnMainThread {
-                // When
-                $0.vm.filterSearchResult(text: searchText)
-                
-                // Then
-                XCTAssertFalse($0.vm.mutableRecipesArray.isEmpty)
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
-                XCTAssertEqual($0.vm.mutableRecipesArray.first?.cuisine, expectedCuisineName, "The filtered recipe should match \(expectedCuisineName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            await MainActor.run { vm.filterSearchResult(text: searchText) }
+            
+            // Allow some time for the filter to complete
+            try await Task.sleep(nanoseconds: 500_000_000)
+            
+            // Then
+            XCTAssertFalse(vm.mutableRecipesArray.isEmpty)
+            XCTAssertEqual(vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
+            XCTAssertEqual(vm.mutableRecipesArray.first?.cuisine, expectedCuisineName, "The filtered recipe should match \(expectedCuisineName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & filtered array result, but got an error: \(error)")
         }
@@ -528,21 +496,22 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_filterSearchResult_shouldHandleCaseInsensitiveSearch() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let searchText = "treAcLE" // Test mixed case
             let expectedRecipeName = "Treacle Tart"
             let expectedRecipeCount: Int = 1
             
-            executeOnMainThread {
-                // When
-                $0.vm.filterSearchResult(text: searchText)
-                
-                // Then
-                XCTAssertFalse($0.vm.mutableRecipesArray.isEmpty)
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
-                XCTAssertEqual($0.vm.mutableRecipesArray.first?.name, expectedRecipeName, "The filtered recipe should match \(expectedRecipeName)")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            await MainActor.run { vm.filterSearchResult(text: searchText) }
+            
+            // Allow some time for the filter to complete
+            try await Task.sleep(nanoseconds: 500_000_000)
+            
+            // Then
+            XCTAssertFalse(vm.mutableRecipesArray.isEmpty)
+            XCTAssertEqual(vm.mutableRecipesArray.count, expectedRecipeCount, "Filtered results should only contain expected recipe count")
+            XCTAssertEqual(vm.mutableRecipesArray.first?.name, expectedRecipeName, "The filtered recipe should match \(expectedRecipeName)")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         } catch {
             XCTFail("Expected successful fetch & filtered array result, but got an error: \(error)")
         }
@@ -558,17 +527,17 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_filterSearchResult_shouldReturnEmptyArray_whenNoMatch() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let searchText = "NonExistentRecipe"
+            // When
+            await MainActor.run { vm.filterSearchResult(text: searchText) }
             
-            executeOnMainThread {
-                // When
-                $0.vm.filterSearchResult(text: searchText)
-                
-                // Then
-                XCTAssertTrue($0.vm.mutableRecipesArray.isEmpty) // No recipes should match
-                XCTAssertEqual($0.vm.currentDataStatus, .emptyResult)
-            }
+            // Allow some time for the filter to complete
+            try await Task.sleep(nanoseconds: 500_000_000)
+            
+            // Then
+            XCTAssertTrue(vm.mutableRecipesArray.isEmpty) // No recipes should match
+            XCTAssertEqual(vm.currentDataStatus, .emptyResult)
         } catch {
             XCTFail("Expected successful fetch & empty array result, but got an error: \(error)")
         }
@@ -584,17 +553,18 @@ final class RecipeViewModelTests: XCTestCase {
     func test_RecipeViewModel_filterSearchResult_shouldReturnFullArray_whenSearchTextIsEmpty() async {
         do {
             // Given
-            try await vm.fetchRecipeData(endpoint: RecipeEndpoints.all)
+            try await vm.fetchRecipeData(endpoint: RecipeEndpointTypes.all.endpointModel)
             let searchText = "" // Empty search
             
-            executeOnMainThread {
-                // When
-                $0.vm.filterSearchResult(text: searchText)
-                
-                // Then
-                XCTAssertEqual($0.vm.mutableRecipesArray.count, $0.vm.recipesArray.count, "The original recipes array should return the mock data set count")
-                XCTAssertEqual($0.vm.currentDataStatus, .none)
-            }
+            // When
+            await MainActor.run { vm.filterSearchResult(text: searchText) }
+            
+            // Allow some time for the filter to complete
+            try await Task.sleep(nanoseconds: 500_000_000)
+            
+            // Then
+            XCTAssertEqual(vm.mutableRecipesArray.count, vm.recipesArray.count, "The original recipes array should return the mock data set count")
+            XCTAssertEqual(vm.currentDataStatus, .none)
         }  catch {
             XCTFail("Expected successful fetch & full array result, but got an error: \(error)")
         }
