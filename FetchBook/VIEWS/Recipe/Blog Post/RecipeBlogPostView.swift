@@ -26,7 +26,6 @@ struct RecipeBlogPostView: View {
     // MARK: - BODY
     var body: some View {
         let videoID: String? = Helpers.extractYouTubeVideoID(from: secureYoutubeURLString ?? "")
-        
         Group {
             if let urlString: String = secureBlogPostURLString,
                let url: URL = .init(string: urlString) {
@@ -44,7 +43,9 @@ struct RecipeBlogPostView: View {
                 )
             }
         }
-        .overlay { FloatingYTPlayerView(showVideoPlayer: $showVideoPlayer, videoID: videoID) }
+        .overlay {
+            FloatingYTPlayerView(showVideoPlayer: $showVideoPlayer, videoID: videoID)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 BlogPostVideoPlayerButtonView(showVideoPlayer: $showVideoPlayer, videoID: videoID)

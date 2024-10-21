@@ -23,8 +23,8 @@ struct RecipeImagePreviewContextMenuItemsView: View {
     // MARK: - BODY
     var body: some View {
         Group {
-            Button { appendBlogPostItem(false) } label: { Label("Go to Blog Post", systemImage: "book") }
-            Button { appendBlogPostItem(true) } label: { Label("Watch on YouTube", systemImage: "play.circle") }
+            blogPostButton
+            youtubeButton
         }
     }
 }
@@ -36,6 +36,24 @@ struct RecipeImagePreviewContextMenuItemsView: View {
 
 // MARK: - EXTENSIONS
 extension RecipeImagePreviewContextMenuItemsView {
+    //  MARK: - blogPostButton
+    private var blogPostButton: some View {
+        Button {
+            appendBlogPostItem(false)
+        } label: {
+            Label("Go to Blog Post", systemImage: "book")
+        }
+    }
+    
+    // MARK: - youtubeButton
+    private var youtubeButton: some View {
+        Button {
+            appendBlogPostItem(true)
+        } label: {
+            Label("Watch on YouTube", systemImage: "play.circle")
+        }
+    }
+    
     // MARK: - FUNCTIONS
     
     // MARK: - appendBlogPostItem
@@ -45,7 +63,6 @@ extension RecipeImagePreviewContextMenuItemsView {
             secureYoutubeURLString: youtubeURLString,
             showVideoPlayer: showVideoPlayer
         )
-        
         Task {
             try? await Task.sleep(nanoseconds: 200_000_000)
             blogPostItem.append(item)

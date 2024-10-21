@@ -7,37 +7,52 @@
 
 import Foundation
 
-struct RecipesModel: Codable {
+/// Model representing a collection of recipes.
+struct RecipesModel: Decodable {
     let recipes: [RecipeModel]
 }
 
-struct RecipeModel: Identifiable, Codable, Equatable {
+/// Model representing a single recipe.
+struct RecipeModel: Identifiable, Decodable, Equatable {
+    
     // MARK: - PROPERTIES
+    
+    /// Unique identifier for the recipe.
     let id: String
+    
+    /// Name of the recipe.
     let name: String
+    
+    /// Cuisine type of the recipe.
     let cuisine: String
+    
+    /// URL string for the highest quality photo available.
     private let photoURLLargeString: String
+    
+    /// URL string for the lowest quality photo available.
     private let thumbnailURLString: String
+    
+    /// URL string for the recipe's website (blog post).
     private let blogPostURLString: String?
+    
+    /// URL string for the recipe's YouTube video.
     private let youtubeURLString: String?
     
     // Computed properties to ensure URLs are always in HTTPS format
     var securePhotoURLLargeString: String {
-        photoURLLargeString.replacingOccurrences(of: "http://", with: "https://")
+        return photoURLLargeString.replacingOccurrences(of: "http://", with: "https://")
     }
-    
     var secureThumbnailURLString: String {
-        thumbnailURLString.replacingOccurrences(of: "http://", with: "https://")
+        return thumbnailURLString.replacingOccurrences(of: "http://", with: "https://")
     }
-    
     var secureBlogPostURLString: String? {
-        blogPostURLString?.replacingOccurrences(of: "http://", with: "https://")
+        return blogPostURLString?.replacingOccurrences(of: "http://", with: "https://")
     }
-    
     var secureYoutubeURLString: String? {
-        youtubeURLString?.replacingOccurrences(of: "http://", with: "https://")
+        return youtubeURLString?.replacingOccurrences(of: "http://", with: "https://")
     }
     
+    /// Represents a mock data object for use in UI Previews.
     static let mockObject: Self = .init(
         id: "9dd84450-9922-463a-bece-64f32f7a7dc5",
         name: "Summer Pudding",
@@ -49,6 +64,7 @@ struct RecipeModel: Identifiable, Codable, Equatable {
     )
     
     // MARK: - CODING KEYS
+    /// Defines the keys for encoding and decoding the model.
     enum CodingKeys: String, CodingKey {
         case id = "uuid"
         case name

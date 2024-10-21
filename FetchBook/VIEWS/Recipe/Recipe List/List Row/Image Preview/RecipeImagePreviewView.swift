@@ -24,7 +24,9 @@ struct RecipeImagePreviewView: View {
     var body: some View {
         largeImage
             .frame(width: recipeImagePreviewSize, height: recipeImagePreviewSize)
-            .overlay(alignment: .bottomLeading) { recipeInfo }
+            .overlay(alignment: .bottomLeading) {
+                recipeInfo
+            }
     }
 }
 
@@ -49,7 +51,9 @@ extension RecipeImagePreviewView {
             url: .init(string: recipe.secureThumbnailURLString),
             options: [.highPriority, .retryFailed]
         )
-        .placeholder { placeholder }
+        .placeholder {
+            placeholder
+        }
         .resizable()
         .scaledToFill()
     }
@@ -60,7 +64,9 @@ extension RecipeImagePreviewView {
             url: .init(string: recipe.securePhotoURLLargeString),
             options: [.lowPriority, .retryFailed]
         )
-        .placeholder { thumbnailImage }
+        .placeholder {
+            thumbnailImage
+        }
         .resizable()
         .scaledToFill()
     }

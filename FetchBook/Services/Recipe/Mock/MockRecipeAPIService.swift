@@ -45,12 +45,10 @@ actor MockRecipeAPIService: RecipeServiceProtocol {
     func fetchRecipeData(from endpoint: RecipeEndpointModel) async throws -> RecipesModel {
         // Introduce a delay of 2 seconds (2_000_000_000 nanoseconds)
         try await Task.sleep(nanoseconds: 2_000_000_000)
-        
         let fileName: String = getMockJsonFilename(for: endpoint)
         guard let path = Bundle.main.path(forResource: fileName, ofType: "json") else {
             throw RecipeServiceErrors.fileNotFound(fileName+".json")
         }
-        
         let url: URL = .init(fileURLWithPath: path)
         let recipes: RecipesModel = try await self.fetchJSON(from: url, type: RecipesModel.self)
         return recipes

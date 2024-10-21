@@ -101,7 +101,8 @@ actor RecipeFilteringManager {
     /// This operation runs on the main actor to update the UI-related state.
     private func resetRecipes() async {
         await recipeVM.updateDataStatus(.none)
-        await sortingManager.assignSortedRecipesToMutableRecipesArray() // Reset recipes with the current sorting
+        // Reset recipes with the current sorting
+        await sortingManager.assignSortedRecipesToMutableRecipesArray()
     }
     
     // MARK: - filterSearchResult
@@ -122,14 +123,12 @@ actor RecipeFilteringManager {
             await sortingManager.assignSortedRecipesToMutableRecipesArray()
             return
         }
-        
         let lowercasedText: String = text.lowercased()
         let sortedRecipesArray: [RecipeModel] = await sortingManager.sortRecipes(option: recipeVM.selectedSortOption)
         let filteredRecipesArray: [RecipeModel] = sortedRecipesArray.filter({
             $0.name.lowercased().contains(lowercasedText) ||
             $0.cuisine.lowercased().contains(lowercasedText)
         })
-        
         if filteredRecipesArray.isEmpty {
             recipeVM.updateMutableRecipesArray(filteredRecipesArray)
         } else {
@@ -137,7 +136,6 @@ actor RecipeFilteringManager {
                 recipeVM.updateMutableRecipesArray(filteredRecipesArray)
             }
         }
-        
         recipeVM.updateDataStatus(recipeVM.mutableRecipesArray.isEmpty ? .emptyResult : .none)
     }
 }
