@@ -34,14 +34,16 @@ actor RecipeDataManager {
     /// - Throws: An error if fetching data from the `RecipeService` fails.
     func fetchRecipeData(endpoint: RecipeEndpointModel) async throws {
         await recipeVM.updateDataStatus(.fetching)
-        
         do {
             let recipesResponse = try await recipeService.fetchRecipeData(from: endpoint)
             let recipes: [RecipeModel] = recipesResponse.recipes
-            
             await recipeVM.updateDataStatus(recipes.isEmpty ? .emptyData : .none)
-            await recipeVM.updateRecipesArray(recipes) // Store fetched recipes in recipesArray.
-            await sortingManager.assignSortedRecipesToMutableRecipesArray() // Initialize mutableRecipesArray with the fetched and sorted recipes.
+            
+            // Store fetched recipes in recipesArray.
+            await recipeVM.updateRecipesArray(recipes)
+            
+            // Initialize mutableRecipesArray with the fetched and sorted recipes.
+            await sortingManager.assignSortedRecipesToMutableRecipesArray()
         } catch {
             await recipeVM.updateDataStatus(.malformed)
             throw error

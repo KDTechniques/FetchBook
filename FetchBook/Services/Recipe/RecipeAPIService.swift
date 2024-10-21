@@ -37,8 +37,9 @@ actor RecipeAPIService: RecipeServiceProtocol {
     /// - Returns: A `RecipesModel` containing the recipes fetched from the specified API endpoint.
     func fetchRecipeData(from endpoint: RecipeEndpointModel) async throws -> RecipesModel {
         let urlString = endpoint.urlString
-        guard let url = URL(string: urlString) else { throw RecipeServiceErrors.invalidURL(urlString) }
-        
+        guard let url = URL(string: urlString) else {
+            throw RecipeServiceErrors.invalidURL(urlString)
+        }
         do {
             let recipes: RecipesModel = try await self.fetchJSON(from: url, type: RecipesModel.self)
             return recipes

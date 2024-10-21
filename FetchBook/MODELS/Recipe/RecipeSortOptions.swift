@@ -14,7 +14,9 @@ import Foundation
 /// generate a list of all cases and to `Identifiable` for use in SwiftUI lists or UI components.
 enum RecipeSortOptions: String, CaseIterable, Identifiable {
     /// The unique identifier for each sorting option, using the raw string value.
-    var id: String { self.rawValue }
+    var id: String {
+        return self.rawValue
+    }
     
     /// Sort recipes alphabetically from A to Z.
     case ascending = "Ascending"

@@ -2,7 +2,7 @@
 //  YouTubePlayerView.swift
 //  FetchBook
 //
-//  Created by Mr. Kavinda Dilshan on 2024-10-06.
+//  Created by Mr. Kavinda Dilshan on 2024-10-21.
 //
 
 import SwiftUI
@@ -10,11 +10,9 @@ import YouTubeiOSPlayerHelper
 
 // A UIViewRepresentable to wrap the YTPlayerView
 struct YouTubePlayerView: UIViewRepresentable {
-    // MARK: - PROPERTIES
     let videoID: String
     @Binding var isLoading: Bool
     
-    // MARK: - Coordinator
     class Coordinator: NSObject, WKNavigationDelegate {
         var parent: YouTubePlayerView
         
@@ -31,21 +29,19 @@ struct YouTubePlayerView: UIViewRepresentable {
         }
     }
     
-    // MARK: - FUNCTIONS
-    func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
     
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
         webView.navigationDelegate = context.coordinator
-        
-        if let url = URL(string: "https://www.youtube.com/embed/\(videoID)") {
-            webView.load(URLRequest(url: url))
-        } else {
-            print("Invalid videoID: \(videoID)")
-        }
-        
+        let url = URL(string: "https://www.youtube.com/embed/\(videoID)")!
+        webView.load(URLRequest(url: url))
         return webView
     }
     
-    func updateUIView(_ uiView: WKWebView, context: Context) { }
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        // No need for updates here
+    }
 }

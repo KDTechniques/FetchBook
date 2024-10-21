@@ -21,8 +21,12 @@ struct FloatingYTPlayerView: View {
     // MARK: - BODY
     var body: some View {
         if let videoID: String = videoID, showVideoPlayer {
-            DraggableYouTubePlayerView(videoID: videoID) { showVideoPlayer = false }
-                .onDisappear { showVideoPlayer = false }
+            DraggableYouTubePlayerView(videoID: videoID) {
+                showVideoPlayer = false
+            }
+            .onDisappear {
+                showVideoPlayer = false
+            }
         }
     }
 }

@@ -14,7 +14,9 @@ struct RecipesView: View {
     // MARK: - PRIVATE PROPERTIES
     @State private var blogPostItem: [BlogPostItemModel] = []
     
-    enum FetchConditions { case initial, refresh }
+    enum FetchConditions {
+        case initial, refresh
+    }
     
     // MARK: - INITIALIZER
     init(vm: RecipeViewModel) {
@@ -26,19 +28,34 @@ struct RecipesView: View {
         NavigationStack(path: $blogPostItem) {
             Group {
                 switch recipeVM.currentDataStatus {
-                case .none: successRecipeList
-                case .fetching: shimmeringListEffect
-                case .malformed: malformedError
-                case .emptyData: emptyDataError
-                case .emptyResult: emptySearchResults
+                case .none:
+                    successRecipeList
+                    
+                case .fetching:
+                    shimmeringListEffect
+                    
+                case .malformed:
+                    malformedError
+                    
+                case .emptyData:
+                    emptyDataError
+                    
+                case .emptyResult:
+                    emptySearchResults
                 }
             }
-            .toolbar { ToolbarItem(placement: .automatic) { RecipeListSorterButtonView(vm: recipeVM) } }
+            .toolbar { ToolbarItem(placement: .automatic) {
+                RecipeListSorterButtonView(vm: recipeVM) }
+            }
             .navigationTitle("Recipes")
         }
         .searchable(text: recipeVM.recipeSearchTextBinding, prompt: "Search")
-        .refreshable { loadData(.refresh) }
-        .task(priority: .high) { loadData(.initial) }
+        .refreshable {
+            loadData(.refresh)
+        }
+        .task(priority: .high) {
+            loadData(.initial)
+        }
     }
 }
 

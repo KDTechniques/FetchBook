@@ -17,7 +17,12 @@ import Foundation
 /// - `showVideoPlayer`: A Boolean value indicating whether a video player should be displayed in the UI.
 ///   If `true`, the video player should be shown, potentially using `secureYoutubeURLString` as the source. If `false`, no video player is displayed.
 struct BlogPostItemModel: Hashable {
-    let secureBlogPostURLString: String?    // The secure URL string for the blog post.
-    let secureYoutubeURLString: String?     // The secure YouTube URL string, if the post includes a video.
-    let showVideoPlayer: Bool               // Whether to display a video player in the UI.
+    /// The secure URL string for the blog post.
+    let secureBlogPostURLString: String?
+    
+    /// The secure YouTube URL string, if the post includes a video.
+    let secureYoutubeURLString: String?
+    
+    /// Whether to display a video player in the UI.
+    let showVideoPlayer: Bool
 }

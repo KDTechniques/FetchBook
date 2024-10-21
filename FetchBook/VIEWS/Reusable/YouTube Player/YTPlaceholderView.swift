@@ -24,7 +24,7 @@ struct YTPlaceholderView: View {
                 ProgressView()
                     .scaleEffect(1.2)
             }
-        } else { EmptyView() }
+        }
     }
 }
 

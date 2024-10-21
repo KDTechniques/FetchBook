@@ -18,13 +18,22 @@ import Foundation
 /// - `innerCornerRadius`: A computed property that calculates the corner radius for the inner frame based on the outer `cornerRadius` and `spacing`.
 ///   This allows for consistent visual styling, ensuring the inner frame's corners are slightly smaller than the outer frame's corners.
 struct RecipeImageValues {
-    static let cornerRadius: CGFloat = 15    // Outer corner radius of the recipe image.
-    static let spacing: CGFloat = 2          // Spacing between the outer and inner frames.
-    static let frameSize: CGFloat = 80       // Outer frame size for the recipe image.
+    /// Outer corner radius of the recipe image.
+    static let cornerRadius: CGFloat = 15
+    
+    /// Spacing between the outer and inner frames.
+    static let spacing: CGFloat = 2
+    
+    /// Outer frame size for the recipe image.
+    static let frameSize: CGFloat = 80
     
     /// The size of the inner frame, adjusted for the spacing.
-    static var innerFrameSize: CGFloat { frameSize - (spacing * 2) }
+    static var innerFrameSize: CGFloat {
+        return frameSize - (spacing * 2)
+    }
     
     /// The corner radius for the inner frame, adjusted for the spacing.
-    static var innerCornerRadius: CGFloat { cornerRadius - spacing }
+    static var innerCornerRadius: CGFloat {
+        return cornerRadius - spacing
+    }
 }
