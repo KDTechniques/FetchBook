@@ -46,6 +46,8 @@ actor RecipeDataManager {
             await sortingManager.assignSortedRecipesToMutableRecipesArray()
         } catch {
             await recipeVM.updateDataStatus(.malformed)
+            await recipeVM.updateRecipesArray([])
+            await recipeVM.updateMutableRecipesArray([])
             throw error
         }
     }

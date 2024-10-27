@@ -9,7 +9,7 @@ import Foundation
 
 actor RecipeSortingManager {
     // MARK: - PROPERTIES
-    private let recipeVM: RecipeViewModel
+    let recipeVM: RecipeViewModel
     
     // MARK: - INITIALIZER
     init(recipeVM: RecipeViewModel) {

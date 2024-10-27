@@ -65,4 +65,29 @@ struct Helpers {
         let request = URLRequest(url: dummyURL)
         await webView.load(request)
     }
+    
+    // MARK: - generatePermutations
+    /// Generates all unique permutations of the elements in the provided array.
+    ///
+    /// This function uses recursion and Swift's high-order functions to generate all unique permutations
+    /// of the array elements.
+    ///
+    /// - Parameter array: The array of elements to permute.
+    /// - Returns: An array containing all unique permutations of the input array.
+    static func generatePermutations<T>(_ array: [T]) -> [[T]] {
+        // Base case: if the array has 0 or 1 elements, return the array as the only permutation.
+        guard array.count > 1 else { return [array] }
+        
+        // Use flatMap to generate all permutations by fixing each element at the first position
+        // and recursively generating permutations for the remaining elements.
+        return array.indices.flatMap { index in
+            // Create a mutable copy of the array and remove the element at the current index.
+            var remainingElements = array
+            let element = remainingElements.remove(at: index)
+            
+            // Recursively generate permutations for the remaining elements and prepend the fixed element.
+            return generatePermutations(remainingElements).map { [element] + $0 }
+        }
+    }
+    
 }
