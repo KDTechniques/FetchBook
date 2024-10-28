@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct DebugView: View {
-    // MARK: - PROEPRTIES
+    // MARK: - PROPERTIES
     @ObservedObject private var recipeVM: RecipeViewModel
     
     // MARK: - INITIALIZER

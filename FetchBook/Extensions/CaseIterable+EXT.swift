@@ -14,7 +14,6 @@ extension CaseIterable {
     /// as enums conforming to `CaseIterable` are expected to have at least one case.
     ///
     /// - Returns: A randomly selected case of the conforming type.
-    /// - Warning: Crashes if the type has no cases (an empty `allCases`).
     static func random() -> Self {
         return allCases.randomElement()!
     }

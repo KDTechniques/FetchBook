@@ -12,6 +12,12 @@ struct DraggableYouTubePlayerView: View {
     let videoID: String
     let action: () -> ()
     
+    // MARK: INITIALIZER
+    init(videoID: String, action: @escaping () -> ()) {
+        self.videoID = videoID
+        self.action = action
+    }
+    
     // MARK: - PRIVATE PROPERTIES
     /// Current drag offset
     @State private var offset = CGSize.zero
@@ -24,12 +30,6 @@ struct DraggableYouTubePlayerView: View {
     let screenHeight = UIScreen.main.bounds.height - 80
     let rectWidth: CGFloat = UIScreen.main.bounds.size.width - 150
     private var rectHeight: CGFloat { rectWidth/16*9 } // 16:9 Ratio
-    
-    // MARK: INITIALIZER
-    init(videoID: String, action: @escaping () -> ()) {
-        self.videoID = videoID
-        self.action = action
-    }
     
     // MARK: - BODY
     var body: some View {

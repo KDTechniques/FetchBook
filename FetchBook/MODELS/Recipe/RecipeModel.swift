@@ -14,16 +14,9 @@ struct RecipesModel: Decodable {
 
 /// Model representing a single recipe.
 struct RecipeModel: Identifiable, Decodable, Equatable {
-    
     // MARK: - PROPERTIES
-    
-    /// Unique identifier for the recipe.
     let id: String
-    
-    /// Name of the recipe.
     let name: String
-    
-    /// Cuisine type of the recipe.
     let cuisine: String
     
     /// URL string for the highest quality photo available.
@@ -64,7 +57,6 @@ struct RecipeModel: Identifiable, Decodable, Equatable {
     )
     
     // MARK: - CODING KEYS
-    /// Defines the keys for encoding and decoding the model.
     enum CodingKeys: String, CodingKey {
         case id = "uuid"
         case name

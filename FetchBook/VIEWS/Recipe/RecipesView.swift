@@ -11,9 +11,6 @@ struct RecipesView: View {
     // MARK: - PROPERTIES
     @ObservedObject private var recipeVM: RecipeViewModel
     
-    // MARK: - PRIVATE PROPERTIES
-    @State private var blogPostItem: [BlogPostItemModel] = []
-    
     enum FetchConditions {
         case initial, refresh
     }
@@ -22,6 +19,9 @@ struct RecipesView: View {
     init(vm: RecipeViewModel) {
         _recipeVM = ObservedObject(wrappedValue: vm)
     }
+    
+    // MARK: - PRIVATE PROPERTIES
+    @State private var blogPostItem: [BlogPostItemModel] = []
     
     // MARK: - BODY
     var body: some View {
@@ -129,6 +129,8 @@ extension RecipesView {
     private var emptySearchResults: some View {
         CustomContentNotAvailableView(.init(title: "No Results"))
     }
+    
+    // MARK: FUNCTIONS
     
     // MARK: - fetchData
     /// Fetches recipe data from the specified endpoint.

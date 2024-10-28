@@ -13,14 +13,14 @@ struct RecipeImageView: View {
     let thumbnailImageURLString: String
     let largeImageURLString: String
     
-    // MARK: - PRIVATE PROPERTIES
-    let values = RecipeImageValues.self
-    
     // MARK: - INITIALIZER
     init(thumbnailImageURLString: String, largeImageURLString: String) {
         self.thumbnailImageURLString = thumbnailImageURLString
         self.largeImageURLString = largeImageURLString
     }
+    
+    // MARK: - PRIVATE PROPERTIES
+    let values = RecipeImageValues.self
     
     // MARK: - BODY
     var body: some View {

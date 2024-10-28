@@ -18,7 +18,7 @@ actor RecipeFilteringManager {
         self.sortingManager = sortingManager
     }
     
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - createDebouncedTextStream
     /// Creates a debounced async stream from the `recipeSearchText` publisher.

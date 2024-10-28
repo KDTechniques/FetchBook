@@ -7,16 +7,14 @@
 
 import Foundation
 
-// DEBUG PURPOSES ONLY
+// NOTE: DEBUG PURPOSES ONLY
 
 /// Enum representing the types of recipe endpoints, each with a raw string value.
 enum RecipeEndpointTypes: String, CaseIterable {
-    
     case all = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json"
     case malformed = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-malformed.json"
     case empty = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-empty.json"
     
-    /// return the type as a string.
     var typeString: String {
         switch self {
         case .all:
@@ -28,12 +26,11 @@ enum RecipeEndpointTypes: String, CaseIterable {
         }
     }
     
-    /// return the corresponding URL string.
     var urlString: String {
         self.rawValue
     }
     
-    /// return a `RecipeEndpointModel` for the type.
+    /// return a `RecipeEndpointModel` for the endpoint type.
     var endpointModel: RecipeEndpointModel {
         return RecipeEndpointModel(type: self, urlString: self.urlString)
     }

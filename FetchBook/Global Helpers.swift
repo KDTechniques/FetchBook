@@ -14,7 +14,7 @@ struct Helpers {
     static let screenWidth: CGFloat = UIScreen.main.bounds.size.width
     static let screenHeight: CGFloat = UIScreen.main.bounds.size.height
     
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - extractYouTubeVideoID
     // Extract video ID from a YouTube URL.
@@ -89,5 +89,4 @@ struct Helpers {
             return generatePermutations(remainingElements).map { [element] + $0 }
         }
     }
-    
 }

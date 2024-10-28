@@ -11,9 +11,7 @@ import SwiftUI
 /// sorting, and publishing the sorted list of recipes to the SwiftUI view.
 @MainActor
 final class RecipeViewModel: ObservableObject {
-    
     // MARK: - INITIAL PROPERTIES
-    
     /// A service for fetching recipe data, adhering to the `RecipeServiceProtocol` protocol.
     let recipeService: RecipeServiceProtocol
     private lazy var sortingManager: RecipeSortingManager = .init(recipeVM: self)
@@ -37,7 +35,6 @@ final class RecipeViewModel: ObservableObject {
     }
     
     // MARK: - PRIVATE PROPERTIES
-    
     /// An array holding the original recipe data fetched from the service.
     @Published private(set) var recipesArray: [RecipeModel] = []
     /// A published array that holds the sorted list of recipes, which updates the UI automatically.
@@ -54,7 +51,6 @@ final class RecipeViewModel: ObservableObject {
     @Published private(set) var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
     
     // MARK: - PUBLIC PROPERTIES
-    
     /// Public access to the `recipeSearchText` using a `Binding`
     var recipeSearchTextBinding: Binding<String> {
         return binding(\.recipeSearchText)
@@ -68,7 +64,7 @@ final class RecipeViewModel: ObservableObject {
         return binding(\.selectedEndpoint)
     }
     
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - updateDataStatus
     /// Updates the current data status of the recipe view model.

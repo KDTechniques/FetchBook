@@ -20,7 +20,7 @@ actor RecipeDataManager {
         self.recipeService = recipeService
     }
     
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - fetchRecipeData
     /// Fetches recipe data from the specified endpoint and updates the `recipesArray` and `mutableRecipesArray`.
@@ -28,7 +28,8 @@ actor RecipeDataManager {
     /// - The function sets the `currentDataStatus` to `.fetching` while waiting for the data.
     /// - Once the data is fetched, it updates the `recipesArray` and `mutableRecipesArray` with the fetched recipes.
     /// - If no recipes are returned, the `currentDataStatus` is set to `.emptyData`, otherwise it is set to `.none`.
-    /// - If an error occurs during fetching, the `currentDataStatus` is updated to `.malformed`, and the error is thrown.
+    /// - If an error occurs during fetching, the `currentDataStatus` is updated to `.malformed`,
+    /// empty both `recipesArray` and `mutableRecipesArray` then the error is thrown.
     ///
     /// - Parameter endpoint: The endpoint from which to fetch the recipe data.
     /// - Throws: An error if fetching data from the `RecipeService` fails.

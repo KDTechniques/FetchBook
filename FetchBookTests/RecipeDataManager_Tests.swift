@@ -1,5 +1,5 @@
 //
-//  RecipeDataManagerTests.swift
+//  RecipeDataManager_Tests.swift
 //  FetchBookTests
 //
 //  Created by Mr. Kavinda Dilshan on 2024-10-27.
@@ -9,8 +9,7 @@ import XCTest
 @testable import FetchBook
 
 @MainActor
-final class RecipeDataManagerTests: XCTestCase {
-    
+final class RecipeDataManager_Tests: XCTestCase {
     // MARK: PROPERTIES
     var vm: RecipeViewModel!
     var sortingManager: RecipeSortingManager!
@@ -26,7 +25,7 @@ final class RecipeDataManagerTests: XCTestCase {
     
     // MARK: - tearDownWithError
     override func tearDownWithError() throws {
-        
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
     // MARK: Unit Tests
@@ -94,7 +93,7 @@ final class RecipeDataManagerTests: XCTestCase {
 }
 
 // MARK: - EXTENSIONS
-extension RecipeDataManagerTests {
+extension RecipeDataManager_Tests {
     // MARK: REUASBLE FUNCTIONS
     
     // MARK: - initialize

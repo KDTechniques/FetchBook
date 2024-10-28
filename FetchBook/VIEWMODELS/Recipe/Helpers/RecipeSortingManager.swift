@@ -16,7 +16,7 @@ actor RecipeSortingManager {
         self.recipeVM = recipeVM
     }
     
-    //MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - sortRecipes
     /// Sorts the `recipesArray` based on the specified sorting option.

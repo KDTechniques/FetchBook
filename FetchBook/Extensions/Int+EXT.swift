@@ -11,7 +11,6 @@ import Foundation
 
 /// Enum representing errors that can occur while calculating factorial.
 enum FactorialError: Error, LocalizedError {
-    
     /// Error for when a negative number is used for factorial calculation.
     case negativeNumber
     
@@ -25,11 +24,13 @@ enum FactorialError: Error, LocalizedError {
 }
 
 extension Int {
-    
+    // MARK: - factorial
     /// Calculates the factorial of the integer.
     ///
     /// This function computes the factorial of the integer using a reduce operation.
     /// It throws an error if the integer is negative, as factorial is not defined for negative numbers.
+    ///
+    /// - Ex: To find factorial of 3: 3.factorial() =>  6
     ///
     /// - Throws: `FactorialError.negativeNumber` if the integer is negative.
     /// - Returns: The factorial of the integer.
