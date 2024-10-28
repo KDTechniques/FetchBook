@@ -141,7 +141,7 @@ extension RecipesView {
     private func fetchData(endpoint: RecipeEndpointModel) {
         Task {
             do {
-                try await recipeVM.fetchRecipeData(endpoint: endpoint)
+                try await recipeVM.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }

@@ -93,14 +93,21 @@ final class RecipeViewModel: ObservableObject {
         self.recipesArray = newArray
     }
     
-    // MARK: - fetchRecipeData
-    /// Fetches recipe data from a specified endpoint asynchronously.
+    // MARK: - emptyRecipesAndMutableRecipesArray
+    /// Resets both `recipesArray` and the `mutableRecipesArray` at the same time by assigning an empty array.
+    func emptyRecipesAndMutableRecipesArray() {
+        recipesArray = []
+        mutableRecipesArray = []
+    }
+    
+    // MARK: - fetchAndUpdateRecipes
+    /// Fetches recipe data from a specified endpoint asynchronously, and update recipes arrays and other related properties accordingly.
     ///
     /// This method performs a network request to fetch recipe data from a given endpoint and updates the view model accordingly.
     /// - Parameter endpoint: The endpoint from which to fetch recipe data, of type `RecipeEndpointModel`.
     /// - Throws: An error if the data fetching process fails.
     /// - Returns: A `RecipesModel` containing the fetched recipes.
-    func fetchRecipeData(endpoint: RecipeEndpointModel) async throws {
-        return try await dataManager.fetchRecipeData(endpoint: endpoint)
+    func fetchAndUpdateRecipes(endpoint: RecipeEndpointModel) async throws {
+        return try await dataManager.fetchAndUpdateRecipes(endpoint: endpoint)
     }
 }

@@ -22,7 +22,7 @@ actor RecipeDataManager {
     
     // MARK: FUNCTIONS
     
-    // MARK: - fetchRecipeData
+    // MARK: - fetchAndUpdateRecipes
     /// Fetches recipe data from the specified endpoint and updates the `recipesArray` and `mutableRecipesArray`.
     ///
     /// - The function sets the `currentDataStatus` to `.fetching` while waiting for the data.
@@ -33,23 +33,28 @@ actor RecipeDataManager {
     ///
     /// - Parameter endpoint: The endpoint from which to fetch the recipe data.
     /// - Throws: An error if fetching data from the `RecipeService` fails.
-    func fetchRecipeData(endpoint: RecipeEndpointModel) async throws {
+    func fetchAndUpdateRecipes(endpoint: RecipeEndpointModel) async throws {
+        /// Sets the `currentDataStatus` to `.fetching` so we can show a progress or shimmer UI to the user
+        /// while we receive a response from the network call.
         await recipeVM.updateDataStatus(.fetching)
         do {
+            // Network call
             let recipesResponse = try await recipeService.fetchRecipeData(from: endpoint)
             let recipes: [RecipeModel] = recipesResponse.recipes
+            
+            // Update the `currentDataStatus` to  either`.emptyData` or `.none` based on the response as there's no errors at this line.
             await recipeVM.updateDataStatus(recipes.isEmpty ? .emptyData : .none)
             
-            // Store fetched recipes in recipesArray.
-            await recipeVM.updateRecipesArray(recipes)
-            
-            // Initialize mutableRecipesArray with the fetched and sorted recipes.
-            await sortingManager.assignSortedRecipesToMutableRecipesArray()
+            // Update recipe arrays.
+            await recipeVM.updateRecipesArray(recipes) // Store fetched recipes in recipesArray.
+            await sortingManager.assignSortedRecipesToMutableRecipesArray() // Initialize mutableRecipesArray with the fetched and sorted recipes.
         } catch {
+            // If the network call fails, flag it as `.malformed` and reset the recipe arrays before throwing the error.
             await recipeVM.updateDataStatus(.malformed)
-            await recipeVM.updateRecipesArray([])
-            await recipeVM.updateMutableRecipesArray([])
+            await recipeVM.emptyRecipesAndMutableRecipesArray()
             throw error
         }
     }
+    
+    
 }

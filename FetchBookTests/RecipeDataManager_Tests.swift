@@ -31,39 +31,39 @@ final class RecipeDataManager_Tests: XCTestCase {
     // MARK: Unit Tests
     
     // MARK: - test_RecipeDataManager_fetchRecipeData_shouldReturnEmptyArray
-    /// Tests if `fetchRecipeData` returns an empty array for the empty endpoint.
+    /// Tests if `fetchAndUpdateRecipes` returns an empty array for the empty endpoint.
     ///
-    /// This test verifies that when the `fetchRecipeData` method is called with the empty endpoint,
+    /// This test verifies that when the `fetchAndUpdateRecipes` method is called with the empty endpoint,
     /// the view model's recipes array should be empty, and the appropriate data status is set.
     func test_RecipeDataManager_fetchRecipeData_shouldReturnEmptyArray() async {
         // Given, When & Then
-        await emptyCheck(canReinitialize: true)
+        await emptyCheck(shouldReinitialize: true)
     }
     
     // MARK: - test_RecipeDataManager_fetchRecipeData_shouldThrowError
-    /// Tests if `fetchRecipeData` throws an error for a malformed endpoint.
+    /// Tests if `fetchAndUpdateRecipes` throws an error for a malformed endpoint.
     ///
-    /// This test verifies that when the `fetchRecipeData` method is called with a malformed endpoint,
+    /// This test verifies that when the `fetchAndUpdateRecipes` method is called with a malformed endpoint,
     /// it should throw an error and set the appropriate data status.
     func test_RecipeDataManager_fetchRecipeData_shouldThrowError() async {
         // Given, When & Then
-        await malformedCheck(canReinitialize: true)
+        await malformedCheck(shouldReinitialize: true)
     }
     
     // MARK: - test_RecipeDataManager_fetchRecipeData_shouldNotReturnEmptyArray
-    /// Tests if `fetchRecipeData` does not return an empty array for the all endpoint.
+    /// Tests if `fetchAndUpdateRecipes` does not return an empty array for the all endpoint.
     ///
-    /// This test verifies that when the `fetchRecipeData` method is called with the all endpoint,
+    /// This test verifies that when the `fetchAndUpdateRecipes` method is called with the all endpoint,
     /// the view model's recipes array should not be empty, and the appropriate data status is set.
     func test_RecipeDataManager_fetchRecipeData_shouldNotReturnEmptyArray() async {
         // Given, When & Then
-        await allCheck(canReinitialize: true)
+        await allCheck(shouldReinitialize: true)
     }
     
     // MARK: - test_RecipeDataManager_fetchRecipeData_shouldPassAllPossiblePermutations
-    /// Tests all permutations of `RecipeEndpointTypes` to ensure `fetchRecipeData` works correctly.
+    /// Tests all permutations of `RecipeEndpointTypes` to ensure `fetchAndUpdateRecipes` works correctly.
     ///
-    /// This test verifies that the `fetchRecipeData` method handles all permutations of the endpoint types correctly.
+    /// This test verifies that the `fetchAndUpdateRecipes` method handles all permutations of the endpoint types correctly.
     /// This simulates a real-life scenario where a user gets all the recipes, then receives malformed data or empty data
     /// after several seconds, or after a refresh.
     func test_RecipeDataManager_fetchRecipeData_shouldPassAllPossiblePermutations() async {
@@ -79,13 +79,13 @@ final class RecipeDataManager_Tests: XCTestCase {
                 switch endpoint {
                 case .all:
                     // Given, When & Then
-                    await allCheck(canReinitialize: false)
+                    await allCheck(shouldReinitialize: false)
                 case .empty:
                     // Given, When & Then
-                    await emptyCheck(canReinitialize: false)
+                    await emptyCheck(shouldReinitialize: false)
                 case .malformed:
                     // Given, When & Then
-                    await malformedCheck(canReinitialize: false)
+                    await malformedCheck(shouldReinitialize: false)
                 }
             }
         }
@@ -111,11 +111,11 @@ extension RecipeDataManager_Tests {
     }
     
     // MARK: - emptyCheck
-    /// Checks the behavior of `fetchRecipeData` when the endpoint returns an empty array.
+    /// Checks the behavior of `fetchAndUpdateRecipes` when the endpoint returns an empty array.
     ///
     /// This function verifies that the data manager correctly handles an endpoint that returns an empty array of recipes.
-    /// - Parameter canReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
-    private func emptyCheck(canReinitialize: Bool) async {
+    /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
+    private func emptyCheck(shouldReinitialize: Bool) async {
         // Given
         let sortOptions: [RecipeSortOptions] = RecipeSortOptions.allCases
         let endpoint: RecipeEndpointModel = RecipeEndpointTypes.empty.endpointModel
@@ -125,7 +125,7 @@ extension RecipeDataManager_Tests {
             vm.selectedSortOptionBinding.wrappedValue = option
             
             do {
-                try await recipeDataManager.fetchRecipeData(endpoint: endpoint)
+                try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
                 XCTFail("Expected successful fetch, but got error: \(error)")
             }
@@ -137,16 +137,16 @@ extension RecipeDataManager_Tests {
             XCTAssertEqual(vm.recipesArray, vm.mutableRecipesArray)
             XCTAssertEqual(vm.selectedSortOption, option)
             
-            if canReinitialize { self.initialize() }
+            if shouldReinitialize { self.initialize() }
         }
     }
     
     // MARK: - malformedCheck
-    /// Checks the behavior of `fetchRecipeData` when the endpoint returns a malformed response.
+    /// Checks the behavior of `fetchAndUpdateRecipes` when the endpoint returns a malformed response.
     ///
     /// This function verifies that the data manager correctly handles an endpoint that returns a malformed response.
-    /// - Parameter canReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
-    private func malformedCheck(canReinitialize: Bool) async {
+    /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
+    private func malformedCheck(shouldReinitialize: Bool) async {
         // Given
         let sortOptions: [RecipeSortOptions] = RecipeSortOptions.allCases
         let endpoint: RecipeEndpointModel = RecipeEndpointTypes.malformed.endpointModel
@@ -156,7 +156,7 @@ extension RecipeDataManager_Tests {
             vm.selectedSortOptionBinding.wrappedValue = option
             
             do {
-                try await recipeDataManager.fetchRecipeData(endpoint: endpoint)
+                try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
                 // Then
                 XCTAssertEqual(vm.currentDataStatus, .malformed)
@@ -165,17 +165,17 @@ extension RecipeDataManager_Tests {
                 XCTAssertEqual(vm.recipesArray, vm.mutableRecipesArray)
                 XCTAssertEqual(vm.selectedSortOption, option)
                 
-                if canReinitialize { self.initialize() }
+                if shouldReinitialize { self.initialize() }
             }
         }
     }
     
     // MARK: - allCheck
-    /// Checks the behavior of `fetchRecipeData` when the endpoint returns a full array of recipes.
+    /// Checks the behavior of `fetchAndUpdateRecipes` when the endpoint returns a full array of recipes.
     ///
     /// This function verifies that the data manager correctly handles an endpoint that returns a full array of recipes.
-    /// - Parameter canReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
-    private func allCheck(canReinitialize: Bool) async {
+    /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
+    private func allCheck(shouldReinitialize: Bool) async {
         // Given
         let sortOptions: [RecipeSortOptions] = RecipeSortOptions.allCases
         let endpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
@@ -185,7 +185,7 @@ extension RecipeDataManager_Tests {
             vm.selectedSortOptionBinding.wrappedValue = option
             
             do {
-                try await recipeDataManager.fetchRecipeData(endpoint: endpoint)
+                try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
                 XCTFail("Expected successful fetch, but got error: \(error)")
             }
@@ -204,7 +204,7 @@ extension RecipeDataManager_Tests {
             
             XCTAssertEqual(vm.selectedSortOption, option)
             
-            if canReinitialize { self.initialize() }
+            if shouldReinitialize { self.initialize() }
         }
     }
 }
