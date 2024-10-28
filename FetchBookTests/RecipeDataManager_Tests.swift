@@ -60,17 +60,17 @@ final class RecipeDataManager_Tests: XCTestCase {
         await allCheck(shouldReinitialize: true)
     }
     
-    // MARK: - test_RecipeDataManager_fetchRecipeData_shouldPassAllPossiblePermutations
+    // MARK: - test_RecipeDataManager_fetchRecipeData_shouldPassAllPossibleEndpointPermutations
     /// Tests all permutations of `RecipeEndpointTypes` to ensure `fetchAndUpdateRecipes` works correctly.
     ///
     /// This test verifies that the `fetchAndUpdateRecipes` method handles all permutations of the endpoint types correctly.
     /// This simulates a real-life scenario where a user gets all the recipes, then receives malformed data or empty data
     /// after several seconds, or after a refresh.
-    func test_RecipeDataManager_fetchRecipeData_shouldPassAllPossiblePermutations() async {
+    func test_RecipeDataManager_fetchRecipeData_shouldPassAllPossibleEndpointPermutations() async {
         // Given
         let endpoints: [RecipeEndpointTypes] = RecipeEndpointTypes.allCases
         /// ex: 1: [.all, .malformed, .empty], 2: [.malformed, .empty, .all], etc...
-        let permutations: [[RecipeEndpointTypes]] = Helpers.generatePermutations(endpoints)
+        let permutations: [[RecipeEndpointTypes]] = endpoints.generatePermutations()
         XCTAssertEqual(permutations.count, try endpoints.count.factorial())
         
         // When
@@ -117,13 +117,12 @@ extension RecipeDataManager_Tests {
     /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
     private func emptyCheck(shouldReinitialize: Bool) async {
         // Given
-        let sortOptions: [RecipeSortOptions] = RecipeSortOptions.allCases
+        let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
         let endpoint: RecipeEndpointModel = RecipeEndpointTypes.empty.endpointModel
         
         // When
         for option in sortOptions {
             vm.selectedSortOptionBinding.wrappedValue = option
-            
             do {
                 try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
@@ -148,13 +147,12 @@ extension RecipeDataManager_Tests {
     /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
     private func malformedCheck(shouldReinitialize: Bool) async {
         // Given
-        let sortOptions: [RecipeSortOptions] = RecipeSortOptions.allCases
+        let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
         let endpoint: RecipeEndpointModel = RecipeEndpointTypes.malformed.endpointModel
         
         // When
         for option in sortOptions {
             vm.selectedSortOptionBinding.wrappedValue = option
-            
             do {
                 try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
@@ -177,13 +175,12 @@ extension RecipeDataManager_Tests {
     /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
     private func allCheck(shouldReinitialize: Bool) async {
         // Given
-        let sortOptions: [RecipeSortOptions] = RecipeSortOptions.allCases
+        let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
         let endpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
         
         // When
         for option in sortOptions {
             vm.selectedSortOptionBinding.wrappedValue = option
-            
             do {
                 try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {

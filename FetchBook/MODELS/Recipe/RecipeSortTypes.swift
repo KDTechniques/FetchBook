@@ -1,5 +1,5 @@
 //
-//  RecipeSortOptions.swift
+//  RecipeSortTypes.swift
 //  FetchBook
 //
 //  Created by Mr. Kavinda Dilshan on 2024-10-20.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// Enumeration representing the sorting options available for recipes.
-enum RecipeSortOptions: String, CaseIterable, Identifiable {
+enum RecipeSortTypes: String, CaseIterable, Identifiable {
     /// The unique identifier for each sorting option, using the raw string value.
     var id: String {
         return self.rawValue

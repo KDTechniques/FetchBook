@@ -31,6 +31,25 @@ struct RecipeModel: Identifiable, Decodable, Equatable {
     /// URL string for the recipe's YouTube video.
     private let youtubeURLString: String?
     
+    // MARK: - INITIALIZER
+    init(
+        id: String,
+        name: String,
+        cuisine: String,
+        photoURLLargeString: String,
+        thumbnailURLString: String,
+        blogPostURLString: String?,
+        youtubeURLString: String?
+    ) {
+        self.id = id
+        self.name = name
+        self.cuisine = cuisine
+        self.photoURLLargeString = photoURLLargeString
+        self.thumbnailURLString = thumbnailURLString
+        self.blogPostURLString = blogPostURLString
+        self.youtubeURLString = youtubeURLString
+    }
+    
     // Computed properties to ensure URLs are always in HTTPS format
     var securePhotoURLLargeString: String {
         return photoURLLargeString.replacingOccurrences(of: "http://", with: "https://")
