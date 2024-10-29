@@ -62,7 +62,7 @@ final class RecipeSortingManager_Tests: XCTestCase {
     
     // MARK: Unit Tests
     
-    // MARK: sortRecipes()
+    // MARK: sortRecipes
     
     // MARK: - test_RecipeSortingManager_sortRecipes_shouldReturnAscendingArray
     /// Tests if `sortRecipes` returns an array sorted in ascending order.
@@ -116,10 +116,71 @@ final class RecipeSortingManager_Tests: XCTestCase {
         }
     }
     
+    // MARK: sortOptionSubscriber
     
+    // MARK: - test_RecipeSortingManager_sortOptionSubscriber_shouldReturnAscendingArray
     
+    /// Tests if the `sortOptionSubscriber` returns an array sorted in ascending order.
+    ///
+    /// This test verifies that when the `selectedSortOption` is set to `ascending`, the `sortOptionSubscriber`
+    /// correctly sorts the recipes array in ascending order.
+    ///
+    /// - Returns: A sorted array with the first and last elements matching the expected values.
+    func test_RecipeSortingManager_sortOptionSubscriber_shouldReturnAscendingArray() async {
+        await self.checkSortedArrayOnSubscriber(type: .ascending, firstElement: self.ascendingFirstElement, lastElement: self.ascendingLastElement)
+    }
     
+    // MARK: - test_RecipeSortingManager_sortOptionSubscriber_shouldReturnDescendingArray
     
+    /// Tests if the `sortOptionSubscriber` returns an array sorted in descending order.
+    ///
+    /// This test verifies that when the `selectedSortOption` is set to `descending`, the `sortOptionSubscriber`
+    /// correctly sorts the recipes array in descending order.
+    ///
+    /// - Returns: A sorted array with the first and last elements matching the expected values.
+    func test_RecipeSortingManager_sortOptionSubscriber_shouldReturnDescendingArray() async {
+        await self.checkSortedArrayOnSubscriber(type: .descending, firstElement: self.descendingFirstElement, lastElement: self.descendingLastElement)
+    }
+    
+    // MARK: - test_RecipeSortingManager_sortOptionSubscriber_shouldReturnDefaultArray
+    
+    /// Tests if the `sortOptionSubscriber` returns the default unsorted array.
+    ///
+    /// This test verifies that when the `selectedSortOption` is set to `none`, the `sortOptionSubscriber`
+    /// returns the recipes array in its default unsorted order.
+    ///
+    /// - Returns: The default array with the first and last elements matching the expected values.
+    func test_RecipeSortingManager_sortOptionSubscriber_shouldReturnDefaultArray() async {
+        await self.checkSortedArrayOnSubscriber(type: .none, firstElement: self.defaultFirstElement, lastElement: self.defaultLastElement)
+    }
+    
+    // MARK: - test_RecipeSortingManager_sortOptionSubscriber_shouldPassAllPossibleSortingSubscriberPermutations
+    
+    /// Tests all possible permutations of sorting options to ensure `sortOptionSubscriber` works correctly.
+    ///
+    /// This test verifies that the `sortOptionSubscriber` method handles all permutations of the sorting options correctly.
+    /// It ensures that the recipes array is sorted appropriately for each permutation.
+    ///
+    /// - Returns: Sorted arrays with the first and last elements matching the expected values for each sorting type.
+    func test_RecipeSortingManager_sortOptionSubscriber_shouldPassAllPossibleSortingSubscriberPermutations() async {
+        // Given
+        let sortTypes: [RecipeSortTypes] = RecipeSortTypes.allCases
+        let permutations: [[RecipeSortTypes]] = sortTypes.generatePermutations()
+        
+        // Given, When & Then
+        for sortTypes in permutations {
+            for sortType in sortTypes {
+                switch sortType {
+                case .ascending:
+                    await checkSortedArrayOnSubscriber(type: sortType, firstElement: ascendingFirstElement, lastElement: ascendingLastElement)
+                case .descending:
+                    await checkSortedArrayOnSubscriber(type: sortType, firstElement: descendingFirstElement, lastElement: descendingLastElement)
+                case .none:
+                    await checkSortedArrayOnSubscriber(type: sortType, firstElement: defaultFirstElement, lastElement: defaultLastElement)
+                }
+            }
+        }
+    }
     
 }
 
@@ -136,6 +197,11 @@ extension RecipeSortingManager_Tests {
         self.sortingManager = .init(recipeVM: vm)
     }
     
+    // MARK: - initializeRecipesArrayWithMockData
+    private func initializeRecipesArrayWithMockData() {
+        vm.updateRecipesArray(self.mockRecipesArray)
+    }
+    
     // MARK: - checkSortedArray
     /// Checks if the sorted array meets the expected criteria.
     ///
@@ -147,14 +213,46 @@ extension RecipeSortingManager_Tests {
     ///   - lastElement: The expected last element in the sorted array.
     private func checkSortedArray(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
         // Given
-        vm.updateRecipesArray(self.mockRecipesArray)
+        self.initializeRecipesArrayWithMockData()
         
         // When
         let sortedRecipesArray: [RecipeModel] = await sortingManager.sortRecipes(type: type)
         
         // Then
+        XCTAssertFalse(vm.recipesArray.isEmpty)
         XCTAssertFalse(sortedRecipesArray.isEmpty)
         XCTAssertEqual(sortedRecipesArray.first?.name, firstElement)
         XCTAssertEqual(sortedRecipesArray.last?.name, lastElement)
+    }
+    
+    // MARK: - checkSortedArrayOnSubscriber
+    /// Checks the sorted array after a sort option change is observed.
+    ///
+    /// This function initializes the recipes array with mock data and then updates the selected sort option.
+    /// After a delay, it verifies that the sort option and the sorted array are updated correctly.
+    ///
+    /// - Parameters:
+    ///   - type: The type of sorting to be applied (e.g., ascending, descending, none).
+    ///   - firstElement: The expected name of the first element in the sorted array.
+    ///   - lastElement: The expected name of the last element in the sorted array.
+    private func checkSortedArrayOnSubscriber(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
+        // Given
+        self.initializeRecipesArrayWithMockData()
+        vm.selectedSortOptionBinding.wrappedValue = type
+        
+        // When
+        do {
+            // Introduce a delay to allow the sort option change to be observed.
+            try await Task.sleep(nanoseconds: 1_000_000_000)
+        } catch {
+            XCTFail("Expected successful delay, but got an error: \(error)")
+        }
+        
+        // Then
+        XCTAssertEqual(vm.selectedSortOption, type)
+        XCTAssertFalse(vm.recipesArray.isEmpty)
+        XCTAssertFalse(vm.mutableRecipesArray.isEmpty)
+        XCTAssertEqual(vm.mutableRecipesArray.first?.name, firstElement)
+        XCTAssertEqual(vm.mutableRecipesArray.last?.name, lastElement)
     }
 }

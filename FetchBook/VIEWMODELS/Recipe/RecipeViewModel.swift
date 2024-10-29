@@ -27,11 +27,9 @@ final class RecipeViewModel: ObservableObject {
     /// - Parameter recipeService: A service conforming to `RecipeServiceProtocol` for fetching recipe data.
     init(recipeService: RecipeServiceProtocol) {
         self.recipeService = recipeService
-        
-        Task {
-            await self.sortingManager.sortOptionSubscriber()
-            await self.filteringManager.recipeSearchTextSubscriber()
-        }
+        _ = sortingManager
+        _ = filteringManager
+        _ = dataManager
     }
     
     // MARK: - PRIVATE PROPERTIES
@@ -108,6 +106,6 @@ final class RecipeViewModel: ObservableObject {
     /// - Throws: An error if the data fetching process fails.
     /// - Returns: A `RecipesModel` containing the fetched recipes.
     func fetchAndUpdateRecipes(endpoint: RecipeEndpointModel) async throws {
-        return try await dataManager.fetchAndUpdateRecipes(endpoint: endpoint)
+        try await dataManager.fetchAndUpdateRecipes(endpoint: endpoint)
     }
 }

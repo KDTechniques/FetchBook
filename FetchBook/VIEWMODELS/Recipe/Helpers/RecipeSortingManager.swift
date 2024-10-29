@@ -14,6 +14,7 @@ actor RecipeSortingManager {
     // MARK: - INITIALIZER
     init(recipeVM: RecipeViewModel) {
         self.recipeVM = recipeVM
+        Task { await self.sortOptionSubscriber() }
     }
     
     // MARK: FUNCTIONS
@@ -46,7 +47,8 @@ actor RecipeSortingManager {
     @MainActor
     func assignSortedRecipesToMutableRecipesArray(_ type: RecipeSortTypes? = nil) async {
         // Sort recipes using the provided option, or the default selectedSortOption if none is provided.
-        await recipeVM.updateMutableRecipesArray(sortRecipes(type: type ?? recipeVM.selectedSortOption))
+        let sortedRecipesArray: [RecipeModel] = await sortRecipes(type: type ?? recipeVM.selectedSortOption)
+        recipeVM.updateMutableRecipesArray(sortedRecipesArray)
     }
     
     // MARK: - sortOptionSubscriber
@@ -57,7 +59,7 @@ actor RecipeSortingManager {
     /// - When the sort option is updated (e.g., A-Z, Z-A, or none), the function calls `sortRecipes(type:)` to sort the array based on the selected option.
     /// - Updates the `mutableRecipesArray` with the sorted results.
     /// - Stores the subscription in `cancelables` to ensure proper memory management and prevent memory leaks.
-    func sortOptionSubscriber() async {
+    private func sortOptionSubscriber() async {
         // Convert Combine publisher to async sequence
         // The for-await loop listens for new values from the publisher and processes them as they arrive.
         for await option in await sortOptionAsyncPublisher(for: recipeVM.$selectedSortOption) {

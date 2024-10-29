@@ -16,6 +16,7 @@ actor RecipeFilteringManager {
     init(recipeVM: RecipeViewModel, sortingManager: RecipeSortingManager) {
         self.recipeVM = recipeVM
         self.sortingManager = sortingManager
+        Task { await self.recipeSearchTextSubscriber() }
     }
     
     // MARK: FUNCTIONS
@@ -77,19 +78,17 @@ actor RecipeFilteringManager {
     /// Main function to subscribe to recipe search text updates and handle them asynchronously with debounce.
     ///
     /// This function listens for updates to `recipeSearchText`, applies debouncing logic, and then triggers either a reset of recipes or filtering of search results based on the text. The logic ensures that searches are only triggered after the user has stopped typing for a defined period of time (debounce).
-    func recipeSearchTextSubscriber() async {
-        Task {
-            var lastSearchTime = Date()
-            let debounceDelay: TimeInterval = 0.1 // Define the debounce delay (0.1 seconds)
-            
-            // Create the debounced text stream to consume the latest recipe search text
-            let debouncedTextStream = await createDebouncedTextStream()
-            
-            // Iterate over the debounced text stream
-            for await text in debouncedTextStream {
-                // Handle the debounced search text asynchronously
-                await handleDebouncedSearchText(text, lastSearchTime: &lastSearchTime, debounceDelay: debounceDelay)
-            }
+    private func recipeSearchTextSubscriber() async {
+        var lastSearchTime = Date()
+        let debounceDelay: TimeInterval = 0.1 // Define the debounce delay (0.1 seconds)
+        
+        // Create the debounced text stream to consume the latest recipe search text
+        let debouncedTextStream = await createDebouncedTextStream()
+        
+        // Iterate over the debounced text stream
+        for await text in debouncedTextStream {
+            // Handle the debounced search text asynchronously
+            await handleDebouncedSearchText(text, lastSearchTime: &lastSearchTime, debounceDelay: debounceDelay)
         }
     }
     
