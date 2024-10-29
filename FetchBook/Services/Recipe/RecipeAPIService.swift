@@ -7,11 +7,10 @@
 
 import Foundation
 
-// Real API service that conforms to RecipeServiceProtocol
+// NOTE: The real API service for fetching recipe data
+
 actor RecipeAPIService: RecipeServiceProtocol {
-    
-    // MARK: - FUNCTIONS
-    
+    // MARK: - fetchData
     /// Fetches raw data from a specified URL.
     ///
     /// This asynchronous function performs a network request to retrieve raw data from the given URL.
@@ -26,6 +25,7 @@ actor RecipeAPIService: RecipeServiceProtocol {
         return data
     }
     
+    // MARK: - fetchRecipeData
     /// Fetches recipe data from the specified API endpoint.
     ///
     /// This asynchronous function retrieves recipe data from a given endpoint defined by the `RecipeEndpoints` enum.

@@ -12,16 +12,16 @@ struct RecipeBlogPostView: View {
     let secureBlogPostURLString: String?
     let secureYoutubeURLString: String?
     
-    // MARK: - PRIVATE PROPERTIES
-    @State private var progress: Double = .zero
-    @State private var showVideoPlayer: Bool
-    
     // MARK: - INITIALAIZER
     init(secureBlogPostURLString: String?, secureYoutubeURLString: String?, showVideoPlayer: Bool = false) {
         self.secureBlogPostURLString = secureBlogPostURLString
         self.secureYoutubeURLString = secureYoutubeURLString
         self.showVideoPlayer = showVideoPlayer
     }
+    
+    // MARK: - PRIVATE PROPERTIES
+    @State private var progress: Double = .zero
+    @State private var showVideoPlayer: Bool
     
     // MARK: - BODY
     var body: some View {

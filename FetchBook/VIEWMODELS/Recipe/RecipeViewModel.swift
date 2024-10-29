@@ -11,11 +11,9 @@ import SwiftUI
 /// sorting, and publishing the sorted list of recipes to the SwiftUI view.
 @MainActor
 final class RecipeViewModel: ObservableObject {
-    
     // MARK: - INITIAL PROPERTIES
-    
     /// A service for fetching recipe data, adhering to the `RecipeServiceProtocol` protocol.
-    private let recipeService: RecipeServiceProtocol
+    let recipeService: RecipeServiceProtocol
     private lazy var sortingManager: RecipeSortingManager = .init(recipeVM: self)
     private lazy var filteringManager: RecipeFilteringManager = .init(recipeVM: self, sortingManager: sortingManager)
     private lazy var dataManager: RecipeDataManager = .init(recipeVM: self, sortingManager: sortingManager, recipeService: recipeService)
@@ -29,15 +27,12 @@ final class RecipeViewModel: ObservableObject {
     /// - Parameter recipeService: A service conforming to `RecipeServiceProtocol` for fetching recipe data.
     init(recipeService: RecipeServiceProtocol) {
         self.recipeService = recipeService
-        
-        Task {
-            await self.sortingManager.sortOptionSubscriber()
-            await self.filteringManager.recipeSearchTextSubscriber()
-        }
+        _ = sortingManager
+        _ = filteringManager
+        _ = dataManager
     }
     
     // MARK: - PRIVATE PROPERTIES
-    
     /// An array holding the original recipe data fetched from the service.
     @Published private(set) var recipesArray: [RecipeModel] = []
     /// A published array that holds the sorted list of recipes, which updates the UI automatically.
@@ -48,19 +43,18 @@ final class RecipeViewModel: ObservableObject {
     @Published private(set) var recipeSearchText: String = ""
     /// The selected sorting option for the recipes. Changes to this property will trigger
     /// the sorting of the recipes based on the chosen option.
-    @Published private(set) var selectedSortOption: RecipeSortOptions = .none
+    @Published private(set) var selectedSortOption: RecipeSortTypes = .none
     /// The currently selected API endpoint for data retrieval.
     /// debug purposes only.
     @Published private(set) var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
     
     // MARK: - PUBLIC PROPERTIES
-    
     /// Public access to the `recipeSearchText` using a `Binding`
     var recipeSearchTextBinding: Binding<String> {
         return binding(\.recipeSearchText)
     }
     /// Public access to the `selectedSortOption` using a `Binding`
-    var selectedSortOptionBinding: Binding<RecipeSortOptions> {
+    var selectedSortOptionBinding: Binding<RecipeSortTypes> {
         return binding(\.selectedSortOption)
     }
     /// Public access to the `selectedEndpoint` using a `Binding`
@@ -68,7 +62,7 @@ final class RecipeViewModel: ObservableObject {
         return binding(\.selectedEndpoint)
     }
     
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - updateDataStatus
     /// Updates the current data status of the recipe view model.
@@ -97,14 +91,21 @@ final class RecipeViewModel: ObservableObject {
         self.recipesArray = newArray
     }
     
-    // MARK: - fetchRecipeData
-    /// Fetches recipe data from a specified endpoint asynchronously.
+    // MARK: - emptyRecipesAndMutableRecipesArray
+    /// Resets both `recipesArray` and the `mutableRecipesArray` at the same time by assigning an empty array.
+    func emptyRecipesAndMutableRecipesArray() {
+        recipesArray = []
+        mutableRecipesArray = []
+    }
+    
+    // MARK: - fetchAndUpdateRecipes
+    /// Fetches recipe data from a specified endpoint asynchronously, and update recipes arrays and other related properties accordingly.
     ///
     /// This method performs a network request to fetch recipe data from a given endpoint and updates the view model accordingly.
     /// - Parameter endpoint: The endpoint from which to fetch recipe data, of type `RecipeEndpointModel`.
     /// - Throws: An error if the data fetching process fails.
     /// - Returns: A `RecipesModel` containing the fetched recipes.
-    func fetchRecipeData(endpoint: RecipeEndpointModel) async throws {
-        return try await dataManager.fetchRecipeData(endpoint: endpoint)
+    func fetchAndUpdateRecipes(endpoint: RecipeEndpointModel) async throws {
+        try await dataManager.fetchAndUpdateRecipes(endpoint: endpoint)
     }
 }

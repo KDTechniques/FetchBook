@@ -14,16 +14,9 @@ struct RecipesModel: Decodable {
 
 /// Model representing a single recipe.
 struct RecipeModel: Identifiable, Decodable, Equatable {
-    
     // MARK: - PROPERTIES
-    
-    /// Unique identifier for the recipe.
     let id: String
-    
-    /// Name of the recipe.
     let name: String
-    
-    /// Cuisine type of the recipe.
     let cuisine: String
     
     /// URL string for the highest quality photo available.
@@ -37,6 +30,25 @@ struct RecipeModel: Identifiable, Decodable, Equatable {
     
     /// URL string for the recipe's YouTube video.
     private let youtubeURLString: String?
+    
+    // MARK: - INITIALIZER
+    init(
+        id: String,
+        name: String,
+        cuisine: String,
+        photoURLLargeString: String,
+        thumbnailURLString: String,
+        blogPostURLString: String?,
+        youtubeURLString: String?
+    ) {
+        self.id = id
+        self.name = name
+        self.cuisine = cuisine
+        self.photoURLLargeString = photoURLLargeString
+        self.thumbnailURLString = thumbnailURLString
+        self.blogPostURLString = blogPostURLString
+        self.youtubeURLString = youtubeURLString
+    }
     
     // Computed properties to ensure URLs are always in HTTPS format
     var securePhotoURLLargeString: String {
@@ -64,7 +76,6 @@ struct RecipeModel: Identifiable, Decodable, Equatable {
     )
     
     // MARK: - CODING KEYS
-    /// Defines the keys for encoding and decoding the model.
     enum CodingKeys: String, CodingKey {
         case id = "uuid"
         case name

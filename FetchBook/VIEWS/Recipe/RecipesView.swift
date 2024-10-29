@@ -11,9 +11,6 @@ struct RecipesView: View {
     // MARK: - PROPERTIES
     @ObservedObject private var recipeVM: RecipeViewModel
     
-    // MARK: - PRIVATE PROPERTIES
-    @State private var blogPostItem: [BlogPostItemModel] = []
-    
     enum FetchConditions {
         case initial, refresh
     }
@@ -22,6 +19,9 @@ struct RecipesView: View {
     init(vm: RecipeViewModel) {
         _recipeVM = ObservedObject(wrappedValue: vm)
     }
+    
+    // MARK: - PRIVATE PROPERTIES
+    @State private var blogPostItem: [BlogPostItemModel] = []
     
     // MARK: - BODY
     var body: some View {
@@ -130,6 +130,8 @@ extension RecipesView {
         CustomContentNotAvailableView(.init(title: "No Results"))
     }
     
+    // MARK: FUNCTIONS
+    
     // MARK: - fetchData
     /// Fetches recipe data from the specified endpoint.
     /// - Parameter endpoint: The endpoint model representing the recipe source.
@@ -139,7 +141,7 @@ extension RecipesView {
     private func fetchData(endpoint: RecipeEndpointModel) {
         Task {
             do {
-                try await recipeVM.fetchRecipeData(endpoint: endpoint)
+                try await recipeVM.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }

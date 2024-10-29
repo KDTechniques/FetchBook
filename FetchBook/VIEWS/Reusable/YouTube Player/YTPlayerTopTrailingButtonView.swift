@@ -12,15 +12,15 @@ struct YTPlayerTopTrailingButtonView: View {
     let isDragging: Bool
     let action: () -> ()
     
-    // MARK: - PRIVATE PROPERTIES
-    let iconSize: CGFloat = 20
-    let iconPadding: CGFloat = 6
-    
     // MARK: - INITIALIZER
     init(isDragging: Bool, action: @escaping () -> ()) {
         self.isDragging = isDragging
         self.action = action
     }
+    
+    // MARK: - PRIVATE PROPERTIES
+    let iconSize: CGFloat = 20
+    let iconPadding: CGFloat = 6
     
     // MARK: - BODY
     var body: some View {

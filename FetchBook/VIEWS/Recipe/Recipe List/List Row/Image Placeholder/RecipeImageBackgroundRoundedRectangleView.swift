@@ -13,7 +13,7 @@ struct RecipeImageBackgroundRoundedRectangleView: View {
     
     // MARK: - BODY
     var body: some View {
-        RoundedRectangle(cornerRadius: values.cornerRadius)
+        RoundedRectangle(cornerRadius: values.outerCornerRadius)
             .fill(Color(uiColor: .systemGray5))
             .frame(width: values.frameSize, height: values.frameSize)
     }

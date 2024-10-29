@@ -12,13 +12,13 @@ struct RecipeImagePreviewView: View {
     // MARK: - PROPERTIES
     let recipe: RecipeModel
     
-    // MARK: - PRIVATE PROPERTIES
-    let recipeImagePreviewSize: CGFloat = Helpers.screenWidth - 100
-    
     // MARK: - INITIALIZER
     init(recipe: RecipeModel) {
         self.recipe = recipe
     }
+    
+    // MARK: - PRIVATE PROPERTIES
+    let recipeImagePreviewSize: CGFloat = Helpers.screenWidth - 100
     
     // MARK: - BODY
     var body: some View {

@@ -16,9 +16,10 @@ actor RecipeFilteringManager {
     init(recipeVM: RecipeViewModel, sortingManager: RecipeSortingManager) {
         self.recipeVM = recipeVM
         self.sortingManager = sortingManager
+        Task { await self.recipeSearchTextSubscriber() }
     }
     
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - createDebouncedTextStream
     /// Creates a debounced async stream from the `recipeSearchText` publisher.
@@ -77,19 +78,17 @@ actor RecipeFilteringManager {
     /// Main function to subscribe to recipe search text updates and handle them asynchronously with debounce.
     ///
     /// This function listens for updates to `recipeSearchText`, applies debouncing logic, and then triggers either a reset of recipes or filtering of search results based on the text. The logic ensures that searches are only triggered after the user has stopped typing for a defined period of time (debounce).
-    func recipeSearchTextSubscriber() async {
-        Task {
-            var lastSearchTime = Date()
-            let debounceDelay: TimeInterval = 0.1 // Define the debounce delay (0.1 seconds)
-            
-            // Create the debounced text stream to consume the latest recipe search text
-            let debouncedTextStream = await createDebouncedTextStream()
-            
-            // Iterate over the debounced text stream
-            for await text in debouncedTextStream {
-                // Handle the debounced search text asynchronously
-                await handleDebouncedSearchText(text, lastSearchTime: &lastSearchTime, debounceDelay: debounceDelay)
-            }
+    private func recipeSearchTextSubscriber() async {
+        var lastSearchTime = Date()
+        let debounceDelay: TimeInterval = 0.1 // Define the debounce delay (0.1 seconds)
+        
+        // Create the debounced text stream to consume the latest recipe search text
+        let debouncedTextStream = await createDebouncedTextStream()
+        
+        // Iterate over the debounced text stream
+        for await text in debouncedTextStream {
+            // Handle the debounced search text asynchronously
+            await handleDebouncedSearchText(text, lastSearchTime: &lastSearchTime, debounceDelay: debounceDelay)
         }
     }
     
@@ -124,7 +123,7 @@ actor RecipeFilteringManager {
             return
         }
         let lowercasedText: String = text.lowercased()
-        let sortedRecipesArray: [RecipeModel] = await sortingManager.sortRecipes(option: recipeVM.selectedSortOption)
+        let sortedRecipesArray: [RecipeModel] = await sortingManager.sortRecipes(type: recipeVM.selectedSortOption)
         let filteredRecipesArray: [RecipeModel] = sortedRecipesArray.filter({
             $0.name.lowercased().contains(lowercasedText) ||
             $0.cuisine.lowercased().contains(lowercasedText)

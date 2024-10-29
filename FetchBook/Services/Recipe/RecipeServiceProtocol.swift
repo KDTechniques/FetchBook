@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Protocol defining a service for fetching recipe data, inheriting from NetworkServiceProtocol.
+// Protocol defining a service for fetching recipe data
 protocol RecipeServiceProtocol: NetworkServiceProtocol {
     /// Fetches recipe data from a specified API endpoint.
     ///
