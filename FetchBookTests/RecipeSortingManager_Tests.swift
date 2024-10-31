@@ -122,7 +122,7 @@ final class RecipeSortingManager_Tests: XCTestCase {
     
     /// Tests if the `sortOptionSubscriber` returns an array sorted in ascending order.
     ///
-    /// This test verifies that when the `selectedSortOption` is set to `ascending`, the `sortOptionSubscriber`
+    /// This test verifies that when the `selectedSortType` is set to `ascending`, the `sortOptionSubscriber`
     /// correctly sorts the recipes array in ascending order.
     ///
     /// - Returns: A sorted array with the first and last elements matching the expected values.
@@ -134,7 +134,7 @@ final class RecipeSortingManager_Tests: XCTestCase {
     
     /// Tests if the `sortOptionSubscriber` returns an array sorted in descending order.
     ///
-    /// This test verifies that when the `selectedSortOption` is set to `descending`, the `sortOptionSubscriber`
+    /// This test verifies that when the `selectedSortType` is set to `descending`, the `sortOptionSubscriber`
     /// correctly sorts the recipes array in descending order.
     ///
     /// - Returns: A sorted array with the first and last elements matching the expected values.
@@ -146,7 +146,7 @@ final class RecipeSortingManager_Tests: XCTestCase {
     
     /// Tests if the `sortOptionSubscriber` returns the default unsorted array.
     ///
-    /// This test verifies that when the `selectedSortOption` is set to `none`, the `sortOptionSubscriber`
+    /// This test verifies that when the `selectedSortType` is set to `none`, the `sortOptionSubscriber`
     /// returns the recipes array in its default unsorted order.
     ///
     /// - Returns: The default array with the first and last elements matching the expected values.
@@ -194,7 +194,9 @@ extension RecipeSortingManager_Tests {
     private func initialize() {
         let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
         self.vm = .init(recipeService: mockRecipeAPIService)
-        self.sortingManager = .init(recipeVM: vm)
+        self.sortingManager = self.vm.sortingManager
+        
+        XCTAssertEqual("\(vm.recipeService)", "\(mockRecipeAPIService)")
     }
     
     // MARK: - initializeRecipesArrayWithMockData
@@ -238,18 +240,18 @@ extension RecipeSortingManager_Tests {
     private func checkSortedArrayOnSubscriber(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
         // Given
         self.initializeRecipesArrayWithMockData()
-        vm.selectedSortOptionBinding.wrappedValue = type
+        vm.selectedSortTypeBinding.wrappedValue = type
         
         // When
         do {
             // Introduce a delay to allow the sort option change to be observed.
-            try await Task.sleep(nanoseconds: 1_000_000_000)
+            try await Task.sleep(nanoseconds: 500_000_000)
         } catch {
             XCTFail("Expected successful delay, but got an error: \(error)")
         }
         
         // Then
-        XCTAssertEqual(vm.selectedSortOption, type)
+        XCTAssertEqual(vm.selectedSortType, type)
         XCTAssertFalse(vm.recipesArray.isEmpty)
         XCTAssertFalse(vm.mutableRecipesArray.isEmpty)
         XCTAssertEqual(vm.mutableRecipesArray.first?.name, firstElement)

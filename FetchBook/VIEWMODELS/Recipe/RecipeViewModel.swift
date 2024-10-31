@@ -14,9 +14,9 @@ final class RecipeViewModel: ObservableObject {
     // MARK: - INITIAL PROPERTIES
     /// A service for fetching recipe data, adhering to the `RecipeServiceProtocol` protocol.
     let recipeService: RecipeServiceProtocol
-    private lazy var sortingManager: RecipeSortingManager = .init(recipeVM: self)
-    private lazy var filteringManager: RecipeFilteringManager = .init(recipeVM: self, sortingManager: sortingManager)
-    private lazy var dataManager: RecipeDataManager = .init(recipeVM: self, sortingManager: sortingManager, recipeService: recipeService)
+    private(set) lazy var sortingManager: RecipeSortingManager = .init(recipeVM: self)
+    private(set) lazy var filteringManager: RecipeFilteringManager = .init(recipeVM: self, sortingManager: sortingManager)
+    private(set) lazy var dataManager: RecipeDataManager = .init(recipeVM: self, sortingManager: sortingManager, recipeService: recipeService)
     
     // MARK: - INITIALIZER
     /// Initializes a new instance of `RecipeViewModel` with the provided recipe service.
@@ -38,12 +38,12 @@ final class RecipeViewModel: ObservableObject {
     /// A published array that holds the sorted list of recipes, which updates the UI automatically.
     @Published private(set) var mutableRecipesArray: [RecipeModel] = []
     /// The current status of the data being processed, and fetched.
-    @Published private(set) var currentDataStatus: RecipeDataStatusTypes = .fetching
+    @Published private(set) var currentDataStatus: RecipeDataStatusTypes = .none
     /// A string that holds the user's recipe search input.
     @Published private(set) var recipeSearchText: String = ""
     /// The selected sorting option for the recipes. Changes to this property will trigger
     /// the sorting of the recipes based on the chosen option.
-    @Published private(set) var selectedSortOption: RecipeSortTypes = .none
+    @Published private(set) var selectedSortType: RecipeSortTypes = .none
     /// The currently selected API endpoint for data retrieval.
     /// debug purposes only.
     @Published private(set) var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
@@ -53,9 +53,9 @@ final class RecipeViewModel: ObservableObject {
     var recipeSearchTextBinding: Binding<String> {
         return binding(\.recipeSearchText)
     }
-    /// Public access to the `selectedSortOption` using a `Binding`
-    var selectedSortOptionBinding: Binding<RecipeSortTypes> {
-        return binding(\.selectedSortOption)
+    /// Public access to the `selectedSortType` using a `Binding`
+    var selectedSortTypeBinding: Binding<RecipeSortTypes> {
+        return binding(\.selectedSortType)
     }
     /// Public access to the `selectedEndpoint` using a `Binding`
     var selectedEndpointBinding: Binding<RecipeEndpointModel> {
