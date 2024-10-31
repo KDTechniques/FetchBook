@@ -38,7 +38,7 @@ final class RecipeViewModel: ObservableObject {
     /// A published array that holds the sorted list of recipes, which updates the UI automatically.
     @Published private(set) var mutableRecipesArray: [RecipeModel] = []
     /// The current status of the data being processed, and fetched.
-    @Published private(set) var currentDataStatus: RecipeDataStatusTypes = .fetching
+    @Published private(set) var currentDataStatus: RecipeDataStatusTypes = .none
     /// A string that holds the user's recipe search input.
     @Published private(set) var recipeSearchText: String = ""
     /// The selected sorting option for the recipes. Changes to this property will trigger

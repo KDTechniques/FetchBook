@@ -129,12 +129,14 @@ actor RecipeFilteringManager {
             $0.cuisine.lowercased().contains(lowercasedText)
         })
         if filteredRecipesArray.isEmpty {
-            recipeVM.updateMutableRecipesArray(filteredRecipesArray)
+            recipeVM.updateMutableRecipesArray([])
         } else {
             withAnimation {
                 recipeVM.updateMutableRecipesArray(filteredRecipesArray)
             }
         }
+        print("Data Status Before ❤️: \(recipeVM.currentDataStatus)")
         recipeVM.updateDataStatus(recipeVM.mutableRecipesArray.isEmpty ? .emptyResult : .none)
+        print("Data Status After ❤️: \(recipeVM.currentDataStatus)")
     }
 }

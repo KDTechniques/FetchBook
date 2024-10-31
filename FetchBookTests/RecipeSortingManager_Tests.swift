@@ -198,8 +198,13 @@ extension RecipeSortingManager_Tests {
     }
     
     // MARK: - initializeRecipesArrayWithMockData
-    private func initializeRecipesArrayWithMockData() {
+    private func initializeRecipesArrayWithMockData() async {
         vm.updateRecipesArray(self.mockRecipesArray)
+        do {
+            try await Task.sleep(nanoseconds: 300_000_000)
+        } catch {
+            XCTFail("Expected successful delay, but got an error: \(error)")
+        }
     }
     
     // MARK: - checkSortedArray
@@ -213,7 +218,7 @@ extension RecipeSortingManager_Tests {
     ///   - lastElement: The expected last element in the sorted array.
     private func checkSortedArray(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
         // Given
-        self.initializeRecipesArrayWithMockData()
+        await self.initializeRecipesArrayWithMockData()
         
         // When
         let sortedRecipesArray: [RecipeModel] = await sortingManager.sortRecipes(type: type)
@@ -237,7 +242,7 @@ extension RecipeSortingManager_Tests {
     ///   - lastElement: The expected name of the last element in the sorted array.
     private func checkSortedArrayOnSubscriber(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
         // Given
-        self.initializeRecipesArrayWithMockData()
+        await self.initializeRecipesArrayWithMockData()
         vm.selectedSortOptionBinding.wrappedValue = type
         
         // When
