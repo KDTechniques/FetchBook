@@ -90,7 +90,7 @@ actor RecipeFilteringManager {
             return
         }
         let lowercasedText: String = text.lowercased()
-        let sortedRecipesArray: [RecipeModel] = await sortingManager.sortRecipes(type: recipeVM.selectedSortOption)
+        let sortedRecipesArray: [RecipeModel] = await sortingManager.sortRecipes(type: recipeVM.selectedSortType)
         let filteredRecipesArray: [RecipeModel] = sortedRecipesArray.filter({
             $0.name.lowercased().contains(lowercasedText) ||
             $0.cuisine.lowercased().contains(lowercasedText)

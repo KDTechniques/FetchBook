@@ -120,7 +120,7 @@ extension RecipeDataManager_Tests {
         
         // When
         for option in sortOptions {
-            vm.selectedSortOptionBinding.wrappedValue = option
+            vm.selectedSortTypeBinding.wrappedValue = option
             do {
                 try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
@@ -132,7 +132,7 @@ extension RecipeDataManager_Tests {
             XCTAssertTrue(vm.recipesArray.isEmpty)
             XCTAssertTrue(vm.mutableRecipesArray.isEmpty)
             XCTAssertEqual(vm.recipesArray, vm.mutableRecipesArray)
-            XCTAssertEqual(vm.selectedSortOption, option)
+            XCTAssertEqual(vm.selectedSortType, option)
             
             if shouldReinitialize { self.initialize() }
         }
@@ -150,7 +150,7 @@ extension RecipeDataManager_Tests {
         
         // When
         for option in sortOptions {
-            vm.selectedSortOptionBinding.wrappedValue = option
+            vm.selectedSortTypeBinding.wrappedValue = option
             do {
                 try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
@@ -159,7 +159,7 @@ extension RecipeDataManager_Tests {
                 XCTAssertTrue(vm.recipesArray.isEmpty)
                 XCTAssertTrue(vm.mutableRecipesArray.isEmpty)
                 XCTAssertEqual(vm.recipesArray, vm.mutableRecipesArray)
-                XCTAssertEqual(vm.selectedSortOption, option)
+                XCTAssertEqual(vm.selectedSortType, option)
                 
                 if shouldReinitialize { self.initialize() }
             }
@@ -178,7 +178,7 @@ extension RecipeDataManager_Tests {
         
         // When
         for option in sortOptions {
-            vm.selectedSortOptionBinding.wrappedValue = option
+            vm.selectedSortTypeBinding.wrappedValue = option
             do {
                 try await recipeDataManager.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
@@ -197,7 +197,7 @@ extension RecipeDataManager_Tests {
                 XCTAssertNotEqual(vm.recipesArray, vm.mutableRecipesArray)
             }
             
-            XCTAssertEqual(vm.selectedSortOption, option)
+            XCTAssertEqual(vm.selectedSortType, option)
             
             if shouldReinitialize { self.initialize() }
         }

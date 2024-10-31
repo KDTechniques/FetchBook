@@ -43,7 +43,7 @@ final class RecipeViewModel: ObservableObject {
     @Published private(set) var recipeSearchText: String = ""
     /// The selected sorting option for the recipes. Changes to this property will trigger
     /// the sorting of the recipes based on the chosen option.
-    @Published private(set) var selectedSortOption: RecipeSortTypes = .none
+    @Published private(set) var selectedSortType: RecipeSortTypes = .none
     /// The currently selected API endpoint for data retrieval.
     /// debug purposes only.
     @Published private(set) var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
@@ -53,9 +53,9 @@ final class RecipeViewModel: ObservableObject {
     var recipeSearchTextBinding: Binding<String> {
         return binding(\.recipeSearchText)
     }
-    /// Public access to the `selectedSortOption` using a `Binding`
-    var selectedSortOptionBinding: Binding<RecipeSortTypes> {
-        return binding(\.selectedSortOption)
+    /// Public access to the `selectedSortType` using a `Binding`
+    var selectedSortTypeBinding: Binding<RecipeSortTypes> {
+        return binding(\.selectedSortType)
     }
     /// Public access to the `selectedEndpoint` using a `Binding`
     var selectedEndpointBinding: Binding<RecipeEndpointModel> {

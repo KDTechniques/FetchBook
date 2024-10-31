@@ -40,14 +40,14 @@ actor RecipeSortingManager {
     /// Assigns sorted recipes to the `mutableRecipesArray`.
     ///
     /// This function sorts the recipes based on the specified sort option and assigns the sorted result to the `mutableRecipesArray`.
-    /// If no sort option is provided, it defaults to the `selectedSortOption`.
+    /// If no sort option is provided, it defaults to the `selectedSortType`.
     ///
     /// - Parameter type: An optional `RecipeSortTypes` value that determines the sorting criteria. If `nil`, the currently selected sort option will be used.
     /// - The function calls `sortRecipes(type:)` to sort the recipes and assigns the result to `mutableRecipesArray`.
     @MainActor
     func assignSortedRecipesToMutableRecipesArray(_ type: RecipeSortTypes? = nil) async {
-        // Sort recipes using the provided option, or the default selectedSortOption if none is provided.
-        let sortedRecipesArray: [RecipeModel] = await sortRecipes(type: type ?? recipeVM.selectedSortOption)
+        // Sort recipes using the provided option, or the default selectedSortType if none is provided.
+        let sortedRecipesArray: [RecipeModel] = await sortRecipes(type: type ?? recipeVM.selectedSortType)
         recipeVM.updateMutableRecipesArray(sortedRecipesArray)
     }
     
@@ -55,14 +55,14 @@ actor RecipeSortingManager {
     /// Sets up a subscriber to observe changes in the selected sort option
     /// and updates the `mutableRecipesArray` accordingly.
     ///
-    /// - This function listens for changes to the `selectedSortOption` property, which determines how the recipes should be sorted.
+    /// - This function listens for changes to the `selectedSortType` property, which determines how the recipes should be sorted.
     /// - When the sort option is updated (e.g., A-Z, Z-A, or none), the function calls `sortRecipes(type:)` to sort the array based on the selected option.
     /// - Updates the `mutableRecipesArray` with the sorted results.
     /// - Stores the subscription in `cancelables` to ensure proper memory management and prevent memory leaks.
     private func sortOptionSubscriber() async {
         // Convert Combine publisher to async sequence
         // The for-await loop listens for new values from the publisher and processes them as they arrive.
-        for await option in await sortOptionAsyncPublisher(for: recipeVM.$selectedSortOption) {
+        for await option in await sortOptionAsyncPublisher(for: recipeVM.$selectedSortType) {
             // Ensure the UI updates are done on the main thread
             // Since `assignSortedRecipesToMutableRecipesArray(type:)` might modify the UI,
             // we use MainActor.run to guarantee it runs on the main thread.

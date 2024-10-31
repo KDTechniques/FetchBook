@@ -8,7 +8,7 @@
 import Foundation
 
 /// Enum representing the various states of recipe data validity.
-enum RecipeDataStatusTypes: String {
+enum RecipeDataStatusTypes: String, CaseIterable {
     /// Indicates a default state or successful state.
     case none
     

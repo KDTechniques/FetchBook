@@ -28,7 +28,7 @@ struct Helpers {
     ///            or does not contain a valid video ID.
     static func extractYouTubeVideoID(from url: String) -> String? {
         // Define a regular expression pattern to match the video ID in the YouTube URL.
-        let pattern = #"(?<=v=)[\w-]{11}"# // Matches the video ID after 'v=' in the URL.
+        let pattern = #"(?<=v=|\/shorts\/)[\w-]{11}"# // Matches the video ID after 'v=' or '/shorts/' in the URL.
         
         // Attempt to find a range of the video ID in the provided URL using the regex pattern.
         if let range = url.range(of: pattern, options: .regularExpression) {
@@ -64,29 +64,5 @@ struct Helpers {
         let dummyURL = URL(string: "about:blank")! // Load a blank page or a simple local page
         let request = URLRequest(url: dummyURL)
         await webView.load(request)
-    }
-    
-    // MARK: - generatePermutations
-    /// Generates all unique permutations of the elements in the provided array.
-    ///
-    /// This function uses recursion and Swift's high-order functions to generate all unique permutations
-    /// of the array elements.
-    ///
-    /// - Parameter array: The array of elements to permute.
-    /// - Returns: An array containing all unique permutations of the input array.
-    static func generatePermutations<T>(_ array: [T]) -> [[T]] {
-        // Base case: if the array has 0 or 1 elements, return the array as the only permutation.
-        guard array.count > 1 else { return [array] }
-        
-        // Use flatMap to generate all permutations by fixing each element at the first position
-        // and recursively generating permutations for the remaining elements.
-        return array.indices.flatMap { index in
-            // Create a mutable copy of the array and remove the element at the current index.
-            var remainingElements = array
-            let element = remainingElements.remove(at: index)
-            
-            // Recursively generate permutations for the remaining elements and prepend the fixed element.
-            return generatePermutations(remainingElements).map { [element] + $0 }
-        }
     }
 }
