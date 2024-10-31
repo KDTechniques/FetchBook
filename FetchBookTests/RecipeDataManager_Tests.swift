@@ -12,7 +12,6 @@ import XCTest
 final class RecipeDataManager_Tests: XCTestCase {
     // MARK: PROPERTIES
     var vm: RecipeViewModel!
-    var sortingManager: RecipeSortingManager!
     var recipeDataManager: RecipeDataManager!
     
     //MARK: FUNCTIONS
@@ -104,8 +103,7 @@ extension RecipeDataManager_Tests {
     private func initialize() {
         let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
         self.vm = .init(recipeService: mockRecipeAPIService)
-        self.sortingManager = .init(recipeVM: vm)
-        self.recipeDataManager = .init(recipeVM: vm, sortingManager: sortingManager, recipeService: mockRecipeAPIService)
+        self.recipeDataManager = self.vm.dataManager
         
         XCTAssertEqual("\(vm.recipeService)", "\(mockRecipeAPIService)")
     }

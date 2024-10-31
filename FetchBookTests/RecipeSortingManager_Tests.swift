@@ -194,17 +194,14 @@ extension RecipeSortingManager_Tests {
     private func initialize() {
         let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
         self.vm = .init(recipeService: mockRecipeAPIService)
-        self.sortingManager = .init(recipeVM: vm)
+        self.sortingManager = self.vm.sortingManager
+        
+        XCTAssertEqual("\(vm.recipeService)", "\(mockRecipeAPIService)")
     }
     
     // MARK: - initializeRecipesArrayWithMockData
-    private func initializeRecipesArrayWithMockData() async {
+    private func initializeRecipesArrayWithMockData() {
         vm.updateRecipesArray(self.mockRecipesArray)
-        do {
-            try await Task.sleep(nanoseconds: 300_000_000)
-        } catch {
-            XCTFail("Expected successful delay, but got an error: \(error)")
-        }
     }
     
     // MARK: - checkSortedArray
@@ -218,7 +215,7 @@ extension RecipeSortingManager_Tests {
     ///   - lastElement: The expected last element in the sorted array.
     private func checkSortedArray(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
         // Given
-        await self.initializeRecipesArrayWithMockData()
+        self.initializeRecipesArrayWithMockData()
         
         // When
         let sortedRecipesArray: [RecipeModel] = await sortingManager.sortRecipes(type: type)
@@ -242,13 +239,13 @@ extension RecipeSortingManager_Tests {
     ///   - lastElement: The expected name of the last element in the sorted array.
     private func checkSortedArrayOnSubscriber(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
         // Given
-        await self.initializeRecipesArrayWithMockData()
+        self.initializeRecipesArrayWithMockData()
         vm.selectedSortOptionBinding.wrappedValue = type
         
         // When
         do {
             // Introduce a delay to allow the sort option change to be observed.
-            try await Task.sleep(nanoseconds: 1_000_000_000)
+            try await Task.sleep(nanoseconds: 500_000_000)
         } catch {
             XCTFail("Expected successful delay, but got an error: \(error)")
         }

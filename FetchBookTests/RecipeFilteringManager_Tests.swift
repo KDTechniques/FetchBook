@@ -11,8 +11,6 @@ final class RecipeFilteringManager_Tests: XCTestCase {
     
     // MARK: - PROPERTIES
     var vm: RecipeViewModel!
-    var sortingManager: RecipeSortingManager!
-    var filteringManager: RecipeFilteringManager!
     
     /// A mock array of `RecipeModel` objects used for testing sorting functionality.
     let mockRecipesArray: [RecipeModel] = [
@@ -53,7 +51,7 @@ final class RecipeFilteringManager_Tests: XCTestCase {
     func test_RecipeFilteringManager_Tests_recipeSearchTextSubscriber_shouldReturnFilteredRecipesArray() async {
         // Given
         let textCases: [TextCaseTypes] = TextCaseTypes.allCases
-        await self.initializeRecipesArraysWithMockData()
+        self.initializeRecipesArraysWithMockData()
         
         // When
         for name in mockRecipesArray.map({ $0.name }) {
@@ -70,7 +68,8 @@ final class RecipeFilteringManager_Tests: XCTestCase {
                 }
                 vm.recipeSearchTextBinding.wrappedValue = caseModifiedText
                 do {
-                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    // Introduce a delay to allow the search text to be observed.
+                    try await Task.sleep(nanoseconds: 300_000_000)
                 } catch {
                     XCTFail("Expected successful delay, but got an error: \(error)")
                 }
@@ -93,12 +92,13 @@ final class RecipeFilteringManager_Tests: XCTestCase {
     /// correctly updates the view model properties without returning an empty array.
     func test_RecipeFilteringManager_Tests_recipeSearchTextSubscriber_shouldNotReturnEmptyArray() async {
         // Given
-        await self.initializeRecipesArraysWithMockData()
+        self.initializeRecipesArraysWithMockData()
         
         // When
         vm.recipeSearchTextBinding.wrappedValue = ""
         do {
-            try await Task.sleep(nanoseconds: 1_000_000_000)
+            // Introduce a delay to allow the search text to be observed.
+            try await Task.sleep(nanoseconds: 300_000_000)
         } catch {
             XCTFail("Expected successful delay, but got an error: \(error)")
         }
@@ -118,12 +118,13 @@ final class RecipeFilteringManager_Tests: XCTestCase {
     func test_RecipeFilteringManager_Tests_recipeSearchTextSubscriber_shouldReturnEmptyArray() async {
         // Given
         let invalidText: String = "!@#$%^&*()_+"
-        await self.initializeRecipesArraysWithMockData()
+        self.initializeRecipesArraysWithMockData()
         
         // When
         vm.recipeSearchTextBinding.wrappedValue = invalidText
         do {
-            try await Task.sleep(nanoseconds: 1_000_000_000)
+            // Introduce a delay to allow the search text to be observed.
+            try await Task.sleep(nanoseconds: 300_000_000)
         } catch {
             XCTFail("Expected successful delay, but got an error: \(error)")
         }
@@ -141,12 +142,12 @@ extension RecipeFilteringManager_Tests {
     
     // MARK: - initialize
     
-    /// Initializes the `RecipeViewModel`, `RecipeSortingManager`, and `RecipeFilteringManager` instances.
+    /// Initializes the `RecipeViewModel` instance.
     private func initialize() {
         let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
         self.vm = .init(recipeService: mockRecipeAPIService)
-        self.sortingManager = .init(recipeVM: vm)
-        self.filteringManager = .init(recipeVM: vm, sortingManager: sortingManager)
+        
+        XCTAssertEqual("\(vm.recipeService)", "\(mockRecipeAPIService)")
     }
     
     // MARK: - initializeRecipesArraysWithMockData
@@ -154,14 +155,8 @@ extension RecipeFilteringManager_Tests {
     /// Initializes the recipes arrays with mock data.
     ///
     /// This function updates the view model's `recipesArray` and `mutableRecipesArray` properties with mock data
-    /// and introduces a delay to simulate the data fetching process.
-    private func initializeRecipesArraysWithMockData() async {
+    private func initializeRecipesArraysWithMockData() {
         vm.updateRecipesArray(self.mockRecipesArray)
         vm.updateMutableRecipesArray(self.mockRecipesArray)
-        do {
-            try await Task.sleep(nanoseconds: 300_000_000)
-        } catch {
-            XCTFail("Expected successful delay, but got an error: \(error)")
-        }
     }
 }
