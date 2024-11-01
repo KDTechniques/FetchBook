@@ -13,14 +13,14 @@ struct RecipeImageView: View {
     let thumbnailImageURLString: String
     let largeImageURLString: String
     
-    // MARK: - PRIVATE PROPERTIES
-    let values = RecipeImageValues.self
-    
     // MARK: - INITIALIZER
     init(thumbnailImageURLString: String, largeImageURLString: String) {
         self.thumbnailImageURLString = thumbnailImageURLString
         self.largeImageURLString = largeImageURLString
     }
+    
+    // MARK: - PRIVATE PROPERTIES
+    let values = RecipeImageValues.self
     
     // MARK: - BODY
     var body: some View {
@@ -50,7 +50,9 @@ extension RecipeImageView {
     // MARK: - thumbnailImage
     private func thumbnailImage(_ url: URL?) -> some View {
         WebImage(url: url, options: [.retryFailed, .highPriority])
-            .placeholder { RecipeImagePlaceholderView() }
+            .placeholder {
+                RecipeImagePlaceholderView()
+            }
             .resizable()
             .scaledToFill()
     }
@@ -60,7 +62,9 @@ extension RecipeImageView {
         RecipeImageBackgroundRoundedRectangleView()
             .overlay {
                 WebImage(url: largeImageURL, options: [.retryFailed, .lowPriority])
-                    .placeholder { thumbnailImage(thumbnailImageURL) }
+                    .placeholder {
+                        thumbnailImage(thumbnailImageURL)
+                    }
                     .resizable()
                     .scaledToFill()
                     .frame(width: values.innerFrameSize, height: values.innerFrameSize)

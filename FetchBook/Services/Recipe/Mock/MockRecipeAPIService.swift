@@ -6,18 +6,13 @@
 //
 
 import Foundation
-
-// Mock API service used for unit testing, conforms to RecipeServiceProtocol
+// Mock API service to simulate the fetch of recipe data
 actor MockRecipeAPIService: RecipeServiceProtocol {
-    
-    // MARK: - FUNCTIONS
-    
     // MARK: - fetchData
-    
     /// Fetches data from a given URL.
     ///
-    /// This asynchronous function reads data from the specified URL. It's used in unit testing to simulate
-    /// fetching data from a file or other sources.
+    /// This asynchronous function reads data from the specified URL.
+    /// It's used in unit testing & debugging to simulate fetching data from a file or other sources.
     ///
     /// - Parameter url: The URL to fetch data from.
     /// - Throws: `URLError` if the data cannot be read from the URL.
@@ -30,7 +25,6 @@ actor MockRecipeAPIService: RecipeServiceProtocol {
     }
     
     // MARK: - fetchRecipeData
-    
     /// Fetches recipe data from a mock API endpoint.
     ///
     /// This asynchronous function simulates fetching recipe data by loading it from a JSON file in the app bundle.
@@ -45,19 +39,16 @@ actor MockRecipeAPIService: RecipeServiceProtocol {
     func fetchRecipeData(from endpoint: RecipeEndpointModel) async throws -> RecipesModel {
         // Introduce a delay of 2 seconds (2_000_000_000 nanoseconds)
         try await Task.sleep(nanoseconds: 2_000_000_000)
-        
         let fileName: String = getMockJsonFilename(for: endpoint)
         guard let path = Bundle.main.path(forResource: fileName, ofType: "json") else {
             throw RecipeServiceErrors.fileNotFound(fileName+".json")
         }
-        
         let url: URL = .init(fileURLWithPath: path)
         let recipes: RecipesModel = try await self.fetchJSON(from: url, type: RecipesModel.self)
         return recipes
     }
     
     // MARK: - getMockJsonFilename
-    
     /// Retrieves the filename of the mock JSON data based on the endpoint type.
     ///
     /// This function returns the name of the mock JSON file corresponding to the specified endpoint type.

@@ -11,34 +11,51 @@ struct RecipesView: View {
     // MARK: - PROPERTIES
     @ObservedObject private var recipeVM: RecipeViewModel
     
-    // MARK: - PRIVATE PROPERTIES
-    @State private var blogPostItem: [BlogPostItemModel] = []
-    
-    enum FetchConditions { case initial, refresh }
+    enum FetchConditions {
+        case initial, refresh
+    }
     
     // MARK: - INITIALIZER
     init(vm: RecipeViewModel) {
         _recipeVM = ObservedObject(wrappedValue: vm)
     }
     
+    // MARK: - PRIVATE PROPERTIES
+    @State private var blogPostItem: [BlogPostItemModel] = []
+    
     // MARK: - BODY
     var body: some View {
         NavigationStack(path: $blogPostItem) {
             Group {
                 switch recipeVM.currentDataStatus {
-                case .none: successRecipeList
-                case .fetching: shimmeringListEffect
-                case .malformed: malformedError
-                case .emptyData: emptyDataError
-                case .emptyResult: emptySearchResults
+                case .none:
+                    successRecipeList
+                    
+                case .fetching:
+                    shimmeringListEffect
+                    
+                case .malformed:
+                    malformedError
+                    
+                case .emptyData:
+                    emptyDataError
+                    
+                case .emptyResult:
+                    emptySearchResults
                 }
             }
-            .toolbar { ToolbarItem(placement: .automatic) { RecipeListSorterButtonView(vm: recipeVM) } }
+            .toolbar { ToolbarItem(placement: .automatic) {
+                RecipeListSorterButtonView(vm: recipeVM) }
+            }
             .navigationTitle("Recipes")
         }
         .searchable(text: recipeVM.recipeSearchTextBinding, prompt: "Search")
-        .refreshable { loadData(.refresh) }
-        .task(priority: .high) { loadData(.initial) }
+        .refreshable {
+            loadData(.refresh)
+        }
+        .task(priority: .high) {
+            loadData(.initial)
+        }
     }
 }
 
@@ -113,6 +130,8 @@ extension RecipesView {
         CustomContentNotAvailableView(.init(title: "No Results"))
     }
     
+    // MARK: FUNCTIONS
+    
     // MARK: - fetchData
     /// Fetches recipe data from the specified endpoint.
     /// - Parameter endpoint: The endpoint model representing the recipe source.
@@ -122,7 +141,7 @@ extension RecipesView {
     private func fetchData(endpoint: RecipeEndpointModel) {
         Task {
             do {
-                try await recipeVM.fetchRecipeData(endpoint: endpoint)
+                try await recipeVM.fetchAndUpdateRecipes(endpoint: endpoint)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }

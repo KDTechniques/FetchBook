@@ -11,18 +11,12 @@ import SwiftUI
 /// sorting, and publishing the sorted list of recipes to the SwiftUI view.
 @MainActor
 final class RecipeViewModel: ObservableObject {
-    
-    // MARK: - PROPERTIES
-    
+    // MARK: - INITIAL PROPERTIES
     /// A service for fetching recipe data, adhering to the `RecipeServiceProtocol` protocol.
-    private let recipeService: RecipeServiceProtocol
-    private lazy var sortingManager: RecipeSortingManager = .init(recipeVM: self)
-    private lazy var filteringManager: RecipeFilteringManager = .init(recipeVM: self, sortingManager: sortingManager)
-    private lazy var dataManager: RecipeDataManager = .init(
-        recipeVM: self,
-        sortingManager: sortingManager,
-        recipeService: recipeService
-    )
+    let recipeService: RecipeServiceProtocol
+    private(set) lazy var sortingManager: RecipeSortingManager = .init(recipeVM: self)
+    private(set) lazy var filteringManager: RecipeFilteringManager = .init(recipeVM: self, sortingManager: sortingManager)
+    private(set) lazy var dataManager: RecipeDataManager = .init(recipeVM: self, sortingManager: sortingManager, recipeService: recipeService)
     
     // MARK: - INITIALIZER
     /// Initializes a new instance of `RecipeViewModel` with the provided recipe service.
@@ -33,66 +27,85 @@ final class RecipeViewModel: ObservableObject {
     /// - Parameter recipeService: A service conforming to `RecipeServiceProtocol` for fetching recipe data.
     init(recipeService: RecipeServiceProtocol) {
         self.recipeService = recipeService
-        
-        Task {
-            await self.sortingManager.sortOptionSubscriber()
-            await self.filteringManager.recipeSearchTextSubscriber()
-        }
+        _ = sortingManager
+        _ = filteringManager
+        _ = dataManager
     }
     
     // MARK: - PRIVATE PROPERTIES
-    
     /// An array holding the original recipe data fetched from the service.
     @Published private(set) var recipesArray: [RecipeModel] = []
-    
     /// A published array that holds the sorted list of recipes, which updates the UI automatically.
     @Published private(set) var mutableRecipesArray: [RecipeModel] = []
-    
     /// The current status of the data being processed, and fetched.
-    @Published private(set) var currentDataStatus: RecipeDataStatusTypes = .fetching
-    
+    @Published private(set) var currentDataStatus: RecipeDataStatusTypes = .none
     /// A string that holds the user's recipe search input.
     @Published private(set) var recipeSearchText: String = ""
-    
     /// The selected sorting option for the recipes. Changes to this property will trigger
     /// the sorting of the recipes based on the chosen option.
-    @Published private(set) var selectedSortOption: RecipeSortOptions = .none
-    
+    @Published private(set) var selectedSortType: RecipeSortTypes = .none
     /// The currently selected API endpoint for data retrieval.
     /// debug purposes only.
     @Published private(set) var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
     
     // MARK: - PUBLIC PROPERTIES
+    /// Public access to the `recipeSearchText` using a `Binding`
+    var recipeSearchTextBinding: Binding<String> {
+        return binding(\.recipeSearchText)
+    }
+    /// Public access to the `selectedSortType` using a `Binding`
+    var selectedSortTypeBinding: Binding<RecipeSortTypes> {
+        return binding(\.selectedSortType)
+    }
+    /// Public access to the `selectedEndpoint` using a `Binding`
+    var selectedEndpointBinding: Binding<RecipeEndpointModel> {
+        return binding(\.selectedEndpoint)
+    }
     
-    // Public access to the `recipeSearchText` using a `Binding`
-    var recipeSearchTextBinding: Binding<String> { binding(\.recipeSearchText) }
-    
-    // Public access to the `selectedSortOption` using a `Binding`
-    var selectedSortOptionBinding: Binding<RecipeSortOptions> { binding(\.selectedSortOption) }
-    
-    // Public access to the `selectedEndpoint` using a `Binding`
-    var selectedEndpointBinding: Binding<RecipeEndpointModel> { binding(\.selectedEndpoint) }
-    
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - updateDataStatus
-    /// Public method to update the current data status.
+    /// Updates the current data status of the recipe view model.
+    ///
+    /// This method sets a new data status, which can be used to represent different states of data loading or processing.
+    /// - Parameter newStatus: The new status to be set, of type `RecipeDataStatusTypes`.
     func updateDataStatus(_ newStatus: RecipeDataStatusTypes) {
         self.currentDataStatus = newStatus
     }
     
     // MARK: - updateMutableRecipesArray
+    /// Updates the mutable recipes array with new data.
+    ///
+    /// This method sets a new array of recipes, which can be used to dynamically update the displayed recipes in the UI.
+    /// - Parameter newArray: The new array of `RecipeModel` objects to be set.
     func updateMutableRecipesArray(_ newArray: [RecipeModel]) {
         self.mutableRecipesArray = newArray
     }
     
     // MARK: - updateRecipesArray
+    /// Updates the main recipes array with new data.
+    ///
+    /// This method sets a new array of recipes, used to update the main collection of recipes in the view model.
+    /// - Parameter newArray: The new array of `RecipeModel` objects to be set.
     func updateRecipesArray(_ newArray: [RecipeModel]) {
         self.recipesArray = newArray
     }
     
-    // MARK: - fetchRecipeData
-    func fetchRecipeData(endpoint: RecipeEndpointModel) async throws {
-        try await dataManager.fetchRecipeData(endpoint: endpoint)
+    // MARK: - emptyRecipesAndMutableRecipesArray
+    /// Resets both `recipesArray` and the `mutableRecipesArray` at the same time by assigning an empty array.
+    func emptyRecipesAndMutableRecipesArray() {
+        recipesArray = []
+        mutableRecipesArray = []
+    }
+    
+    // MARK: - fetchAndUpdateRecipes
+    /// Fetches recipe data from a specified endpoint asynchronously, and update recipes arrays and other related properties accordingly.
+    ///
+    /// This method performs a network request to fetch recipe data from a given endpoint and updates the view model accordingly.
+    /// - Parameter endpoint: The endpoint from which to fetch recipe data, of type `RecipeEndpointModel`.
+    /// - Throws: An error if the data fetching process fails.
+    /// - Returns: A `RecipesModel` containing the fetched recipes.
+    func fetchAndUpdateRecipes(endpoint: RecipeEndpointModel) async throws {
+        try await dataManager.fetchAndUpdateRecipes(endpoint: endpoint)
     }
 }

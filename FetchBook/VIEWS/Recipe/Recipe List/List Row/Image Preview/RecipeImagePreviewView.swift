@@ -12,19 +12,21 @@ struct RecipeImagePreviewView: View {
     // MARK: - PROPERTIES
     let recipe: RecipeModel
     
-    // MARK: - PRIVATE PROPERTIES
-    let recipeImagePreviewSize: CGFloat = Helpers.screenWidth - 100
-    
     // MARK: - INITIALIZER
     init(recipe: RecipeModel) {
         self.recipe = recipe
     }
     
+    // MARK: - PRIVATE PROPERTIES
+    let recipeImagePreviewSize: CGFloat = Helpers.screenWidth - 100
+    
     // MARK: - BODY
     var body: some View {
         largeImage
             .frame(width: recipeImagePreviewSize, height: recipeImagePreviewSize)
-            .overlay(alignment: .bottomLeading) { recipeInfo }
+            .overlay(alignment: .bottomLeading) {
+                recipeInfo
+            }
     }
 }
 
@@ -49,7 +51,9 @@ extension RecipeImagePreviewView {
             url: .init(string: recipe.secureThumbnailURLString),
             options: [.highPriority, .retryFailed]
         )
-        .placeholder { placeholder }
+        .placeholder {
+            placeholder
+        }
         .resizable()
         .scaledToFill()
     }
@@ -60,7 +64,9 @@ extension RecipeImagePreviewView {
             url: .init(string: recipe.securePhotoURLLargeString),
             options: [.lowPriority, .retryFailed]
         )
-        .placeholder { thumbnailImage }
+        .placeholder {
+            thumbnailImage
+        }
         .resizable()
         .scaledToFill()
     }

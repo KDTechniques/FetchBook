@@ -7,37 +7,64 @@
 
 import Foundation
 
-struct RecipesModel: Codable {
+/// Model representing a collection of recipes.
+struct RecipesModel: Decodable {
     let recipes: [RecipeModel]
 }
 
-struct RecipeModel: Identifiable, Codable, Equatable {
+/// Model representing a single recipe.
+struct RecipeModel: Identifiable, Decodable, Equatable {
     // MARK: - PROPERTIES
     let id: String
     let name: String
     let cuisine: String
+    
+    /// URL string for the highest quality photo available.
     private let photoURLLargeString: String
+    
+    /// URL string for the lowest quality photo available.
     private let thumbnailURLString: String
+    
+    /// URL string for the recipe's website (blog post).
     private let blogPostURLString: String?
+    
+    /// URL string for the recipe's YouTube video.
     private let youtubeURLString: String?
+    
+    // MARK: - INITIALIZER
+    init(
+        id: String,
+        name: String,
+        cuisine: String,
+        photoURLLargeString: String,
+        thumbnailURLString: String,
+        blogPostURLString: String?,
+        youtubeURLString: String?
+    ) {
+        self.id = id
+        self.name = name
+        self.cuisine = cuisine
+        self.photoURLLargeString = photoURLLargeString
+        self.thumbnailURLString = thumbnailURLString
+        self.blogPostURLString = blogPostURLString
+        self.youtubeURLString = youtubeURLString
+    }
     
     // Computed properties to ensure URLs are always in HTTPS format
     var securePhotoURLLargeString: String {
-        photoURLLargeString.replacingOccurrences(of: "http://", with: "https://")
+        return photoURLLargeString.replacingOccurrences(of: "http://", with: "https://")
     }
-    
     var secureThumbnailURLString: String {
-        thumbnailURLString.replacingOccurrences(of: "http://", with: "https://")
+        return thumbnailURLString.replacingOccurrences(of: "http://", with: "https://")
     }
-    
     var secureBlogPostURLString: String? {
-        blogPostURLString?.replacingOccurrences(of: "http://", with: "https://")
+        return blogPostURLString?.replacingOccurrences(of: "http://", with: "https://")
     }
-    
     var secureYoutubeURLString: String? {
-        youtubeURLString?.replacingOccurrences(of: "http://", with: "https://")
+        return youtubeURLString?.replacingOccurrences(of: "http://", with: "https://")
     }
     
+    /// Represents a mock data object for use in UI Previews.
     static let mockObject: Self = .init(
         id: "9dd84450-9922-463a-bece-64f32f7a7dc5",
         name: "Summer Pudding",

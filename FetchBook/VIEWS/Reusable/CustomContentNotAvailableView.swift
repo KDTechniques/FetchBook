@@ -59,11 +59,7 @@ extension CustomContentNotAvailableView {
         let description: String?
         
         // MARK: - INITIALIZER
-        init(
-            systemImageName : String? = nil,
-            title           : String,
-            description     : String? = nil
-        ) {
+        init(systemImageName : String? = nil, title: String, description: String? = nil) {
             self.systemImageName    = systemImageName
             self.title              = title
             self.description        = description

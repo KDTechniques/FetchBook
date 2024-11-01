@@ -13,14 +13,18 @@ struct WebView: UIViewRepresentable {
     let url: URL
     @Binding var progress: Double
     
-    // Using a shared `WKProcessPool` for better performance across multiple WebViews.
+    //  MARK: - PRIVATE PROPERTIES
+    /// Using a shared `WKProcessPool` for better performance across multiple WebViews.
     private static let sharedProcessPool = WKProcessPool()
     
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
+    
+    // MARK: - makeCoordinator
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
     
+    // MARK: - makeUIView
     func makeUIView(context: Context) -> WKWebView {
         // Configure WebView with process pool and other settings.
         let configuration = WKWebViewConfiguration()
@@ -37,11 +41,13 @@ struct WebView: UIViewRepresentable {
         // Load the initial URL request.
         let request = URLRequest(url: url)
         webView.load(request)
-        
         return webView
     }
     
-    func updateUIView(_ uiView: WKWebView, context: Context) { }
+    // MARK: - updateUIView
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        // No need for updates here
+    }
     
     // MARK: - Coordinator
     class Coordinator: NSObject, WKNavigationDelegate {

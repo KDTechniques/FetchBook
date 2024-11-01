@@ -19,14 +19,17 @@ struct RecipeShimmeringListView: View {
                 RecipeImagePlaceholderView()
                 
                 VStack(alignment: .leading) {
-                    Text("Recipe name goes here")
-                        .opacity(0)
-                        .background(Color(uiColor: .systemGray3))
-                    
-                    Text("Cuisine here")
-                        .font(.subheadline)
-                        .opacity(0)
-                        .background(Color(uiColor: .systemGray3))
+                    Group {
+                        Text("Recipe name goes here")
+                            .opacity(0)
+                            .background(Color(uiColor: .systemGray3))
+                        
+                        Text("Cuisine here")
+                            .font(.subheadline)
+                            .opacity(0)
+                            .background(Color(uiColor: .systemGray3))
+                    }
+                    .clipShape(.rect(cornerRadius: 3))
                 }
                 .padding(.top, 10)
             }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Protocol defining a service for fetching data from the network.
+// Protocol defining a service for fetching data from the network.
 protocol NetworkServiceProtocol {
     /// Fetches data from a given URL.
     ///
@@ -19,7 +19,6 @@ protocol NetworkServiceProtocol {
     func fetchData(from url: URL) async throws -> Data
 }
 
-/// Extension providing default implementations for `NetworkServiceProtocol`.
 extension NetworkServiceProtocol {
     /// Fetches and decodes JSON data from a given URL.
     ///

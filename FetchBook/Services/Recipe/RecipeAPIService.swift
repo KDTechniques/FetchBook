@@ -7,11 +7,10 @@
 
 import Foundation
 
-// Real API service that conforms to RecipeServiceProtocol
+// NOTE: The real API service for fetching recipe data
+
 actor RecipeAPIService: RecipeServiceProtocol {
-    
-    // MARK: - FUNCTIONS
-    
+    // MARK: - fetchData
     /// Fetches raw data from a specified URL.
     ///
     /// This asynchronous function performs a network request to retrieve raw data from the given URL.
@@ -26,6 +25,7 @@ actor RecipeAPIService: RecipeServiceProtocol {
         return data
     }
     
+    // MARK: - fetchRecipeData
     /// Fetches recipe data from the specified API endpoint.
     ///
     /// This asynchronous function retrieves recipe data from a given endpoint defined by the `RecipeEndpoints` enum.
@@ -37,8 +37,9 @@ actor RecipeAPIService: RecipeServiceProtocol {
     /// - Returns: A `RecipesModel` containing the recipes fetched from the specified API endpoint.
     func fetchRecipeData(from endpoint: RecipeEndpointModel) async throws -> RecipesModel {
         let urlString = endpoint.urlString
-        guard let url = URL(string: urlString) else { throw RecipeServiceErrors.invalidURL(urlString) }
-        
+        guard let url = URL(string: urlString) else {
+            throw RecipeServiceErrors.invalidURL(urlString)
+        }
         do {
             let recipes: RecipesModel = try await self.fetchJSON(from: url, type: RecipesModel.self)
             return recipes

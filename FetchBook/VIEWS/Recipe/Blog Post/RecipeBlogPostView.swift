@@ -12,10 +12,6 @@ struct RecipeBlogPostView: View {
     let secureBlogPostURLString: String?
     let secureYoutubeURLString: String?
     
-    // MARK: - PRIVATE PROPERTIES
-    @State private var progress: Double = .zero
-    @State private var showVideoPlayer: Bool
-    
     // MARK: - INITIALAIZER
     init(secureBlogPostURLString: String?, secureYoutubeURLString: String?, showVideoPlayer: Bool = false) {
         self.secureBlogPostURLString = secureBlogPostURLString
@@ -23,10 +19,13 @@ struct RecipeBlogPostView: View {
         self.showVideoPlayer = showVideoPlayer
     }
     
+    // MARK: - PRIVATE PROPERTIES
+    @State private var progress: Double = .zero
+    @State private var showVideoPlayer: Bool
+    
     // MARK: - BODY
     var body: some View {
         let videoID: String? = Helpers.extractYouTubeVideoID(from: secureYoutubeURLString ?? "")
-        
         Group {
             if let urlString: String = secureBlogPostURLString,
                let url: URL = .init(string: urlString) {
@@ -44,7 +43,9 @@ struct RecipeBlogPostView: View {
                 )
             }
         }
-        .overlay { FloatingYTPlayerView(showVideoPlayer: $showVideoPlayer, videoID: videoID) }
+        .overlay {
+            FloatingYTPlayerView(showVideoPlayer: $showVideoPlayer, videoID: videoID)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 BlogPostVideoPlayerButtonView(showVideoPlayer: $showVideoPlayer, videoID: videoID)

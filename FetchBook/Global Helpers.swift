@@ -14,7 +14,7 @@ struct Helpers {
     static let screenWidth: CGFloat = UIScreen.main.bounds.size.width
     static let screenHeight: CGFloat = UIScreen.main.bounds.size.height
     
-    // MARK: - FUNCTIONS
+    // MARK: FUNCTIONS
     
     // MARK: - extractYouTubeVideoID
     // Extract video ID from a YouTube URL.
@@ -28,7 +28,7 @@ struct Helpers {
     ///            or does not contain a valid video ID.
     static func extractYouTubeVideoID(from url: String) -> String? {
         // Define a regular expression pattern to match the video ID in the YouTube URL.
-        let pattern = #"(?<=v=)[\w-]{11}"# // Matches the video ID after 'v=' in the URL.
+        let pattern = #"(?<=v=|\/shorts\/)[\w-]{11}"# // Matches the video ID after 'v=' or '/shorts/' in the URL.
         
         // Attempt to find a range of the video ID in the provided URL using the regex pattern.
         if let range = url.range(of: pattern, options: .regularExpression) {

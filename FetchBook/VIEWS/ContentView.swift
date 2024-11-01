@@ -22,13 +22,8 @@ struct ContentView: View {
     // MARK: - BODY
     var body: some View {
         TabView(selection: $selectedTab) {
-            RecipesView(vm: recipeVM)
-                .tabItem {  Label("Recipes", systemImage: "book.fill") }
-                .tag(TabBarTypes.recipe)
-            
-            DebugView(vm: recipeVM)
-                .tabItem { Label("Debug", systemImage: "wrench.and.screwdriver.fill") }
-                .tag(TabBarTypes.debug)
+            recipes
+            debug
         }
     }
 }
@@ -40,4 +35,26 @@ struct ContentView: View {
 
 #Preview("ContentView - RecipeAPIService") {
     ContentView(recipeService: RecipeAPIService())
+}
+
+extension ContentView {
+    // MARK: - recipes
+    private var recipes: some View {
+        RecipesView(vm: recipeVM)
+            .tabItem {
+                Label("Recipes", systemImage: "book.fill")
+            }
+            .tag(TabBarTypes.recipe)
+    }
+    
+    // MARK: - debug
+    private var debug: some View {
+#if DEBUG
+        DebugView(vm: recipeVM)
+            .tabItem {
+                Label("Debug", systemImage: "wrench.and.screwdriver.fill")
+            }
+            .tag(TabBarTypes.debug)
+#endif
+    }
 }

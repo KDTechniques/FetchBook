@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct DebugView: View {
-    // MARK: - PROEPRTIES
+    // MARK: - PROPERTIES
     @ObservedObject private var recipeVM: RecipeViewModel
     
     // MARK: - INITIALIZER
@@ -39,9 +39,9 @@ extension DebugView {
     private var endpoint: some View {
         Section {
             Picker("Recipe Endpoints Picker", selection: recipeVM.selectedEndpointBinding) {
-                ForEach(RecipeEndpointTypes.allCases, id: \.self) {
-                    Text($0.typeString.capitalized)
-                        .tag($0.endpointModel)
+                ForEach(RecipeEndpointTypes.allCases, id: \.self) { endpoint in
+                    Text(endpoint.typeString.capitalized)
+                        .tag(endpoint.endpointModel)
                 }
             }
             .pickerStyle(.segmented)
