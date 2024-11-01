@@ -12,7 +12,7 @@ import XCTest
 final class MockRecipeAPIService_Tests: XCTestCase {
     
     // MARK: - PROPERTIES
-    let mockRecipeService: RecipeServiceProtocol = MockRecipeAPIService()
+    let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
     
     // MARK: FUNCTIONS
     
@@ -27,6 +27,8 @@ final class MockRecipeAPIService_Tests: XCTestCase {
     }
     
     // MARK: UNIT TESTS
+    
+    // MARK: fetchData
     
     // MARK: - test_MockRecipeAPIService_fetchData_shouldReturnData
     /// Tests if the `fetchData` method of `MockRecipeAPIService` returns valid data for various file names.
@@ -49,7 +51,7 @@ final class MockRecipeAPIService_Tests: XCTestCase {
             }
             
             do {
-                let data: Data = try await mockRecipeService.fetchData(from: fileURL)
+                let data: Data = try await mockRecipeAPIService.fetchData(from: fileURL)
                 
                 // Then
                 XCTAssertFalse(data.isEmpty)
@@ -72,20 +74,25 @@ final class MockRecipeAPIService_Tests: XCTestCase {
     func test_MockRecipeAPIService_fetchData_shouldThrow() async  {
         // Given
         var data: Data?
-        guard let url: URL = .init(string: "https://github.com/KDTechniques/FetchBook!@#$%^&*()_+") else {
+        guard let url: URL = .init(string: "https://!@#$%^&*()_+") else {
             XCTFail("Expected valid URL, but go an invalid url.")
             return
         }
         
         do {
-            let tempData: Data = try await mockRecipeService.fetchData(from: url)
+            // When
+            let tempData: Data = try await mockRecipeAPIService.fetchData(from: url)
             data = tempData
+            
+            // Then
             XCTAssertThrowsError("Successfully throw an error.")
         } catch {
             // Then
             XCTAssertEqual(data, nil)
         }
     }
+    
+    // MARK: fetchRecipeData
     
     // MARK: - test_MockRecipeAPIService_fetchRecipeData_shouldReturnRecipesModel
     /// Tests if the `fetchRecipeData` method of `MockRecipeAPIService` returns a `RecipesModel` for various endpoints.
@@ -103,7 +110,7 @@ final class MockRecipeAPIService_Tests: XCTestCase {
         // When
         for endpoint in endpointsArray {
             do {
-                let recipes: RecipesModel = try await mockRecipeService.fetchRecipeData(from: endpoint.endpointModel)
+                let recipes: RecipesModel = try await mockRecipeAPIService.fetchRecipeData(from: endpoint.endpointModel)
                 
                 // Then
                 switch endpoint {
@@ -136,7 +143,7 @@ final class MockRecipeAPIService_Tests: XCTestCase {
         
         // Then
         do {
-            let tempRecipes: RecipesModel = try await mockRecipeService.fetchRecipeData(from: endpoint.endpointModel)
+            let tempRecipes: RecipesModel = try await mockRecipeAPIService.fetchRecipeData(from: endpoint.endpointModel)
             recipes = tempRecipes.recipes
             XCTAssertThrowsError("Successfully throw an error.")
         } catch {
