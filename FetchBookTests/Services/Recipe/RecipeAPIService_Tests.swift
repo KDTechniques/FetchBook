@@ -11,7 +11,7 @@ import XCTest
 @MainActor
 final class RecipeAPIService_Tests: XCTestCase {
     // MARK: - PROPERTIES
-    
+    let apiService: RecipeServiceProtocol = RecipeAPIService()
     
     // MARK: FUNCTIONS
     
@@ -27,6 +27,9 @@ final class RecipeAPIService_Tests: XCTestCase {
     
     // MARK: UNIT TESTS
     
-    // MARK: -
+    // MARK: - test_RecipeAPIService_fetchData_shouldReturnData
+    func test_RecipeAPIService_fetchData_shouldReturnData() async {
+        
+    }
     
 }
