@@ -27,6 +27,10 @@ final class GlobalHelpers_Tests: XCTestCase {
     /// Tests if the `extractYouTubeVideoID` function correctly extracts the video ID from various YouTube URLs.
     /// This test verifies that when the `extractYouTubeVideoID` function is called with different types of YouTube URLs,
     /// it correctly extracts the video ID or returns nil if the ID cannot be extracted.
+    ///
+    /// - Given: An array of tuples containing YouTube URLs and their expected video IDs.
+    /// - When: The `extractYouTubeVideoID` function is called with each URL.
+    /// - Then: The extracted video ID is compared to the expected video ID using assertions.
     func test_Helpers_extractYouTubeVideoID_shouldReturnVideoIDStringOrNil() {
         // Given
         let mockURLsAndIDsArray: [(urlString: String, expectedID: String?)] = [
