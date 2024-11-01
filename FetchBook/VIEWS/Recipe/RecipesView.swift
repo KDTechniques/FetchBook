@@ -44,12 +44,12 @@ struct RecipesView: View {
                     emptySearchResults
                 }
             }
+            .searchable(text: recipeVM.recipeSearchTextBinding, prompt: "Search")
             .toolbar { ToolbarItem(placement: .automatic) {
                 RecipeListSorterButtonView(vm: recipeVM) }
             }
             .navigationTitle("Recipes")
         }
-        .searchable(text: recipeVM.recipeSearchTextBinding, prompt: "Search")
         .refreshable {
             loadData(.refresh)
         }
