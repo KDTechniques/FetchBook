@@ -72,10 +72,10 @@ final class RecipeViewModel_Tests: XCTestCase {
         
         // When
         for endpointType in endpointTypesArray {
-            vm.selectedEndpointBinding.wrappedValue = endpointType.endpointModel
+            vm.selectedEndpointBinding.wrappedValue = endpointType
             
             // Then
-            XCTAssertEqual(vm.selectedEndpoint, endpointType.endpointModel)
+            XCTAssertEqual(vm.selectedEndpoint, endpointType)
         }
     }
     
@@ -176,7 +176,7 @@ final class RecipeViewModel_Tests: XCTestCase {
                 switch endpoint {
                 case .all:
                     do {
-                        try await vm.fetchAndUpdateRecipes(endpoint: endpoint.endpointModel)
+                        try await vm.fetchAndUpdateRecipes(endpoint: endpoint)
                     } catch {
                         XCTFail("Expected successful fetch and update, but got an error: \(error)")
                     }
@@ -185,7 +185,7 @@ final class RecipeViewModel_Tests: XCTestCase {
                     XCTAssertEqual(vm.currentDataStatus, .none)
                 case .malformed:
                     do {
-                        try await vm.fetchAndUpdateRecipes(endpoint: endpoint.endpointModel)
+                        try await vm.fetchAndUpdateRecipes(endpoint: endpoint)
                         XCTFail("Expected successful failure but got no error.")
                     } catch {
                         XCTAssertTrue(vm.recipesArray.isEmpty)
@@ -194,7 +194,7 @@ final class RecipeViewModel_Tests: XCTestCase {
                     }
                 case .empty:
                     do {
-                        try await vm.fetchAndUpdateRecipes(endpoint: endpoint.endpointModel)
+                        try await vm.fetchAndUpdateRecipes(endpoint: endpoint)
                     } catch {
                         XCTFail("Expected successful fetch and update, but got an error: \(error)")
                     }

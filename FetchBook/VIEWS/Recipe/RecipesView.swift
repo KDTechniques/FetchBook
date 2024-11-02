@@ -138,7 +138,7 @@ extension RecipesView {
     /// This function uses an asynchronous task to fetch the recipe data,
     /// updating the view model accordingly. If an error occurs during the fetch,
     /// it sets the current data status to .malformed and prints the error.
-    private func fetchData(endpoint: RecipeEndpointModel) {
+    private func fetchData(endpoint: RecipeEndpointTypes) {
         Task {
             do {
                 try await recipeVM.fetchAndUpdateRecipes(endpoint: endpoint)

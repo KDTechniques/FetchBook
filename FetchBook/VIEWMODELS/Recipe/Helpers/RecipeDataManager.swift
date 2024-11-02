@@ -33,7 +33,7 @@ actor RecipeDataManager {
     ///
     /// - Parameter endpoint: The endpoint from which to fetch the recipe data.
     /// - Throws: An error if fetching data from the `RecipeService` fails.
-    func fetchAndUpdateRecipes(endpoint: RecipeEndpointModel) async throws {
+    func fetchAndUpdateRecipes(endpoint: RecipeEndpointTypes) async throws {
         /// Sets the `currentDataStatus` to `.fetching` so we can show a progress or shimmer UI to the user
         /// while we receive a response from the network call.
         await recipeVM.updateDataStatus(.fetching)

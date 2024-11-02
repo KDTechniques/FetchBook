@@ -110,7 +110,7 @@ final class MockRecipeAPIService_Tests: XCTestCase {
         // When
         for endpoint in endpointsArray {
             do {
-                let recipes: RecipesModel = try await mockRecipeAPIService.fetchRecipeData(from: endpoint.endpointModel)
+                let recipes: RecipesModel = try await mockRecipeAPIService.fetchRecipeData(from: endpoint)
                 
                 // Then
                 switch endpoint {
@@ -143,7 +143,7 @@ final class MockRecipeAPIService_Tests: XCTestCase {
         
         // Then
         do {
-            let tempRecipes: RecipesModel = try await mockRecipeAPIService.fetchRecipeData(from: endpoint.endpointModel)
+            let tempRecipes: RecipesModel = try await mockRecipeAPIService.fetchRecipeData(from: endpoint)
             recipes = tempRecipes.recipes
             XCTAssertThrowsError("Successfully throw an error.")
         } catch {

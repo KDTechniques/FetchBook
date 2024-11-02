@@ -33,10 +33,10 @@ actor MockRecipeAPIService: RecipeServiceProtocol {
     /// - For the `.malformed` endpoint, it throws a `URLError` to simulate a malformed response.
     /// - For the `.empty` endpoint, it returns an empty `RecipesModel`.
     ///
-    /// - Parameter endpoint: The specific endpoint to fetch data from, defined by the `RecipeEndpointModel`.
+    /// - Parameter endpoint: The specific endpoint to fetch data from, defined by the `RecipeEndpointTypes`.
     /// - Throws: `URLError` if the file cannot be read or if the data cannot be parsed.
     /// - Returns: A `RecipesModel` containing the recipes fetched from the mock data.
-    func fetchRecipeData(from endpoint: RecipeEndpointModel) async throws -> RecipesModel {
+    func fetchRecipeData(from endpoint: RecipeEndpointTypes) async throws -> RecipesModel {
         // Introduce a delay of 2 seconds (2_000_000_000 nanoseconds)
         try await Task.sleep(nanoseconds: 2_000_000_000)
         let fileName: String = getMockJsonFilename(for: endpoint)
@@ -56,8 +56,8 @@ actor MockRecipeAPIService: RecipeServiceProtocol {
     ///
     /// - Parameter endpoint: The specific endpoint to fetch data from.
     /// - Returns: A mock JSON filename corresponding to the endpoint type.
-    private func getMockJsonFilename(for endpoint: RecipeEndpointModel) -> String {
-        switch endpoint.type {
+    private func getMockJsonFilename(for endpoint: RecipeEndpointTypes) -> String {
+        switch endpoint {
         case .all:
             return "recipes"
         case .malformed:
