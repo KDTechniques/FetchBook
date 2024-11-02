@@ -40,8 +40,8 @@ extension DebugView {
         Section {
             Picker("Recipe Endpoints Picker", selection: recipeVM.selectedEndpointBinding) {
                 ForEach(RecipeEndpointTypes.allCases, id: \.self) { endpoint in
-                    Text(endpoint.typeString.capitalized)
-                        .tag(endpoint.endpointModel)
+                    Text(endpoint.rawValue.capitalized)
+                        .tag(endpoint)
                 }
             }
             .pickerStyle(.segmented)

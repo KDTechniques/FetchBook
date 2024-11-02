@@ -116,7 +116,7 @@ extension RecipeDataManager_Tests {
     private func emptyCheck(shouldReinitialize: Bool) async {
         // Given
         let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
-        let endpoint: RecipeEndpointModel = RecipeEndpointTypes.empty.endpointModel
+        let endpoint: RecipeEndpointTypes = RecipeEndpointTypes.empty.endpointModel
         
         // When
         for option in sortOptions {
@@ -146,7 +146,7 @@ extension RecipeDataManager_Tests {
     private func malformedCheck(shouldReinitialize: Bool) async {
         // Given
         let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
-        let endpoint: RecipeEndpointModel = RecipeEndpointTypes.malformed.endpointModel
+        let endpoint: RecipeEndpointTypes = RecipeEndpointTypes.malformed.endpointModel
         
         // When
         for option in sortOptions {
@@ -174,7 +174,7 @@ extension RecipeDataManager_Tests {
     private func allCheck(shouldReinitialize: Bool) async {
         // Given
         let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
-        let endpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
+        let endpoint: RecipeEndpointTypes = RecipeEndpointTypes.all.endpointModel
         
         // When
         for option in sortOptions {

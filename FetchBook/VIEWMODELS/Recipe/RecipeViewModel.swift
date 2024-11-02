@@ -46,7 +46,7 @@ final class RecipeViewModel: ObservableObject {
     @Published private(set) var selectedSortType: RecipeSortTypes = .none
     /// The currently selected API endpoint for data retrieval.
     /// debug purposes only.
-    @Published private(set) var selectedEndpoint: RecipeEndpointModel = RecipeEndpointTypes.all.endpointModel
+    @Published private(set) var selectedEndpoint: RecipeEndpointTypes = .all
     
     // MARK: - PUBLIC PROPERTIES
     /// Public access to the `recipeSearchText` using a `Binding`
@@ -58,7 +58,7 @@ final class RecipeViewModel: ObservableObject {
         return binding(\.selectedSortType)
     }
     /// Public access to the `selectedEndpoint` using a `Binding`
-    var selectedEndpointBinding: Binding<RecipeEndpointModel> {
+    var selectedEndpointBinding: Binding<RecipeEndpointTypes> {
         return binding(\.selectedEndpoint)
     }
     
@@ -102,10 +102,10 @@ final class RecipeViewModel: ObservableObject {
     /// Fetches recipe data from a specified endpoint asynchronously, and update recipes arrays and other related properties accordingly.
     ///
     /// This method performs a network request to fetch recipe data from a given endpoint and updates the view model accordingly.
-    /// - Parameter endpoint: The endpoint from which to fetch recipe data, of type `RecipeEndpointModel`.
+    /// - Parameter endpoint: The endpoint from which to fetch recipe data, of type `RecipeEndpointTypes`.
     /// - Throws: An error if the data fetching process fails.
     /// - Returns: A `RecipesModel` containing the fetched recipes.
-    func fetchAndUpdateRecipes(endpoint: RecipeEndpointModel) async throws {
+    func fetchAndUpdateRecipes(endpoint: RecipeEndpointTypes) async throws {
         try await dataManager.fetchAndUpdateRecipes(endpoint: endpoint)
     }
 }

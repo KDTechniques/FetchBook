@@ -32,10 +32,10 @@ actor RecipeAPIService: RecipeServiceProtocol {
     /// It constructs a URL from the endpoint, configures a URL request, and performs a network request.
     /// The response is then decoded into a `RecipesModel` object.
     ///
-    /// - Parameter endpoint: The specific endpoint to fetch data from, defined by the `RecipeEndpointModel`.
+    /// - Parameter endpoint: The specific endpoint to fetch data from, defined by the `RecipeEndpointTypes`.
     /// - Throws: `URLError` if the URL is invalid, or if the network request fails or the response cannot be decoded.
     /// - Returns: A `RecipesModel` containing the recipes fetched from the specified API endpoint.
-    func fetchRecipeData(from endpoint: RecipeEndpointModel) async throws -> RecipesModel {
+    func fetchRecipeData(from endpoint: RecipeEndpointTypes) async throws -> RecipesModel {
         let urlString = endpoint.urlString
         guard let url = URL(string: urlString) else {
             throw RecipeServiceErrors.invalidURL(urlString)
