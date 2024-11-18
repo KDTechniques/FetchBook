@@ -24,7 +24,7 @@ struct YTPlayerTopTrailingButtonView: View {
     
     // MARK: - BODY
     var body: some View {
-        Image(systemName: isDragging ? "arrow.up.and.down.and.arrow.left.and.right" : "pip.remove")
+        Image(systemName: SystemImageAssetsValues.youtubePlayerDragging(isDragging))
             .resizable()
             .scaledToFit()
             .frame(width: iconSize, height: iconSize)

@@ -20,6 +20,9 @@ struct RecipeImagePreviewContextMenuItemsView: View {
         self.youtubeURLString = youtubeURLString
     }
     
+    // MARK: - PRIVATE PROPERTIES
+    private let systemImageAssetValues = SystemImageAssetsValues.self
+    
     // MARK: - BODY
     var body: some View {
         Group {
@@ -41,7 +44,7 @@ extension RecipeImagePreviewContextMenuItemsView {
         Button {
             appendBlogPostItem(false)
         } label: {
-            Label("Go to Blog Post", systemImage: "book")
+            Label("Go to Blog Post", systemImage: systemImageAssetValues.blogPostButton)
         }
     }
     
@@ -50,7 +53,7 @@ extension RecipeImagePreviewContextMenuItemsView {
         Button {
             appendBlogPostItem(true)
         } label: {
-            Label("Watch on YouTube", systemImage: "play.circle")
+            Label("Watch on YouTube", systemImage: systemImageAssetValues.youtubePlayButton)
         }
     }
     

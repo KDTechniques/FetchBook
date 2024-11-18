@@ -23,7 +23,7 @@ struct BlogPostVideoPlayerButtonView: View {
         Button {
             showVideoPlayer = true
         } label: {
-            Image(systemName: "play.circle")
+            Image(systemName: SystemImageAssetsValues.youtubePlayButton)
         }
         .disabled(videoID == nil)
         .onDisappear { showVideoPlayer = false }

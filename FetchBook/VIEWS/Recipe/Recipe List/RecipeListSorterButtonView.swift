@@ -26,7 +26,7 @@ struct RecipeListSorterButtonView: View {
                 }
             }
         } label: {
-            Image(systemName: "arrow.up.arrow.down")
+            Image(systemName: SystemImageAssetsValues.sortingMenuButton)
         }
     }
 }
