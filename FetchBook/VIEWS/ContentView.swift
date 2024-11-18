@@ -18,6 +18,7 @@ struct ContentView: View {
     
     // MARK: - PRIVATE PROPERTIES
     @State private var selectedTab: TabBarTypes = .recipe
+    private let systemImageAssetValues = SystemImageAssetsValues.self
     
     // MARK: - BODY
     var body: some View {
@@ -42,7 +43,7 @@ extension ContentView {
     private var recipes: some View {
         RecipesView(vm: recipeVM)
             .tabItem {
-                Label("Recipes", systemImage: "book.fill")
+                Label("Recipes", systemImage: systemImageAssetValues.recipesTab)
             }
             .tag(TabBarTypes.recipe)
     }
@@ -52,7 +53,7 @@ extension ContentView {
 #if DEBUG
         DebugView(vm: recipeVM)
             .tabItem {
-                Label("Debug", systemImage: "wrench.and.screwdriver.fill")
+                Label("Debug", systemImage: systemImageAssetValues.debugTab)
             }
             .tag(TabBarTypes.debug)
 #endif
