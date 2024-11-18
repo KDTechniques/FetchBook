@@ -61,7 +61,7 @@ final class RecipeViewModel: ObservableObject {
     /// This method sets a new data status, which can be used to represent different states of data loading or processing.
     /// - Parameter newStatus: The new status to be set, of type `RecipeDataStatusTypes`.
     func updateDataStatus(_ newStatus: RecipeDataStatusTypes) {
-        self.currentDataStatus = newStatus
+        currentDataStatus = newStatus
     }
     
     // MARK: - updateMutableRecipesArray
@@ -70,7 +70,7 @@ final class RecipeViewModel: ObservableObject {
     /// This method sets a new array of recipes, which can be used to dynamically update the displayed recipes in the UI.
     /// - Parameter newArray: The new array of `RecipeModel` objects to be set.
     func updateMutableRecipesArray(_ newArray: [RecipeModel]) {
-        self.mutableRecipesArray = newArray
+        mutableRecipesArray = newArray
     }
     
     // MARK: - updateRecipesArray
@@ -79,7 +79,7 @@ final class RecipeViewModel: ObservableObject {
     /// This method sets a new array of recipes, used to update the main collection of recipes in the view model.
     /// - Parameter newArray: The new array of `RecipeModel` objects to be set.
     func updateRecipesArray(_ newArray: [RecipeModel]) {
-        self.recipesArray = newArray
+        recipesArray = newArray
     }
     
     // MARK: - emptyRecipesAndMutableRecipesArray

@@ -47,7 +47,7 @@ actor RecipeDataManager {
             
             // Update recipe arrays.
             await recipeVM.updateRecipesArray(recipes) // Store fetched recipes in recipesArray.
-            await sortingManager.assignSortedRecipesToMutableRecipesArray() // Initialize mutableRecipesArray with the fetched and sorted recipes.
+            await sortingManager.assignSortedRecipesToMutableRecipesArray() // Initialize mutableRecipesArray with the fetched recipes and sort it.
         } catch {
             // If the network call fails, flag it as `.malformed` and reset the recipe arrays before throwing the error.
             await recipeVM.updateDataStatus(.malformed)

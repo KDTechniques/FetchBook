@@ -10,7 +10,6 @@ import XCTest
 
 @MainActor
 final class MockRecipeAPIService_Tests: XCTestCase {
-    
     // MARK: - PROPERTIES
     let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
     
@@ -23,7 +22,7 @@ final class MockRecipeAPIService_Tests: XCTestCase {
     
     // MARK: - tearDownWithError
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        try super.tearDownWithError()
     }
     
     // MARK: UNIT TESTS

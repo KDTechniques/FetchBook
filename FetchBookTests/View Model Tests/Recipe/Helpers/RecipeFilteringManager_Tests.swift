@@ -28,17 +28,13 @@ final class RecipeFilteringManager_Tests: XCTestCase {
     // MARK: FUNCTIONS
     
     // MARK: - setUpWithError
-    /// Sets up the test environment before each test method in the class is called.
-    /// Initializes the `RecipeViewModel`, `RecipeSortingManager`, and `RecipeFilteringManager` instances.
     override func setUpWithError() throws {
         self.initialize()
     }
     
     // MARK: - tearDownWithError
-    /// Cleans up the test environment after each test method in the class is called.
-    /// Use this method to release any resources that were created in `setUpWithError`.
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        try super.tearDownWithError()
     }
     
     // MARK: UNIT TESTS

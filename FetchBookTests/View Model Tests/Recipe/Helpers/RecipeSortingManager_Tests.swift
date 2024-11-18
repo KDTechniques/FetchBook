@@ -57,7 +57,7 @@ final class RecipeSortingManager_Tests: XCTestCase {
     
     // MARK: - tearDownWithError
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        try super.tearDownWithError()
     }
     
     // MARK: Unit Tests
@@ -240,6 +240,7 @@ extension RecipeSortingManager_Tests {
     private func checkSortedArrayOnSubscriber(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
         // Given
         self.initializeRecipesArrayWithMockData()
+        await self.sortingManager.assignSortedRecipesToMutableRecipesArray()
         vm.selectedSortTypeBinding.wrappedValue = type
         
         // When
