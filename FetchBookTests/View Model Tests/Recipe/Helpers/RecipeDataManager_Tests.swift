@@ -11,14 +11,13 @@ import XCTest
 @MainActor
 final class RecipeDataManager_Tests: XCTestCase {
     // MARK: PROPERTIES
-    var vm: RecipeViewModel!
-    var recipeDataManager: RecipeDataManager!
+    var vm: RecipeViewModel?
+    var recipeDataManager: RecipeDataManager?
     
     //MARK: FUNCTIONS
     
     // MARK: - setUpWithError
     override func setUpWithError() throws {
-        // Initialize the mock service and view model before each test
         self.initialize()
     }
     
@@ -103,7 +102,13 @@ extension RecipeDataManager_Tests {
     private func initialize() {
         let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
         self.vm = .init(recipeService: mockRecipeAPIService)
-        self.recipeDataManager = self.vm.dataManager
+        
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
+        self.recipeDataManager = vm.dataManager
         
         XCTAssertEqual("\(vm.recipeService)", "\(mockRecipeAPIService)")
     }
@@ -114,6 +119,12 @@ extension RecipeDataManager_Tests {
     /// This function verifies that the data manager correctly handles an endpoint that returns an empty array of recipes.
     /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
     private func emptyCheck(shouldReinitialize: Bool) async {
+        guard let vm,
+              let recipeDataManager else {
+            XCTFail("Expected successful view model, and recipeDataManager initialization, but found them nil.")
+            return
+        }
+        
         // Given
         let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
         let endpoint: RecipeEndpointTypes = RecipeEndpointTypes.empty
@@ -144,6 +155,12 @@ extension RecipeDataManager_Tests {
     /// This function verifies that the data manager correctly handles an endpoint that returns a malformed response.
     /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
     private func malformedCheck(shouldReinitialize: Bool) async {
+        guard let vm,
+              let recipeDataManager else {
+            XCTFail("Expected successful view model, and recipeDataManager initialization, but found them nil.")
+            return
+        }
+        
         // Given
         let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
         let endpoint: RecipeEndpointTypes = RecipeEndpointTypes.malformed
@@ -172,6 +189,12 @@ extension RecipeDataManager_Tests {
     /// This function verifies that the data manager correctly handles an endpoint that returns a full array of recipes.
     /// - Parameter shouldReinitialize: A boolean indicating whether the view model should be reinitialized after each iteration.
     private func allCheck(shouldReinitialize: Bool) async {
+        guard let vm,
+              let recipeDataManager else {
+            XCTFail("Expected successful view model, and recipeDataManager initialization, but found them nil.")
+            return
+        }
+        
         // Given
         let sortOptions: [RecipeSortTypes] = RecipeSortTypes.allCases
         let endpoint: RecipeEndpointTypes = RecipeEndpointTypes.all

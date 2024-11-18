@@ -11,8 +11,8 @@ import XCTest
 @MainActor
 final class RecipeSortingManager_Tests: XCTestCase {
     // MARK: PROPERTIES
-    var vm: RecipeViewModel!
-    var sortingManager: RecipeSortingManager!
+    var vm: RecipeViewModel?
+    var sortingManager: RecipeSortingManager?
     
     /// A mock array of `RecipeModel` objects used for testing sorting functionality.
     let mockRecipesArray: [RecipeModel] = [
@@ -192,15 +192,28 @@ extension RecipeSortingManager_Tests {
     ///
     /// This function sets up the mock service and initializes the view model and sorting manager before each test case.
     private func initialize() {
+        
+        
         let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
         self.vm = .init(recipeService: mockRecipeAPIService)
-        self.sortingManager = self.vm.sortingManager
+        
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
+        self.sortingManager = vm.sortingManager
         
         XCTAssertEqual("\(vm.recipeService)", "\(mockRecipeAPIService)")
     }
     
     // MARK: - initializeRecipesArrayWithMockData
     private func initializeRecipesArrayWithMockData() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         vm.updateRecipesArray(self.mockRecipesArray)
     }
     
@@ -214,6 +227,12 @@ extension RecipeSortingManager_Tests {
     ///   - firstElement: The expected first element in the sorted array.
     ///   - lastElement: The expected last element in the sorted array.
     private func checkSortedArray(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
+        guard let vm,
+              let sortingManager else {
+            XCTFail("Expected successful view model, and sorting manager initialization, but found them nil.")
+            return
+        }
+        
         // Given
         self.initializeRecipesArrayWithMockData()
         
@@ -238,9 +257,15 @@ extension RecipeSortingManager_Tests {
     ///   - firstElement: The expected name of the first element in the sorted array.
     ///   - lastElement: The expected name of the last element in the sorted array.
     private func checkSortedArrayOnSubscriber(type: RecipeSortTypes, firstElement: String, lastElement: String) async {
+        guard let vm,
+        let sortingManager else {
+            XCTFail("Expected successful view model, and sorting manager initialization, but found them nil.")
+            return
+        }
+        
         // Given
         self.initializeRecipesArrayWithMockData()
-        await self.sortingManager.assignSortedRecipesToMutableRecipesArray()
+        await sortingManager.assignSortedRecipesToMutableRecipesArray()
         vm.selectedSortTypeBinding.wrappedValue = type
         
         // When

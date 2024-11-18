@@ -9,7 +9,7 @@ import XCTest
 @MainActor
 final class RecipeViewModel_Tests: XCTestCase {
     // MARK: - PROPERTIES
-    var vm: RecipeViewModel!
+    var vm: RecipeViewModel?
     
     // MARK: FUNCTIONS
     
@@ -31,6 +31,11 @@ final class RecipeViewModel_Tests: XCTestCase {
     /// This test verifies that when the `recipeSearchTextBinding` is updated with different string values,
     /// the `recipeSearchText` property in the view model reflects the correct value.
     func test_RecipeViewModel_recipeSearchTextBinding_shouldReturnString() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let textsArray: [String] = [UUID().uuidString, ""]
         
@@ -49,6 +54,11 @@ final class RecipeViewModel_Tests: XCTestCase {
     /// This test verifies that when the `selectedSortTypeBinding` is updated with different sort types,
     /// the `selectedSortType` property in the view model reflects the correct value.
     func test_RecipeViewModel_selectedSortTypeBinding_shouldReturnSortType() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let sortTypesArray: [RecipeSortTypes] = RecipeSortTypes.allCases
         
@@ -67,6 +77,11 @@ final class RecipeViewModel_Tests: XCTestCase {
     /// This test verifies that when the `selectedEndpointBinding` is updated with different endpoint models,
     /// the `selectedEndpoint` property in the view model reflects the correct value.
     func test_RecipeViewModel_selectedEndpointBinding_shouldReturnEndpointModel() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let endpointTypesArray: [RecipeEndpointTypes] = RecipeEndpointTypes.allCases
         
@@ -85,6 +100,11 @@ final class RecipeViewModel_Tests: XCTestCase {
     /// This test verifies that when the `updateDataStatus` method is called with different data status types,
     /// the `currentDataStatus` property in the view model reflects the correct value.
     func test_RecipeViewModel_updateDataStatus_shouldReturnDataStatus() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let dataStatusTypesArray: [RecipeDataStatusTypes] = RecipeDataStatusTypes.allCases
         
@@ -103,6 +123,11 @@ final class RecipeViewModel_Tests: XCTestCase {
     /// This test verifies that when the `updateRecipesArray` method is called with different arrays of recipes,
     /// the `recipesArray` property in the view model reflects the correct value.
     func test_RecipeViewModel_updateRecipesArray_shouldReturnRecipesArray() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let mockRecipesArray: [RecipeModel] = Array(repeating: .mockObject, count: 5)
         let emptyArray: [RecipeModel] = []
@@ -123,6 +148,11 @@ final class RecipeViewModel_Tests: XCTestCase {
     /// This test verifies that when the `updateMutableRecipesArray` method is called with different arrays of recipes,
     /// the `mutableRecipesArray` property in the view model reflects the correct value.
     func test_RecipeViewModel_updateMutableRecipesArray_shouldReturnMutableRecipesArray() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let mockRecipesArray: [RecipeModel] = Array(repeating: .mockObject, count: 5)
         let emptyArray: [RecipeModel] = []
@@ -143,6 +173,11 @@ final class RecipeViewModel_Tests: XCTestCase {
     /// This test verifies that when the `emptyRecipesAndMutableRecipesArray` method is called,
     /// the `recipesArray` and `mutableRecipesArray` properties in the view model are cleared.
     func test_RecipeViewModel_emptyRecipesAndMutableRecipesArray_shouldReturnEmptyArrays() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let mockRecipesArray: [RecipeModel] = Array(repeating: .mockObject, count: 5)
         vm.updateRecipesArray(mockRecipesArray)
@@ -165,6 +200,11 @@ final class RecipeViewModel_Tests: XCTestCase {
     /// the `recipesArray`, `mutableRecipesArray`, and `currentDataStatus` properties in the view model are updated
     /// as expected based on the endpoint model.
     func test_RecipeViewModel_fetchAndUpdateRecipes_shouldReturnExpectedArrays() async {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let endpointTypesArray: [RecipeEndpointTypes] = RecipeEndpointTypes.allCases
         let permutationsArray: [[RecipeEndpointTypes]] = endpointTypesArray.generatePermutations()
@@ -218,6 +258,11 @@ extension RecipeViewModel_Tests {
     private func initialize() {
         let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
         self.vm = .init(recipeService: mockRecipeAPIService)
+        
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
         
         XCTAssertEqual("\(vm.recipeService)", "\(mockRecipeAPIService)")
     }

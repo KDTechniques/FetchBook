@@ -10,7 +10,7 @@ import XCTest
 final class RecipeFilteringManager_Tests: XCTestCase {
     
     // MARK: - PROPERTIES
-    var vm: RecipeViewModel!
+    var vm: RecipeViewModel?
     
     /// A mock array of `RecipeModel` objects used for testing sorting functionality.
     let mockRecipesArray: [RecipeModel] = [
@@ -45,6 +45,11 @@ final class RecipeFilteringManager_Tests: XCTestCase {
     /// This test verifies that when the `recipeSearchText` is set to various text cases, the `recipeSearchTextSubscriber`
     /// correctly filters the recipes array and updates the view model properties.
     func test_RecipeFilteringManager_Tests_recipeSearchTextSubscriber_shouldReturnFilteredRecipesArray() async {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let textCases: [TextCaseTypes] = TextCaseTypes.allCases
         self.initializeRecipesArraysWithMockData()
@@ -87,6 +92,11 @@ final class RecipeFilteringManager_Tests: XCTestCase {
     /// This test verifies that when the `recipeSearchText` is set to an empty string, the `recipeSearchTextSubscriber`
     /// correctly updates the view model properties without returning an empty array.
     func test_RecipeFilteringManager_Tests_recipeSearchTextSubscriber_shouldNotReturnEmptyArray() async {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         self.initializeRecipesArraysWithMockData()
         
@@ -112,6 +122,11 @@ final class RecipeFilteringManager_Tests: XCTestCase {
     /// This test verifies that when the `recipeSearchText` is set to an invalid string, the `recipeSearchTextSubscriber`
     /// correctly updates the view model properties and returns an empty array.
     func test_RecipeFilteringManager_Tests_recipeSearchTextSubscriber_shouldReturnEmptyArray() async {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         // Given
         let invalidText: String = "!@#$%^&*()_+"
         self.initializeRecipesArraysWithMockData()
@@ -143,6 +158,11 @@ extension RecipeFilteringManager_Tests {
         let mockRecipeAPIService: RecipeServiceProtocol = MockRecipeAPIService()
         self.vm = .init(recipeService: mockRecipeAPIService)
         
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         XCTAssertEqual("\(vm.recipeService)", "\(mockRecipeAPIService)")
     }
     
@@ -152,6 +172,11 @@ extension RecipeFilteringManager_Tests {
     ///
     /// This function updates the view model's `recipesArray` and `mutableRecipesArray` properties with mock data
     private func initializeRecipesArraysWithMockData() {
+        guard let vm else {
+            XCTFail("Expected successful view model initialization, but found it nil.")
+            return
+        }
+        
         vm.updateRecipesArray(self.mockRecipesArray)
         vm.updateMutableRecipesArray(self.mockRecipesArray)
     }
