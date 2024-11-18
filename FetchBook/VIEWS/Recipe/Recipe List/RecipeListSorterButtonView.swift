@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeListSorterButtonView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     @ObservedObject var vm: RecipeViewModel
     
     // MARK: - INITIALIZER

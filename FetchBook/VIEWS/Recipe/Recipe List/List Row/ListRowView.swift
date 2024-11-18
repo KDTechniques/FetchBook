@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListRowView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let recipe: RecipeModel
     
     // MARK: - INITIALIZER

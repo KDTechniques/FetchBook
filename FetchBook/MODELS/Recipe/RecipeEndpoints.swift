@@ -8,7 +8,6 @@
 import Foundation
 
 // NOTE: DEBUG PURPOSES ONLY
-
 enum RecipeEndpointTypes: String, CaseIterable {
     case all
     case malformed

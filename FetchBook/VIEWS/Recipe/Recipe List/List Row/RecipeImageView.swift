@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct RecipeImageView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let thumbnailImageURLString: String
     let largeImageURLString: String
     
@@ -20,7 +20,7 @@ struct RecipeImageView: View {
     }
     
     // MARK: - PRIVATE PROPERTIES
-    let values = RecipeImageValues.self
+    private let values = RecipeImageValues.self
     
     // MARK: - BODY
     var body: some View {

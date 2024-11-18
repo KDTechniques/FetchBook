@@ -8,7 +8,6 @@
 import Foundation
 
 // NOTE: The real API service for fetching recipe data
-
 actor RecipeAPIService: RecipeServiceProtocol {
     // MARK: - fetchData
     /// Fetches raw data from a specified URL.

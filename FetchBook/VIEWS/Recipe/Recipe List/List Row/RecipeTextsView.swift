@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeTextsView: View {
-    // MARK: PROPERTIES
+    // MARK: INITIAL PROPERTIES
     let name: String
     let cuisine: String
     

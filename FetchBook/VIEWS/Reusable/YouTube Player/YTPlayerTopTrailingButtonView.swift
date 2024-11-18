@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct YTPlayerTopTrailingButtonView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let isDragging: Bool
     let action: () -> ()
     
@@ -19,8 +19,8 @@ struct YTPlayerTopTrailingButtonView: View {
     }
     
     // MARK: - PRIVATE PROPERTIES
-    let iconSize: CGFloat = 20
-    let iconPadding: CGFloat = 6
+    private let iconSize: CGFloat = 20
+    private let iconPadding: CGFloat = 6
     
     // MARK: - BODY
     var body: some View {

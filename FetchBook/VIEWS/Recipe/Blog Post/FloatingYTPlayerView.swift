@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FloatingYTPlayerView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     @Binding var showVideoPlayer: Bool
     let videoID: String?
     

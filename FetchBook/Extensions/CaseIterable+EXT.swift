@@ -15,6 +15,6 @@ extension CaseIterable {
     ///
     /// - Returns: A randomly selected case of the conforming type.
     static func random() -> Self {
-        return allCases.randomElement()!
+        return allCases.randomElement()! // Note: The Force unwrap is safe in this context, so no need to return an optional by safe unwrapping it.
     }
 }

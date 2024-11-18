@@ -9,7 +9,7 @@ import SwiftUI
 import WebKit
 
 struct WebView: UIViewRepresentable {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let url: URL
     @Binding var progress: Double
     

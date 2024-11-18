@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct ListRowContentView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let recipe: RecipeModel
     let firstItemID: String
     let lastItemID: String

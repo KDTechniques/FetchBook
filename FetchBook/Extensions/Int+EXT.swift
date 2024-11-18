@@ -7,14 +7,9 @@
 
 import Foundation
 
-import Foundation
-
-/// Enum representing errors that can occur while calculating factorial.
 enum FactorialError: Error, LocalizedError {
-    /// Error for when a negative number is used for factorial calculation.
     case negativeNumber
     
-    /// Provides a localized description for each error case.
     var errorDescription: String? {
         switch self {
         case .negativeNumber:

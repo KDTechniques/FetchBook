@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct RecipeImagePreviewView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let recipe: RecipeModel
     
     // MARK: - INITIALIZER
@@ -18,7 +18,7 @@ struct RecipeImagePreviewView: View {
     }
     
     // MARK: - PRIVATE PROPERTIES
-    let recipeImagePreviewSize: CGFloat = Helpers.screenWidth - 100
+    private let recipeImagePreviewSize: CGFloat = Helpers.screenWidth - 100
     
     // MARK: - BODY
     var body: some View {

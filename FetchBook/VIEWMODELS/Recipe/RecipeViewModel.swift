@@ -7,12 +7,9 @@
 
 import SwiftUI
 
-/// A view model responsible for managing the recipe data, including fetching,
-/// sorting, and publishing the sorted list of recipes to the SwiftUI view.
 @MainActor
 final class RecipeViewModel: ObservableObject {
     // MARK: - INITIAL PROPERTIES
-    /// A service for fetching recipe data, adhering to the `RecipeServiceProtocol` protocol.
     let recipeService: RecipeServiceProtocol
     private(set) lazy var sortingManager: RecipeSortingManager = .init(recipeVM: self)
     private(set) lazy var filteringManager: RecipeFilteringManager = .init(recipeVM: self, sortingManager: sortingManager)
@@ -35,29 +32,23 @@ final class RecipeViewModel: ObservableObject {
     // MARK: - PRIVATE PROPERTIES
     /// An array holding the original recipe data fetched from the service.
     @Published private(set) var recipesArray: [RecipeModel] = []
-    /// A published array that holds the sorted list of recipes, which updates the UI automatically.
+    /// An array holding the sorted, and filtered list of recipes
     @Published private(set) var mutableRecipesArray: [RecipeModel] = []
-    /// The current status of the data being processed, and fetched.
     @Published private(set) var currentDataStatus: RecipeDataStatusTypes = .none
-    /// A string that holds the user's recipe search input.
     @Published private(set) var recipeSearchText: String = ""
-    /// The selected sorting option for the recipes. Changes to this property will trigger
-    /// the sorting of the recipes based on the chosen option.
     @Published private(set) var selectedSortType: RecipeSortTypes = .none
     /// The currently selected API endpoint for data retrieval.
     /// debug purposes only.
     @Published private(set) var selectedEndpoint: RecipeEndpointTypes = .all
     
     // MARK: - PUBLIC PROPERTIES
-    /// Public access to the `recipeSearchText` using a `Binding`
+    // Public access using  Bindings
     var recipeSearchTextBinding: Binding<String> {
         return binding(\.recipeSearchText)
     }
-    /// Public access to the `selectedSortType` using a `Binding`
     var selectedSortTypeBinding: Binding<RecipeSortTypes> {
         return binding(\.selectedSortType)
     }
-    /// Public access to the `selectedEndpoint` using a `Binding`
     var selectedEndpointBinding: Binding<RecipeEndpointTypes> {
         return binding(\.selectedEndpoint)
     }

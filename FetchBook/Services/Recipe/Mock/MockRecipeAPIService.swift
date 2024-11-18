@@ -6,7 +6,7 @@
 //
 
 import Foundation
-// Mock API service to simulate the fetch of recipe data
+
 actor MockRecipeAPIService: RecipeServiceProtocol {
     // MARK: - fetchData
     /// Fetches data from a given URL.
@@ -37,8 +37,7 @@ actor MockRecipeAPIService: RecipeServiceProtocol {
     /// - Throws: `URLError` if the file cannot be read or if the data cannot be parsed.
     /// - Returns: A `RecipesModel` containing the recipes fetched from the mock data.
     func fetchRecipeData(from endpoint: RecipeEndpointTypes) async throws -> RecipesModel {
-        // Introduce a delay of 2 seconds (2_000_000_000 nanoseconds)
-        try await Task.sleep(nanoseconds: 2_000_000_000)
+        try await Task.sleep(nanoseconds: 2_000_000_000) // Delay is to simulate fetching data over a network call
         let fileName: String = getMockJsonFilename(for: endpoint)
         guard let path = Bundle.main.path(forResource: fileName, ofType: "json") else {
             throw RecipeServiceErrors.fileNotFound(fileName+".json")

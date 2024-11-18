@@ -67,8 +67,7 @@ actor RecipeFilteringManager {
     /// This operation runs on the main actor to update the UI-related state.
     private func resetRecipes() async {
         await recipeVM.updateDataStatus(.none)
-        // Reset recipes with the current sorting
-        await sortingManager.assignSortedRecipesToMutableRecipesArray()
+        await sortingManager.assignSortedRecipesToMutableRecipesArray()  // Note: Reset recipes with the 'current sorting'.
     }
     
     // MARK: - filterSearchResult
