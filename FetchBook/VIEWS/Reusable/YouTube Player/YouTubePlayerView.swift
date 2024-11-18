@@ -10,7 +10,7 @@ import YouTubeiOSPlayerHelper
 
 /// A UIViewRepresentable to wrap the YTPlayerView
 struct YouTubePlayerView: UIViewRepresentable {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let videoID: String
     @Binding var isLoading: Bool
     

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     @StateObject private var recipeVM: RecipeViewModel
     
     // MARK: - INITIALIZER

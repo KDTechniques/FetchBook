@@ -9,8 +9,8 @@ import SwiftUI
 import Shimmer
 
 struct RecipeShimmeringListView: View {
-    // MARK: - PROPERTIES
-    let array: [Int] = Array(0...10)
+    // MARK: - PRIVATE PROPERTIES
+    private let array: [Int] = Array(0...10)
     
     // MARK: - BODY
     var body: some View {

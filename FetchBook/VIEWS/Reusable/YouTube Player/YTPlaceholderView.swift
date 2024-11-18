@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct YTPlaceholderView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let showPlaceholder: Bool
     
     // MARK: - INITIALIZER

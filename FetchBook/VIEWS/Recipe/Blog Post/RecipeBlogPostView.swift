@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct RecipeBlogPostView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let secureBlogPostURLString: String?
     let secureYoutubeURLString: String?
+    @State private var showVideoPlayer: Bool
     
     // MARK: - INITIALAIZER
     init(secureBlogPostURLString: String?, secureYoutubeURLString: String?, showVideoPlayer: Bool = false) {
@@ -21,7 +22,6 @@ struct RecipeBlogPostView: View {
     
     // MARK: - PRIVATE PROPERTIES
     @State private var progress: Double = .zero
-    @State private var showVideoPlayer: Bool
     
     // MARK: - BODY
     var body: some View {
@@ -34,13 +34,7 @@ struct RecipeBlogPostView: View {
                     WebView(url: url, progress: $progress)
                 }
             } else {
-                CustomContentNotAvailableView(
-                    .init(
-                        systemImageName: "book",
-                        title: "No Recipe Insights",
-                        description: "The blog post related to this recipe is currently unavailable. Please check back later or explore other recipes."
-                    )
-                )
+                CustomContentNotAvailableView(ContentNotAvailableValues.recipeBlogPost)
             }
         }
         .overlay {

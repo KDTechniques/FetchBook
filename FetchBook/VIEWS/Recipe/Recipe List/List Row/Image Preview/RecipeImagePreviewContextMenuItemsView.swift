@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeImagePreviewContextMenuItemsView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     @Binding var blogPostItem: [BlogPostItemModel]
     let blogPostURLString: String?
     let youtubeURLString: String?

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DraggableYouTubePlayerView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let videoID: String
     let action: () -> ()
     
@@ -26,9 +26,9 @@ struct DraggableYouTubePlayerView: View {
     @State private var isDragging: Bool = false
     @State private var isLoading: Bool = true
     
-    let screenWidth = UIScreen.main.bounds.width - 50
-    let screenHeight = UIScreen.main.bounds.height - 80
-    let rectWidth: CGFloat = UIScreen.main.bounds.size.width - 150
+    private let screenWidth = UIScreen.main.bounds.width - 50
+    private let screenHeight = UIScreen.main.bounds.height - 80
+    private let rectWidth: CGFloat = UIScreen.main.bounds.size.width - 150
     private var rectHeight: CGFloat { rectWidth/16*9 } // 16:9 Ratio
     
     // MARK: - BODY

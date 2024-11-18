@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeImageBackgroundRoundedRectangleView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let values = RecipeImageValues.self
     
     // MARK: - BODY

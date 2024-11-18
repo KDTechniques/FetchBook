@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomContentNotAvailableView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     let item: ContentNotAvailableModel
     
     // MARK: - INITIALIZER
@@ -29,43 +29,19 @@ struct CustomContentNotAvailableView: View {
 
 // MARK: - PREVIEWS
 #Preview("CustomContentNotAvailableView") {
-    CustomContentNotAvailableView(.init(
-        systemImageName: "bookmark",
-        title: "No Saved Episodes",
-        description: "Save episodes you want listen to later, and they'll show up here."
-    ))
+    CustomContentNotAvailableView(ContentNotAvailableValues.mockAll)
 }
 
 #Preview("Only Title") {
-    CustomContentNotAvailableView(.init(
-        title: "No Results"
-    ))
+    CustomContentNotAvailableView(ContentNotAvailableValues.mockTitleOnly)
 }
 
 #Preview("Only Title & Description") {
-    CustomContentNotAvailableView(.init(
-        title: "No Saved Episodes",
-        description: "Save episodes you want listen to later, and they'll show up here."
-    ))
+    CustomContentNotAvailableView(ContentNotAvailableValues.mockTitleNDescriptionOnly)
 }
 
 // MARK: - EXTENSIONS
 extension CustomContentNotAvailableView {
-    // MARK: - ContentNotAvailableModel
-    struct ContentNotAvailableModel {
-        // MARK:  - PROPERTIES
-        let systemImageName: String?
-        let title: String
-        let description: String?
-        
-        // MARK: - INITIALIZER
-        init(systemImageName : String? = nil, title: String, description: String? = nil) {
-            self.systemImageName    = systemImageName
-            self.title              = title
-            self.description        = description
-        }
-    }
-    
     // MARK: - systemImage
     @ViewBuilder
     private var systemImage: some View {

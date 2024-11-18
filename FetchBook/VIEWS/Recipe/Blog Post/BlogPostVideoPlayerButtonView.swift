@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BlogPostVideoPlayerButtonView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     @Binding var showVideoPlayer:  Bool
     let videoID: String?
     

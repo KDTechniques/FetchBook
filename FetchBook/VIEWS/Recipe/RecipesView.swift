@@ -7,13 +7,13 @@
 
 import SwiftUI
 
+fileprivate enum FetchConditions {
+    case initial, refresh
+}
+
 struct RecipesView: View {
-    // MARK: - PROPERTIES
+    // MARK: - INITIAL PROPERTIES
     @ObservedObject private var recipeVM: RecipeViewModel
-    
-    enum FetchConditions {
-        case initial, refresh
-    }
     
     // MARK: - INITIALIZER
     init(vm: RecipeViewModel) {
@@ -22,6 +22,7 @@ struct RecipesView: View {
     
     // MARK: - PRIVATE PROPERTIES
     @State private var blogPostItem: [BlogPostItemModel] = []
+    let contentNotAvailableValues = ContentNotAvailableValues.self
     
     // MARK: - BODY
     var body: some View {
@@ -102,12 +103,8 @@ extension RecipesView {
     // MARK: - malformedError
     private var malformedError: some View {
         List {
-            CustomContentNotAvailableView(.init(
-                systemImageName: "exclamationmark.icloud",
-                title: "No Recipes",
-                description: "We're having trouble loading the recipes right now. Please try again later."
-            ))
-            .listRowSeparator(.hidden)
+            CustomContentNotAvailableView(contentNotAvailableValues.malformedRecipes)
+                .listRowSeparator(.hidden)
         }
         .listStyle(.plain)
     }
@@ -115,19 +112,15 @@ extension RecipesView {
     // MARK: - emptyDataError
     private var emptyDataError: some View {
         List {
-            CustomContentNotAvailableView(.init(
-                systemImageName: "fork.knife",
-                title: "No Recipes",
-                description: "Recipes are currently unavailable from our end. Please check back later."
-            ))
-            .listRowSeparator(.hidden)
+            CustomContentNotAvailableView(contentNotAvailableValues.emptyDataRecipes)
+                .listRowSeparator(.hidden)
         }
         .listStyle(.plain)
     }
     
     // MARK: - emptySearchResults
     private var emptySearchResults: some View {
-        CustomContentNotAvailableView(.init(title: "No Results"))
+        CustomContentNotAvailableView(contentNotAvailableValues.emptyRecipeSearchResults)
     }
     
     // MARK: FUNCTIONS
